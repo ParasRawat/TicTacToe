@@ -26,11 +26,52 @@
         android:layout_below="@+id/title"
         android:layout_margin="8dp"
         android:layout_centerHorizontal="true"/>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/browse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/gamerimage"
+        android:layout_alignLeft="@+id/gamerimage"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="4dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="16dp">
+
+        <TextView
+            android:id="@+id/browsetextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="Browse"
+            android:textAlignment="center" />
+
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView
+        android:id="@+id/opencam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/gamerimage"
+        android:layout_below="@id/gamerimage"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="4dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="16dp">
+
+        <TextView
+            android:id="@+id/opencameratextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="Camera"
+            android:textAlignment="center" />
+
+    </android.support.v7.widget.CardView>
     <android.support.v7.widget.CardView
         android:id="@+id/namecardview"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:layout_below="@id/gamerimage"
+        android:layout_below="@id/opencam"
          android:layout_margin="8dp"
         app:cardElevation="8dp">
 
@@ -48,7 +89,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/nameedittext"
+                android:id="@+id/gamernamenameedittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/nametextview"
@@ -80,7 +121,7 @@
             <TextView
                 android:layout_margin="8dp"
                 android:textSize="16dp"
-                android:id="@+id/email"
+                android:id="@+id/gameremail"
                 android:text="parasmynamee@gmail.com"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -110,5 +151,7 @@
             android:textAlignment="center"
             android:textColor="@android:color/white" />
     </android.support.v7.widget.CardView>
+
+
 
 </RelativeLayout>
