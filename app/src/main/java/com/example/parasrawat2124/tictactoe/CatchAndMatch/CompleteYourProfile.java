@@ -4,6 +4,7 @@ package com.example.parasrawat2124.tictactoe.CatchAndMatch;
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -30,8 +31,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -47,15 +51,13 @@ import java.util.Date;
 public class CompleteYourProfile extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
-    CardView buttoncardview;
+    CardView buttoncardview,namecardview,emailcardview,browse,opencam;
     ImageView gamerImage;
-    TextView gameremail;
+    TextView gameremail,title;
     TextView gamername;
-    CardView browse;
-    CardView opencam;
     Uri imageuri;
     String phototofile;
-    ProgressBar progressBar;
+    ProgressBar progressBar,progressintermeidate;
     public static final int PICK_IMAGE_REQUEST=1;
     public static final int CLICK_IMAGE_REQUEST=2;
     StorageReference storageReference;
@@ -70,13 +72,26 @@ public class CompleteYourProfile extends AppCompatActivity {
         buttoncardview=findViewById(R.id.buttoncardview);
         gamerImage=findViewById(R.id.gamerimage);
         gameremail=findViewById(R.id.gameremail);
+        namecardview=findViewById(R.id.namecardview);
+        emailcardview=findViewById(R.id.emailcardview);
         gamername=findViewById(R.id.gamernamenameedittext);
         browse=findViewById(R.id.browse);
         opencam=findViewById(R.id.opencam);
         progressBar=findViewById(R.id.progressbar);
         progressBar.setVisibility(View.GONE);
+        progressintermeidate=findViewById(R.id.progressbarintermidiate);
         storageReference=FirebaseStorage.getInstance().getReference("GamerImages");
+        checkProfile(firebaseUser.getEmail());
+        title=findViewById(R.id.title);
 
+        //Setting visibilities as false
+        buttoncardview.setVisibility(View.GONE);
+        gamerImage.setVisibility(View.GONE);
+        emailcardview.setVisibility(View.GONE);
+        browse.setVisibility(View.GONE);
+        opencam.setVisibility(View.GONE);
+        namecardview.setVisibility(View.GONE);
+        title.setVisibility(View.GONE);
         buttoncardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,7 +146,7 @@ public class CompleteYourProfile extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Uri> task) {
 
                     if (task.isSuccessful()) {
-                        String name = gamername.getText().toString();
+                        final String name = gamername.getText().toString();
                         String email = firebaseUser.getEmail();
                         Uri uri = task.getResult();
                         String downloadurl = uri.toString();
@@ -142,6 +157,7 @@ public class CompleteYourProfile extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(getApplicationContext(), "Succesfully Updated Profile", Toast.LENGTH_SHORT).show();
+                                    storeGamerName(name);
                                     startActivity(new Intent(CompleteYourProfile.this,CatchPlayer.class));
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Profile update failed Please try Again", Toast.LENGTH_SHORT).show();
@@ -239,5 +255,63 @@ public class CompleteYourProfile extends AppCompatActivity {
         return image;
 
     }
+    void checkProfile(String email){
+        String name=getSharedPreferences();
+        DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("Gamers");
+        databaseReference.child(name).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+           try{
+               if(!dataSnapshot.getValue().equals(null)){
+                   startActivity(new Intent(CompleteYourProfile.this,CatchPlayer.class));
 
+               }
+               else {
+                   //Setting visibilities as false
+                   buttoncardview.setVisibility(View.VISIBLE);
+                   gamerImage.setVisibility(View.VISIBLE);
+                   emailcardview.setVisibility(View.VISIBLE);
+                   browse.setVisibility(View.VISIBLE);
+                   opencam.setVisibility(View.VISIBLE);
+                   namecardview.setVisibility(View.VISIBLE);
+                   title.setVisibility(View.VISIBLE);
+                   progressintermeidate.setVisibility(View.GONE);
+                   Toast.makeText(getApplicationContext(),"Please Complete your profile",Toast.LENGTH_SHORT).show();
+               }
+           }
+           catch (Exception e){
+               buttoncardview.setVisibility(View.VISIBLE);
+               gamerImage.setVisibility(View.VISIBLE);
+               emailcardview.setVisibility(View.VISIBLE);
+               browse.setVisibility(View.VISIBLE);
+               opencam.setVisibility(View.VISIBLE);
+               namecardview.setVisibility(View.VISIBLE);
+               title.setVisibility(View.VISIBLE);
+               progressintermeidate.setVisibility(View.GONE);
+               Toast.makeText(getApplicationContext(),"Exception Occured",Toast.LENGTH_SHORT).show();
+
+           }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+    void storeGamerName(String name){
+        SharedPreferences sharedPreferences=getSharedPreferences("Gamers",MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putString("name",name);
+        editor.apply();
+
+    }
+
+    String getSharedPreferences(){
+        SharedPreferences sharedPreferences=getSharedPreferences("Gamers",MODE_PRIVATE);
+        String name=sharedPreferences.getString("name","0");
+        return name;
+    }
 }
+

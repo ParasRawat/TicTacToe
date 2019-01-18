@@ -1,9 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CatchAndMatch.CatchPlayer">
+    <TextView
+        android:id="@+id/catchplayaer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/caesar_dressing"
+        android:padding="8dp"
+        android:text="CATCH PLAYER"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="48dp"
 
-</android.support.constraint.ConstraintLayout>
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/entername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/playername"
+        android:layout_alignStart="@+id/playername"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/caesar_dressing"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18dp"
+        android:text="Enter Player Name" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:id="@+id/playername"
+        android:layout_margin="8dp"
+        android:fontFamily="@font/caesar_dressing"
+        android:layout_centerInParent="true"/>
+
+
+    <TextView
+        android:id="@+id/letsplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lets Play"
+        android:textSize="30dp"
+        android:layout_below="@+id/playername"
+        android:layout_margin="16dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="bold"
+        android:fontFamily="@font/caesar_dressing"
+        />
+
+
+</RelativeLayout>
