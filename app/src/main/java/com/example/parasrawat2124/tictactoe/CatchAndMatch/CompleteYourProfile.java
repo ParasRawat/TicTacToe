@@ -19,6 +19,7 @@ import android.support.v7.widget.CardView;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +55,7 @@ public class CompleteYourProfile extends AppCompatActivity {
     CardView opencam;
     Uri imageuri;
     String phototofile;
+    ProgressBar progressBar;
     public static final int PICK_IMAGE_REQUEST=1;
     public static final int CLICK_IMAGE_REQUEST=2;
     StorageReference storageReference;
@@ -71,6 +73,8 @@ public class CompleteYourProfile extends AppCompatActivity {
         gamername=findViewById(R.id.gamernamenameedittext);
         browse=findViewById(R.id.browse);
         opencam=findViewById(R.id.opencam);
+        progressBar=findViewById(R.id.progressbar);
+        progressBar.setVisibility(View.GONE);
         storageReference=FirebaseStorage.getInstance().getReference("GamerImages");
 
         buttoncardview.setOnClickListener(new View.OnClickListener() {
@@ -138,6 +142,7 @@ public class CompleteYourProfile extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(getApplicationContext(), "Succesfully Updated Profile", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(CompleteYourProfile.this,CatchPlayer.class));
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Profile update failed Please try Again", Toast.LENGTH_SHORT).show();
                                 }
@@ -156,6 +161,12 @@ public class CompleteYourProfile extends AppCompatActivity {
                 @Override
                 public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                     //todo show the progress of Image Upload.
+                progressBar.setVisibility(View.VISIBLE);
+                double bytesTransferred=taskSnapshot.getBytesTransferred();
+                double totalBytes=taskSnapshot.getTotalByteCount();
+                int progress= (int)(100*(bytesTransferred/totalBytes));
+                progressBar.setProgress(progress);
+
                 }
             });
         }
