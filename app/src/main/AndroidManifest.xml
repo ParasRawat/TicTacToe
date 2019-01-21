@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SplashScreen"
+        <activity
+            android:name=".SplashScreen"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,16 +36,22 @@
                 android:resource="@xml/file_paths"
                 tools:replace="android:resource" />
         </provider>
-        <activity android:name=".Login_and_Registration.LoginScreen"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".CatchAndMatch.CatchPlayer"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".CatchAndMatch.CompleteYourProfile"
-            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".Login_and_Registration.LoginScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CatchAndMatch.CatchPlayer"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CatchAndMatch.CompleteYourProfile"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <activity android:name=".CatchAndMatch.Match"></activity>
     </application>
 
 </manifest>

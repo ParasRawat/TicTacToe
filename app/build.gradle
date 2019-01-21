@@ -46,7 +46,6 @@ dependencies {
     //Dependency for glide for the purpose of image related ui improvement
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
-
     //External dependencies
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.+'
     implementation 'de.hdodenhof:circleimageview:2.2.0'

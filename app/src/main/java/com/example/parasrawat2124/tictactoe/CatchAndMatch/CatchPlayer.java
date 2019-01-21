@@ -1,5 +1,6 @@
 package com.example.parasrawat2124.tictactoe.CatchAndMatch;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,7 +31,6 @@ public class CatchPlayer extends AppCompatActivity {
         firebaseUser=firebaseAuth.getCurrentUser();
         playername=findViewById(R.id.playername);
         letsplay=findViewById(R.id.letsplay);
-
         Toast.makeText(getApplicationContext(),"Welcome "+firebaseUser.getDisplayName(),Toast.LENGTH_LONG);
         Log.d(TAG, "onCreate:+++++++++===========++++++++++ "+firebaseUser.getEmail());
 
@@ -39,10 +39,10 @@ public class CatchPlayer extends AppCompatActivity {
             public void onClick(View v) {
                 if(playername.getText().toString().equals("")){
                     Toast.makeText(getApplicationContext(),"Please provide the name",Toast.LENGTH_SHORT).show();
-
                 }
                 else {
                     matchPlayer();
+                    startActivity(new Intent(CatchPlayer.this,Match.class));
                 }
             }
         });
@@ -58,6 +58,7 @@ public class CatchPlayer extends AppCompatActivity {
                     if (dataSnapshot.getValue()!= null) {
                         Log.d(TAG, "onDataChange: "+dataSnapshot);
                         Toast.makeText(getApplicationContext(), "Successfully Found, Awaiting reply", Toast.LENGTH_SHORT).show();
+                        //todo: start your match because the players have been matched now show the realtime process
                     }
                     else {
                         Toast.makeText(getApplicationContext(), "Cannot Find, Try Again", Toast.LENGTH_SHORT).show();
@@ -76,4 +77,5 @@ public class CatchPlayer extends AppCompatActivity {
         });
 
     }
+
 }
