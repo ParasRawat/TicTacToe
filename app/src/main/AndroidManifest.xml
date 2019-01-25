@@ -51,7 +51,8 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".CatchAndMatch.Match"></activity>
+        <activity android:name=".CatchAndMatch.Match" />
+        <activity android:name=".CatchAndMatch.MatchingPlayers"></activity>
     </application>
 
 </manifest>

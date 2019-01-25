@@ -1,6 +1,7 @@
 package com.example.parasrawat2124.tictactoe.CatchAndMatch;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,7 +10,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.parasrawat2124.tictactoe.ModelClass.Matching;
 import com.example.parasrawat2124.tictactoe.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -21,7 +25,8 @@ import com.google.firebase.database.ValueEventListener;
 public class CatchPlayer extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
-    TextView playername,letsplay;
+    TextView playername,letsplay,or,requests;
+
     public static final String TAG="CatchPlayer";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +36,8 @@ public class CatchPlayer extends AppCompatActivity {
         firebaseUser=firebaseAuth.getCurrentUser();
         playername=findViewById(R.id.playername);
         letsplay=findViewById(R.id.letsplay);
+        or=findViewById(R.id.or);
+        requests=findViewById(R.id.requests);
         Toast.makeText(getApplicationContext(),"Welcome "+firebaseUser.getDisplayName(),Toast.LENGTH_LONG);
         Log.d(TAG, "onCreate:+++++++++===========++++++++++ "+firebaseUser.getEmail());
 
@@ -42,15 +49,25 @@ public class CatchPlayer extends AppCompatActivity {
                 }
                 else {
                     matchPlayer();
-                    startActivity(new Intent(CatchPlayer.this,Match.class));
+
                 }
+            }
+        });
+
+        requests.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(CatchPlayer.this,MatchingPlayers.class);
+                intent.putExtra("response","1");
+                storeResponse("1");
+                startActivity(intent);
             }
         });
 
     }
     void matchPlayer(){
         DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("Gamers");
-        String player=playername.getText().toString();
+        final String player=playername.getText().toString();
         databaseReference.child(player).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -58,7 +75,8 @@ public class CatchPlayer extends AppCompatActivity {
                     if (dataSnapshot.getValue()!= null) {
                         Log.d(TAG, "onDataChange: "+dataSnapshot);
                         Toast.makeText(getApplicationContext(), "Successfully Found, Awaiting reply", Toast.LENGTH_SHORT).show();
-                        //todo: start your match because the players have been matched now show the realtime process
+                        startMatchInDatabase(getSharedPreferences(),player);
+
                     }
                     else {
                         Toast.makeText(getApplicationContext(), "Cannot Find, Try Again", Toast.LENGTH_SHORT).show();
@@ -77,5 +95,36 @@ public class CatchPlayer extends AppCompatActivity {
         });
 
     }
-
+    void storeResponse(String response){
+        SharedPreferences sharedPreferences=getSharedPreferences("Response",getApplicationContext().MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit().putString("response",response);
+        editor.apply();
+    }
+    String getSharedPreferences(){
+        SharedPreferences sharedPreferences=getSharedPreferences("Gamers",MODE_PRIVATE);
+        String name=sharedPreferences.getString("name","0");
+        return name;
+    }
+    void startMatchInDatabase(String player1,String player2)
+    {
+        //player1 is the challenger
+        //player2 is the challenged
+        Matching matching=new Matching(player1,player2,"","","","ready","notready");
+        DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("ActiveMtach");
+        databaseReference.child(player1+"vs"+player2).setValue(matching).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Toast.makeText(getApplicationContext(), "Match started succesfully", Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(CatchPlayer.this,MatchingPlayers.class);
+                    intent.putExtra("response","2");
+                    storeResponse("2");
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(getApplicationContext(),"Error while pushing the match",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
 }
