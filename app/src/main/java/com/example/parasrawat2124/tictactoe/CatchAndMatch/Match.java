@@ -52,7 +52,13 @@ public class Match extends AppCompatActivity {
         crosss.setTag(IMAGEVIEW_TAG);
         zero.setTag(IMAGEVIEW_TAG);
 
-        fillData();
+        //if game starter is player 1, then you are the challenger
+        //if game started is player 2, then your are the challenged player
+        Log.d(TAG, "getSharedPrefereces "+getSharedPreferences());
+        Log.d(TAG, "getGameStarter "+getGameStarter());
+        Log.d(TAG, "getGame "+getGame());
+        Log.d(TAG, "getSecondPlayer "+getSecondPlayer());
+
     }
 
 
@@ -62,52 +68,24 @@ public class Match extends AppCompatActivity {
         String name=sharedPreferences.getString("name","0");
         return name;
     }
-    void fillData(){
-        Log.d(TAG, "fillData: "+player1);
-        Log.d(TAG, "fillData: "+player2);
-        try {
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Gamers");
-            databaseReference.child(player1).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                    Log.d(TAG, "onDataChange: " + dataSnapshot);
-                    GamerProfile gamerProfile = dataSnapshot.getValue(GamerProfile.class);
-                    Picasso.get().load(gamerProfile.getUri()).into(gamer1);
-                    gamer1name.setText(gamerProfile.getName());
 
 
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-        }catch (Exception e){
-
-        }
-
-        try{
-        DatabaseReference databaseReference2=FirebaseDatabase.getInstance().getReference("Gamers");
-        databaseReference2.child(player2).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d(TAG, "onDataChange: "+dataSnapshot);
-                GamerProfile gamerProfile=dataSnapshot.getValue(GamerProfile.class);
-                Picasso.get().load(gamerProfile.getUri()).into(gamer2);
-                gamer2name.setText(gamerProfile.getName());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-    }catch (Exception e){
-
-        }
+    String getGameStarter(){
+        SharedPreferences sharedPreferences=getSharedPreferences("Starter",MODE_PRIVATE);
+        String stater=sharedPreferences.getString("GameStarter","0");
+        return stater;
     }
-}
+
+    String getGame(){
+        SharedPreferences sharedPreferences=getSharedPreferences("Game",MODE_PRIVATE);
+        String  game =sharedPreferences.getString("GameName","0");
+        return game;
+    }
+
+    String getSecondPlayer(){
+        SharedPreferences sharedPreferences=getSharedPreferences("SecondPlayer",MODE_PRIVATE);
+       String name= sharedPreferences.getString("SecondPlayerName","0");
+       return name;
+    }
+    }
 

@@ -159,6 +159,10 @@ public class MatchingPlayers extends AppCompatActivity{
                     }
                     else if(matching.getPlayer2status().equals("ready")){
                         challengedtatus.setText("I am Ready, Lets roll");
+                        //you started the game as player 1
+                        storeGame(getSharedPreferences()+"vs"+getSecondPlayer());
+                        storeGameStarter("player1");
+                        storeSecondPlayer(getSecondPlayer());
                         startTimer();
 
                     }
@@ -222,8 +226,8 @@ public class MatchingPlayers extends AppCompatActivity{
     }
 
     void readyMatch(){
-        String player2=getSharedPreferences();
-        String player1=getChallengerName();
+        final String player2=getSharedPreferences();
+        final String player1=getChallengerName();
         Matching matching=new Matching(player1,player2,"","","","ready","ready");
         HashMap<String, Object> hashMap=new HashMap<>();
         hashMap.put("player2status","ready");
@@ -233,6 +237,10 @@ public class MatchingPlayers extends AppCompatActivity{
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
                     readycardview.setVisibility(View.GONE);
+                    //You started the game as player 2
+                    storeGameStarter("player2");
+                    storeSecondPlayer(player1);
+                    storeGame(player1+"vs"+player2);
                     startTimer();
                 }
 
@@ -249,5 +257,21 @@ public class MatchingPlayers extends AppCompatActivity{
         String name=sharedPreferences.getString("ChallengerName","0");
         return name;
     }
-
+    //to store who started the game
+    void storeGameStarter(String name){
+        SharedPreferences sharedPreferences=getSharedPreferences("Starter",MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit().putString("GameStarter",name);
+        editor.apply();
+    }
+    //To store the active match
+    void storeGame(String name){
+        SharedPreferences sharedPreferences=getSharedPreferences("Game",MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit().putString("GameName",name);
+        editor.apply();
+    }
+    void storeSecondPlayer(String name){
+        SharedPreferences sharedPreferences=getSharedPreferences("SecondPlayer",MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit().putString("SecondPlayerName",name);
+        editor.apply();
+    }
 }
