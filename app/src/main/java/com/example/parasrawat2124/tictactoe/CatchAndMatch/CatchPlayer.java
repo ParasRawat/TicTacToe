@@ -66,6 +66,7 @@ public class CatchPlayer extends AppCompatActivity {
 
     }
     void matchPlayer(){
+        //Checking if the player is registered with in for our database
         DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("Gamers");
         final String player=playername.getText().toString();
         databaseReference.child(player).addValueEventListener(new ValueEventListener() {
@@ -75,6 +76,8 @@ public class CatchPlayer extends AppCompatActivity {
                     if (dataSnapshot.getValue()!= null) {
                         Log.d(TAG, "onDataChange: "+dataSnapshot);
                         Toast.makeText(getApplicationContext(), "Successfully Found, Awaiting reply", Toast.LENGTH_SHORT).show();
+                        storeSecondPlayer(player);
+                        //player is the player that is searched.
                         startMatchInDatabase(getSharedPreferences(),player);
 
                     }
@@ -115,7 +118,7 @@ public class CatchPlayer extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(getApplicationContext(), "Match started succesfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Match started success", Toast.LENGTH_SHORT).show();
                     Intent intent=new Intent(CatchPlayer.this,MatchingPlayers.class);
                     intent.putExtra("response","2");
                     storeResponse("2");
@@ -126,5 +129,10 @@ public class CatchPlayer extends AppCompatActivity {
                 }
             }
         });
+    }
+    void storeSecondPlayer(String player2){
+        SharedPreferences sharedPreferences=getSharedPreferences("Player2",getApplicationContext().MODE_PRIVATE);
+        SharedPreferences. Editor editor= sharedPreferences.edit().putString("Player2Name",player2);
+        editor.apply();
     }
 }

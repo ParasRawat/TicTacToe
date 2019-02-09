@@ -145,25 +145,30 @@ public class Match extends AppCompatActivity {
     void fillData(){
         Log.d(TAG, "fillData: "+player1);
         Log.d(TAG, "fillData: "+player2);
-        DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("Gamers");
-        databaseReference.child(player1).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        try {
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Gamers");
+            databaseReference.child(player1).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                Log.d(TAG, "onDataChange: "+dataSnapshot);
-                GamerProfile gamerProfile=dataSnapshot.getValue(GamerProfile.class);
-                Picasso.get().load(gamerProfile.getUri()).into(gamer1);
-                gamer1name.setText(gamerProfile.getName());
+                    Log.d(TAG, "onDataChange: " + dataSnapshot);
+                    GamerProfile gamerProfile = dataSnapshot.getValue(GamerProfile.class);
+                    Picasso.get().load(gamerProfile.getUri()).into(gamer1);
+                    gamer1name.setText(gamerProfile.getName());
 
 
-            }
+                }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }catch (Exception e){
 
+        }
+
+        try{
         DatabaseReference databaseReference2=FirebaseDatabase.getInstance().getReference("Gamers");
         databaseReference2.child(player2).addValueEventListener(new ValueEventListener() {
             @Override
@@ -180,6 +185,9 @@ public class Match extends AppCompatActivity {
             }
         });
 
+    }catch (Exception e){
+
+        }
     }
 }
 

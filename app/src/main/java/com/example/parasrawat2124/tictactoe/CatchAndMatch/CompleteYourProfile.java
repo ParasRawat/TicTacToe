@@ -214,7 +214,7 @@ public class CompleteYourProfile extends AppCompatActivity {
             Bitmap bitmap =BitmapFactory.decodeFile(phototofile);
             gamerImage.setImageBitmap(bitmap);
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG,100,bytes);
+            bitmap.compress(Bitmap.CompressFormat.JPEG,1,bytes);
             String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "Title", null);
             imageuri=Uri.parse(path);
         }

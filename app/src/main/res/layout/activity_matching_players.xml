@@ -75,4 +75,27 @@
         android:text="Waiting"
         android:textColor="@color/colorPrimaryDark" />
 
+    <android.support.v7.widget.CardView
+        android:visibility="gone"
+        android:layout_margin="8dp"
+        app:cardElevation="8dp"
+        android:id="@+id/countdowncard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/countdowntextview"
+                android:layout_width="wrap_content"
+                android:layout_height="300dp"
+                android:textSize="150dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:fontFamily="@font/caesar_dressing"
+                android:textAlignment="center"
+                android:layout_centerInParent="true" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
 </RelativeLayout>

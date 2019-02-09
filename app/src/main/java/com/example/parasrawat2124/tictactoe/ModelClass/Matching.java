@@ -10,6 +10,7 @@ public class Matching {
     String player2status;
 
     public Matching() {
+
     }
 
     public Matching(String player1, String player2, String player1move, String player2move, String result,String player1status,String player2status) {
