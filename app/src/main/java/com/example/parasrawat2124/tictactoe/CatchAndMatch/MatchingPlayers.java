@@ -12,10 +12,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.parasrawat2124.tictactoe.ModelClass.GamerProfile;
 import com.example.parasrawat2124.tictactoe.ModelClass.Matching;
 import com.example.parasrawat2124.tictactoe.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,11 +26,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
+
 public class MatchingPlayers extends AppCompatActivity{
     ImageView challengerimage,challengedimage;
     TextView challengerstatus,challengedtatus;
     CardView countdowncard;
     TextView countdowntextview;
+    CardView readycardview;
     CountDownTimer cTimer ;
     public static final String TAG="Challenge";
     @Override
@@ -39,9 +45,18 @@ public class MatchingPlayers extends AppCompatActivity{
         challengerstatus=findViewById(R.id.challengerstatus);
         challengedtatus=findViewById(R.id.challenegedstatus);
         countdowncard=findViewById(R.id.countdowncard);
+        readycardview=findViewById(R.id.readycardview);
         countdowntextview=findViewById(R.id.countdowntextview);
         cTimer=null;
         condition();
+        readycardview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //challeneged player responses
+                readyMatch();
+            }
+        });
+
 
     }
     void condition(){
@@ -49,8 +64,8 @@ public class MatchingPlayers extends AppCompatActivity{
         //response 1 means i want to see the requests
         //response 2 means i have invited someone
         if(getResponse().equals("1")){
-
-            //todo Check from the database if any match has been active on in your name, if yes then fill in the challenger and the challenged and await the response
+            String name=getSharedPreferences();
+            checkMatch(name);
         }
         else if(getResponse().equals("2")){
             //Fill in the credentials in the views;
@@ -59,7 +74,6 @@ public class MatchingPlayers extends AppCompatActivity{
             Log.d(TAG, "condition: "+challenegr+"   "+challeneged);
             fillChallengerData(challenegr);
             fillChallenegedData(challeneged);
-            //todo await for the player reply
         }
     }
     String getResponse(){
@@ -78,6 +92,7 @@ public class MatchingPlayers extends AppCompatActivity{
         return name;
     }
     void fillChallengerData(String name){
+        Log.d(TAG, "fillChallengerData: "+"Called");
         DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("Gamers");
         databaseReference.child(name).addValueEventListener(new ValueEventListener() {
             @Override
@@ -114,6 +129,7 @@ public class MatchingPlayers extends AppCompatActivity{
 
     }
     void fillChallenegedData(String name){
+        Log.d(TAG, "fillChallenegedData: "+"Called");
         DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("Gamers");
         databaseReference.child(name).addValueEventListener(new ValueEventListener() {
             @Override
@@ -143,7 +159,6 @@ public class MatchingPlayers extends AppCompatActivity{
                     }
                     else if(matching.getPlayer2status().equals("ready")){
                         challengedtatus.setText("I am Ready, Lets roll");
-                        countdowncard.setVisibility(View.VISIBLE);
                         startTimer();
 
                     }
@@ -161,6 +176,7 @@ public class MatchingPlayers extends AppCompatActivity{
 
     }
     void startTimer() {
+        countdowncard.setVisibility(View.VISIBLE);
         cTimer = new CountDownTimer(4000, 1000) {
             public void onTick(long millisUntilFinished) {
                 int mil= (int) millisUntilFinished/1000;
@@ -179,4 +195,59 @@ public class MatchingPlayers extends AppCompatActivity{
         };
         cTimer.start();
     }
+    void checkMatch(final String name){
+        DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("ActiveMtach");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot data:dataSnapshot.getChildren()
+                     ) {
+                    Log.d(TAG, "PLAYER 2 INFO "+data);
+                    Matching matching=data.getValue(Matching.class);
+                    if(matching.getPlayer2().equals(name)){
+                        Toast.makeText(getApplicationContext(),"You have 1 challenge",Toast.LENGTH_LONG).show();
+                        fillChallenegedData(name);
+                        storeChallengerName(matching.getPlayer1());
+                        fillChallengerData(matching.getPlayer1());
+                        readycardview.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    void readyMatch(){
+        String player2=getSharedPreferences();
+        String player1=getChallengerName();
+        Matching matching=new Matching(player1,player2,"","","","ready","ready");
+        HashMap<String, Object> hashMap=new HashMap<>();
+        hashMap.put("player2status","ready");
+        DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("ActiveMtach");
+        databaseReference.child(player1+"vs"+player2).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    readycardview.setVisibility(View.GONE);
+                    startTimer();
+                }
+
+            }
+        });
+    }
+    void storeChallengerName(String name){
+        SharedPreferences sharedPreferences=getSharedPreferences("Challenger",MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit().putString("ChallengerName",name);
+        editor.apply();
+    }
+    String getChallengerName(){
+        SharedPreferences sharedPreferences=getSharedPreferences("Challenger",MODE_PRIVATE);
+        String name=sharedPreferences.getString("ChallengerName","0");
+        return name;
+    }
+
 }
