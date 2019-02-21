@@ -13,11 +13,12 @@ public class Responses {
     String player1turn;
     String player2turn;
     String winner;
+    String turn;
 
     public Responses() {
     }
 
-    public Responses(String block11, String block12, String block13, String block21, String block22, String block23, String block31, String block32, String block33, String player1turn, String player2turn, String winner) {
+    public Responses(String block11, String block12, String block13, String block21, String block22, String block23, String block31, String block32, String block33, String player1turn, String player2turn, String winner,String turn) {
         this.block11 = block11;
         this.block12 = block12;
         this.block13 = block13;
@@ -30,6 +31,7 @@ public class Responses {
         this.player1turn = player1turn;
         this.player2turn = player2turn;
         this.winner = winner;
+        this.turn=turn;
     }
 
     public String getBlock11() {
@@ -78,5 +80,9 @@ public class Responses {
 
     public String getWinner() {
         return winner;
+    }
+
+    public String getTurn() {
+        return turn;
     }
 }
