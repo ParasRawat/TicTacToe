@@ -1,6 +1,7 @@
 package com.example.parasrawat2124.tictactoe.CatchAndMatch;
 
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -120,7 +121,42 @@ public class Match extends AppCompatActivity {
             });
         }
 
-        //Updater LogiC
+        //Fill Credentials
+        DatabaseReference databaseReference2=FirebaseDatabase.getInstance().getReference("Gamers");
+        databaseReference2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot data:dataSnapshot.getChildren()
+                     ) {
+                    Log.d(TAG, "onDataChange: "+data);
+                    GamerProfile gamerProfile=data.getValue(GamerProfile.class);
+                    if(gamerProfile.getName().equals(getSharedPreferences())){
+                        gamer1name.setText(gamerProfile.getName());
+                        Picasso.get().load(gamerProfile.getUri()).placeholder(R.drawable.tictacplaceholder).into(gamer1);
+
+
+                    }
+
+                    if(gamerProfile.getName().equals(getSecondPlayer())){
+                        gamer2name.setText(gamerProfile.getName());
+                        Picasso.get().load(gamerProfile.getUri()).placeholder(R.drawable.tictacplaceholder).into(gamer2);
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+
+
+        //Updater Logic
         DatabaseReference updater=FirebaseDatabase.getInstance().getReference("MatchProcess");
         updater.child(getGame()).addValueEventListener(new ValueEventListener() {
             @Override
@@ -130,75 +166,93 @@ public class Match extends AppCompatActivity {
                 if(!responses.getBlock11().equals("empty")){
                     if(responses.getBlock11().equals("zero")){
                         imageView11.setImageResource(R.drawable.zero);
+                        gettingreadycardview.setVisibility(View.GONE);
                     }
                     else {
                         imageView11.setImageResource(R.drawable.cross);
+                        gettingreadycardview.setVisibility(View.GONE);
                     }
                 }
 
                 if(!responses.getBlock12().equals("empty")){
                     if(responses.getBlock12().equals("zero")){
                         imageView12.setImageResource(R.drawable.zero);
+                        gettingreadycardview.setVisibility(View.GONE);
                     }
                     else {
                         imageView12.setImageResource(R.drawable.cross);
+                        gettingreadycardview.setVisibility(View.GONE);
                     }
                 }
 
                 if(!responses.getBlock13().equals("empty")){
                     if(responses.getBlock13().equals("zero")){
                         imageView13.setImageResource(R.drawable.zero);
+                        gettingreadycardview.setVisibility(View.GONE);
                     }
                     else {
                         imageView13.setImageResource(R.drawable.cross);
+                        gettingreadycardview.setVisibility(View.GONE);
                     }
                 }
                 if(!responses.getBlock21().equals("empty")){
                     if(responses.getBlock21().equals("zero")){
                         imageView21.setImageResource(R.drawable.zero);
+                        gettingreadycardview.setVisibility(View.GONE);
                     }
                     else {
                         imageView21.setImageResource(R.drawable.cross);
+                        gettingreadycardview.setVisibility(View.GONE);
                     }
                 }
                 if(!responses.getBlock22().equals("empty")){
                     if(responses.getBlock22().equals("zero")){
                         imageView22.setImageResource(R.drawable.zero);
+                        gettingreadycardview.setVisibility(View.GONE);
                     }
                     else {
                         imageView22.setImageResource(R.drawable.cross);
+                        gettingreadycardview.setVisibility(View.GONE);
                     }
                 }
                 if(!responses.getBlock23().equals("empty")){
                     if(responses.getBlock23().equals("zero")){
                         imageView23.setImageResource(R.drawable.zero);
+                        gettingreadycardview.setVisibility(View.GONE);
                     }
                     else {
                         imageView23.setImageResource(R.drawable.cross);
+                        gettingreadycardview.setVisibility(View.GONE);
                     }
                 }
                 if(!responses.getBlock31().equals("empty")){
                     if(responses.getBlock31().equals("zero")){
                         imageView31.setImageResource(R.drawable.zero);
+                        gettingreadycardview.setVisibility(View.GONE);
                     }
                     else {
                         imageView31.setImageResource(R.drawable.cross);
+                        gettingreadycardview.setVisibility(View.GONE);
                     }
                 }
                 if(!responses.getBlock32().equals("empty")){
                     if(responses.getBlock32().equals("zero")){
                         imageView32.setImageResource(R.drawable.zero);
+                        gettingreadycardview.setVisibility(View.GONE);
                     }
                     else {
                         imageView32.setImageResource(R.drawable.cross);
+                        gettingreadycardview.setVisibility(View.GONE);
                     }
                 }
                 if(!responses.getBlock33().equals("empty")){
                     if(responses.getBlock33().equals("zero")){
                         imageView33.setImageResource(R.drawable.zero);
+                        gettingreadycardview.setVisibility(View.GONE);
                     }
                     else {
                         imageView33.setImageResource(R.drawable.cross);
+                        gettingreadycardview.setVisibility(View.GONE);
                     }
                 }
 
@@ -240,6 +294,7 @@ public class Match extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                gettingreadycardview.setVisibility(View.GONE);
                                             }
                                         }
                                     });
@@ -256,6 +311,7 @@ public class Match extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                gettingreadycardview.setVisibility(View.GONE);
                                             }
                                         }
                                     });
@@ -272,8 +328,7 @@ public class Match extends AppCompatActivity {
 
                         }
                         else {
-                            //todo not the players turn; so wait for the reply of other player
-                            gettingreadycardview.setVisibility(View.GONE);
+                            Toast.makeText(getApplicationContext(),"Not Your Turn",Toast.LENGTH_SHORT).show();
                         }
 
 
@@ -318,6 +373,7 @@ public class Match extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                gettingreadycardview.setVisibility(View.GONE);
                                             }
                                         }
                                     });
@@ -334,6 +390,7 @@ public class Match extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                gettingreadycardview.setVisibility(View.GONE);
                                             }
                                         }
                                     });
@@ -393,6 +450,7 @@ public class Match extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                gettingreadycardview.setVisibility(View.GONE);
                                             }
                                         }
                                     });
@@ -409,6 +467,7 @@ public class Match extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                gettingreadycardview.setVisibility(View.GONE);
                                             }
                                         }
                                     });
@@ -467,6 +526,7 @@ public class Match extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                gettingreadycardview.setVisibility(View.GONE);
                                             }
                                         }
                                     });
@@ -483,6 +543,7 @@ public class Match extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                gettingreadycardview.setVisibility(View.GONE);
                                             }
                                         }
                                     });
@@ -542,6 +603,7 @@ public class Match extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                gettingreadycardview.setVisibility(View.GONE);
                                             }
                                         }
                                     });
@@ -558,6 +620,7 @@ public class Match extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                gettingreadycardview.setVisibility(View.GONE);
                                             }
                                         }
                                     });
@@ -617,6 +680,7 @@ public class Match extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
+                                                gettingreadycardview.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
                                             }
                                         }
@@ -633,6 +697,7 @@ public class Match extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
+                                                gettingreadycardview.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
                                             }
                                         }
@@ -692,6 +757,7 @@ public class Match extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
+                                                gettingreadycardview.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
                                             }
                                         }
@@ -708,6 +774,7 @@ public class Match extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
+                                                gettingreadycardview.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
                                             }
                                         }
@@ -766,6 +833,7 @@ public class Match extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
+                                                gettingreadycardview.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
                                             }
                                         }
@@ -782,6 +850,7 @@ public class Match extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
+                                                gettingreadycardview.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
                                             }
                                         }
@@ -841,6 +910,7 @@ public class Match extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
+                                                gettingreadycardview.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
                                             }
                                         }
@@ -857,6 +927,7 @@ public class Match extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
+                                                gettingreadycardview.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
                                             }
                                         }
@@ -908,34 +979,58 @@ public class Match extends AppCompatActivity {
 
                 if(block11.equals(block12) && block12.equals(block13) && !block11.equals("empty")){
                     Toast.makeText(getApplicationContext(),"WINNER",Toast.LENGTH_LONG).show();
+                    blink(imageView11);
+                    blink(imageView12);
+                    blink(imageView13);
+
                     winnercardview.setVisibility(View.VISIBLE);
 
                 }
 
                 if(block21.equals(block22) && block22.equals(block23) && !block21.equals("empty")){
                     Toast.makeText(getApplicationContext(),"WINNER",Toast.LENGTH_LONG).show();
+                    blink(imageView21);
+                    blink(imageView22);
+                    blink(imageView23);
+
                     winnercardview.setVisibility(View.VISIBLE);
 
                 }
                 if(block31.equals(block32) && block32.equals(block33) && !block31.equals("empty")){
                     Toast.makeText(getApplicationContext(),"WINNER",Toast.LENGTH_LONG).show();
+                    blink(imageView31);
+                    blink(imageView32);
+                    blink(imageView33);
+
                     winnercardview.setVisibility(View.VISIBLE);
 
                 }
 
                 if(block11.equals(block21) && block21.equals(block31) &&  !block11.equals("empty") ){
                     Toast.makeText(getApplicationContext(),"WINNER",Toast.LENGTH_LONG).show();
+                    blink(imageView11);
+                    blink(imageView21);
+                    blink(imageView31);
+
                     winnercardview.setVisibility(View.VISIBLE);
 
                 }
                 if(block12.equals(block22) && block22.equals(block32) && !block12.equals("empty")){
                     Toast.makeText(getApplicationContext(),"WINNER",Toast.LENGTH_LONG).show();
+                    blink(imageView12);
+                    blink(imageView22);
+                    blink(imageView32);
+
                     winnercardview.setVisibility(View.VISIBLE);
 
                 }
 
                 if(block13.equals(block23) && block23.equals(block33)  && !block13.equals("empty")) {
                     Toast.makeText(getApplicationContext(),"WINNER",Toast.LENGTH_LONG).show();
+                    blink(imageView13);
+                    blink(imageView23);
+                    blink(imageView33);
+
                     winnercardview.setVisibility(View.VISIBLE);
 
                 }
@@ -943,6 +1038,10 @@ public class Match extends AppCompatActivity {
 
                 if(block11.equals(block22) && block22.equals(block33)  && !block11.equals("empty")){
                     Toast.makeText(getApplicationContext(),"WINNER",Toast.LENGTH_LONG).show();
+                    blink(imageView11);
+                    blink(imageView22);
+                    blink(imageView33);
+
                     winnercardview.setVisibility(View.VISIBLE);
 
 
@@ -951,6 +1050,10 @@ public class Match extends AppCompatActivity {
                 if(block13.equals(block22) && block22.equals(block31)  && !block13.equals("empty")){
 
                     Toast.makeText(getApplicationContext(),"WINNER",Toast.LENGTH_LONG).show();
+                    blink(imageView13);
+                    blink(imageView22);
+                    blink(imageView31);
+
                     winnercardview.setVisibility(View.VISIBLE);
 
                 }
@@ -993,5 +1096,29 @@ public class Match extends AppCompatActivity {
        return name;
     }
 
+    private void blink(final View v) {
+        final Handler handler = new Handler();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int timeToBlink = 500;    //in milissegunds
+                try {
+                    Thread.sleep(timeToBlink);
+                } catch (Exception e) {
+                }
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (v.getVisibility() == View.VISIBLE) {
+                            v.setVisibility(View.INVISIBLE);
+                        } else {
+                            v.setVisibility(View.VISIBLE);
+                        }
+                        blink(v);
+                    }
+                });
+            }
+        }).start();
+    }
     }
 
