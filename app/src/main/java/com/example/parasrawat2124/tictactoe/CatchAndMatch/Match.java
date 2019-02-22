@@ -13,7 +13,6 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.parasrawat2124.tictactoe.ModelClass.GamerProfile;
-import com.example.parasrawat2124.tictactoe.ModelClass.Response;
 import com.example.parasrawat2124.tictactoe.ModelClass.Responses;
 import com.example.parasrawat2124.tictactoe.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -46,6 +45,7 @@ public class Match extends AppCompatActivity {
     String block33="block33";
     String player1turn="player1turn";
     String player2turn="player2turn";
+    CardView winnercardview;
     ImageView imageView11,imageView12,imageView13,imageView21,imageView22,imageView23,imageView31,imageView32,imageView33;
     //todo Player 1 is always the challenger player, player 2 is always the challenged player
     CircleImageView gamer1,gamer2;
@@ -72,6 +72,7 @@ public class Match extends AppCompatActivity {
         crosss.setTag(IMAGEVIEW_TAG);
         zero.setTag(IMAGEVIEW_TAG);
         gettingreadycardview=findViewById(R.id.gettingreadycardview);
+        winnercardview=findViewById(R.id.winnercardview);
 
         //if game starter is player 1, then you are the challenger
         //if game started is player 2, then your are the challenged player
@@ -889,6 +890,80 @@ public class Match extends AppCompatActivity {
         });
 
 
+        //Winner Logic
+        DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+        databaseReference1.child(getGame()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Responses responses = dataSnapshot.getValue(Responses.class);
+                block11 = responses.getBlock11();
+                block12 = responses.getBlock12();
+                block13 = responses.getBlock13();
+                block21 = responses.getBlock21();
+                block22 = responses.getBlock22();
+                block23 = responses.getBlock23();
+                block31 = responses.getBlock31();
+                block32 = responses.getBlock32();
+                block33 = responses.getBlock33();
+
+                if(block11.equals(block12) && block12.equals(block13) && !block11.equals("empty")){
+                    Toast.makeText(getApplicationContext(),"WINNER",Toast.LENGTH_LONG).show();
+                    winnercardview.setVisibility(View.VISIBLE);
+
+                }
+
+                if(block21.equals(block22) && block22.equals(block23) && !block21.equals("empty")){
+                    Toast.makeText(getApplicationContext(),"WINNER",Toast.LENGTH_LONG).show();
+                    winnercardview.setVisibility(View.VISIBLE);
+
+                }
+                if(block31.equals(block32) && block32.equals(block33) && !block31.equals("empty")){
+                    Toast.makeText(getApplicationContext(),"WINNER",Toast.LENGTH_LONG).show();
+                    winnercardview.setVisibility(View.VISIBLE);
+
+                }
+
+                if(block11.equals(block21) && block21.equals(block31) &&  !block11.equals("empty") ){
+                    Toast.makeText(getApplicationContext(),"WINNER",Toast.LENGTH_LONG).show();
+                    winnercardview.setVisibility(View.VISIBLE);
+
+                }
+                if(block12.equals(block22) && block22.equals(block32) && !block12.equals("empty")){
+                    Toast.makeText(getApplicationContext(),"WINNER",Toast.LENGTH_LONG).show();
+                    winnercardview.setVisibility(View.VISIBLE);
+
+                }
+
+                if(block13.equals(block23) && block23.equals(block33)  && !block13.equals("empty")) {
+                    Toast.makeText(getApplicationContext(),"WINNER",Toast.LENGTH_LONG).show();
+                    winnercardview.setVisibility(View.VISIBLE);
+
+                }
+
+
+                if(block11.equals(block22) && block22.equals(block33)  && !block11.equals("empty")){
+                    Toast.makeText(getApplicationContext(),"WINNER",Toast.LENGTH_LONG).show();
+                    winnercardview.setVisibility(View.VISIBLE);
+
+
+                }
+
+                if(block13.equals(block22) && block22.equals(block31)  && !block13.equals("empty")){
+
+                    Toast.makeText(getApplicationContext(),"WINNER",Toast.LENGTH_LONG).show();
+                    winnercardview.setVisibility(View.VISIBLE);
+
+                }
+
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 
