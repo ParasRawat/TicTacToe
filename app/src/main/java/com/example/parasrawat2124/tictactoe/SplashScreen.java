@@ -19,11 +19,11 @@ Handler handler;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         ticimage=findViewById(R.id.ticimage);
-        Glide.with(this).asGif().load(R.drawable.tictactoe).into(ticimage);
+        Glide.with(this).asGif().load(R.drawable.uianim).into(ticimage);
         Thread timer=new Thread(){
             public void run(){
           try{
-              sleep(2000);
+              sleep(4000);
 
 
           }

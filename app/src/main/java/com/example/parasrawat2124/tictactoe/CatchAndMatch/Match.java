@@ -84,6 +84,7 @@ public class Match extends AppCompatActivity {
 
 
         if(getGameStarter().equals("player1")){
+            //pushing the game
             crosss.setVisibility(View.VISIBLE);
             Responses responses=new Responses("empty","empty","empty","empty","empty","empty","empty","empty","empty","false","true","","player2");
             DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("MatchProcess");
@@ -104,6 +105,7 @@ public class Match extends AppCompatActivity {
 
         }
         if(getGameStarter().equals("player2")){
+            //pushing the game
             zero.setVisibility(View.VISIBLE);
             Responses responses=new Responses("empty","empty","empty","empty","empty","empty","empty","empty","empty","false","true","","player2");
             DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("MatchProcess");
@@ -264,10 +266,6 @@ public class Match extends AppCompatActivity {
 
             }
         });
-
-
-
-
         final DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("MatchProcess");
         //ImageView 11
         imageView11.setOnClickListener(new View.OnClickListener() {
@@ -276,13 +274,12 @@ public class Match extends AppCompatActivity {
                 databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        gettingreadycardview.setVisibility(View.VISIBLE);
                         Log.d(TAG, "onDataChange: "+dataSnapshot);
                         Responses responses=dataSnapshot.getValue(Responses.class);
+                        //checking the turn
                         if(getGameStarter().equals(responses.getTurn())){
-
                             if(responses.getBlock11().equals("empty")){
-                                //todo allow the player to make the change
+                                //check to allow the user to make change
                                 if(getGameStarter().equals("player1")){
                                     imageView11.setImageResource(R.drawable.cross);
                                     HashMap<String,Object> hashMap=new HashMap<>();
@@ -295,9 +292,11 @@ public class Match extends AppCompatActivity {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
                                                 gettingreadycardview.setVisibility(View.GONE);
+                                                return;
                                             }
                                         }
                                     });
+
 
                                 }
                                 else if(getGameStarter().equals("player2")){
@@ -312,6 +311,7 @@ public class Match extends AppCompatActivity {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
                                                 gettingreadycardview.setVisibility(View.GONE);
+                                                return;
                                             }
                                         }
                                     });
@@ -321,15 +321,10 @@ public class Match extends AppCompatActivity {
                                 }
 
                             }
-                            else {
-                                Toast.makeText(getApplicationContext(),"Not a valid response, already filled ",Toast.LENGTH_LONG).show();
-                                gettingreadycardview.setVisibility(View.GONE);
-                            }
+
 
                         }
-                        else {
-                            Toast.makeText(getApplicationContext(),"Not Your Turn",Toast.LENGTH_SHORT).show();
-                        }
+
 
 
                     }
@@ -355,7 +350,6 @@ public class Match extends AppCompatActivity {
                 databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        gettingreadycardview.setVisibility(View.VISIBLE);
                         Log.d(TAG, "onDataChange: "+dataSnapshot);
                         Responses responses=dataSnapshot.getValue(Responses.class);
                         if(getGameStarter().equals(responses.getTurn())){
@@ -374,6 +368,7 @@ public class Match extends AppCompatActivity {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
                                                 gettingreadycardview.setVisibility(View.GONE);
+                                                return;
                                             }
                                         }
                                     });
@@ -391,6 +386,7 @@ public class Match extends AppCompatActivity {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
                                                 gettingreadycardview.setVisibility(View.GONE);
+                                                return;
                                             }
                                         }
                                     });
@@ -399,10 +395,6 @@ public class Match extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
                                 }
 
-                            }
-                            else {
-                                Toast.makeText(getApplicationContext(),"Not a valid response, already filled ",Toast.LENGTH_LONG).show();
-                                gettingreadycardview.setVisibility(View.GONE);
                             }
 
                         }
@@ -432,7 +424,6 @@ public class Match extends AppCompatActivity {
                 databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        gettingreadycardview.setVisibility(View.VISIBLE);
                         Log.d(TAG, "onDataChange: "+dataSnapshot);
                         Responses responses=dataSnapshot.getValue(Responses.class);
                         if(getGameStarter().equals(responses.getTurn())){
@@ -451,10 +442,10 @@ public class Match extends AppCompatActivity {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
                                                 gettingreadycardview.setVisibility(View.GONE);
+                                                return;
                                             }
                                         }
                                     });
-
                                 }
                                 else if(getGameStarter().equals("player2")){
                                     imageView13.setImageResource(R.drawable.zero);
@@ -468,6 +459,7 @@ public class Match extends AppCompatActivity {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
                                                 gettingreadycardview.setVisibility(View.GONE);
+                                                return;
                                             }
                                         }
                                     });
@@ -475,19 +467,12 @@ public class Match extends AppCompatActivity {
                                 else {
                                     Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
                                 }
-
                             }
-                            else {
-                                Toast.makeText(getApplicationContext(),"Not a valid response, already filled ",Toast.LENGTH_LONG).show();
-                                gettingreadycardview.setVisibility(View.GONE);
-                            }
-
                         }
                         else {
                             //todo not the players turn; so wait for the reply of other player
                             gettingreadycardview.setVisibility(View.GONE);
                         }
-
 
                     }
 
@@ -508,7 +493,6 @@ public class Match extends AppCompatActivity {
                 databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        gettingreadycardview.setVisibility(View.VISIBLE);
                         Log.d(TAG, "onDataChange: "+dataSnapshot);
                         Responses responses=dataSnapshot.getValue(Responses.class);
                         if(getGameStarter().equals(responses.getTurn())){
@@ -527,6 +511,7 @@ public class Match extends AppCompatActivity {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
                                                 gettingreadycardview.setVisibility(View.GONE);
+                                                return;
                                             }
                                         }
                                     });
@@ -544,6 +529,7 @@ public class Match extends AppCompatActivity {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
                                                 gettingreadycardview.setVisibility(View.GONE);
+                                                return;
                                             }
                                         }
                                     });
@@ -552,10 +538,6 @@ public class Match extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
                                 }
 
-                            }
-                            else {
-                                Toast.makeText(getApplicationContext(),"Not a valid response, already filled ",Toast.LENGTH_LONG).show();
-                                gettingreadycardview.setVisibility(View.GONE);
                             }
 
                         }
@@ -585,7 +567,6 @@ public class Match extends AppCompatActivity {
                 databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        gettingreadycardview.setVisibility(View.VISIBLE);
                         Log.d(TAG, "onDataChange: "+dataSnapshot);
                         Responses responses=dataSnapshot.getValue(Responses.class);
                         if(getGameStarter().equals(responses.getTurn())){
@@ -604,6 +585,7 @@ public class Match extends AppCompatActivity {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
                                                 gettingreadycardview.setVisibility(View.GONE);
+                                                return;
                                             }
                                         }
                                     });
@@ -621,6 +603,7 @@ public class Match extends AppCompatActivity {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
                                                 gettingreadycardview.setVisibility(View.GONE);
+                                                return;
                                             }
                                         }
                                     });
@@ -630,11 +613,6 @@ public class Match extends AppCompatActivity {
                                 }
 
                             }
-                            else {
-                                Toast.makeText(getApplicationContext(),"Not a valid response, already filled ",Toast.LENGTH_LONG).show();
-                                gettingreadycardview.setVisibility(View.GONE);
-                            }
-
                         }
                         else {
                             //todo not the players turn; so wait for the reply of other player
@@ -663,7 +641,6 @@ public class Match extends AppCompatActivity {
                 databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        gettingreadycardview.setVisibility(View.VISIBLE);
                         Log.d(TAG, "onDataChange: "+dataSnapshot);
                         Responses responses=dataSnapshot.getValue(Responses.class);
                         if(getGameStarter().equals(responses.getTurn())){
@@ -682,6 +659,9 @@ public class Match extends AppCompatActivity {
                                             if (task.isSuccessful()) {
                                                 gettingreadycardview.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                gettingreadycardview.setVisibility(View.GONE);
+                                                return;
+
                                             }
                                         }
                                     });
@@ -699,6 +679,8 @@ public class Match extends AppCompatActivity {
                                             if (task.isSuccessful()) {
                                                 gettingreadycardview.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                gettingreadycardview.setVisibility(View.GONE);
+                                                return;
                                             }
                                         }
                                     });
@@ -707,10 +689,6 @@ public class Match extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
                                 }
 
-                            }
-                            else {
-                                Toast.makeText(getApplicationContext(),"Not a valid response, already filled ",Toast.LENGTH_LONG).show();
-                                gettingreadycardview.setVisibility(View.GONE);
                             }
 
                         }
@@ -740,7 +718,6 @@ public class Match extends AppCompatActivity {
                 databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        gettingreadycardview.setVisibility(View.VISIBLE);
                         Log.d(TAG, "onDataChange: "+dataSnapshot);
                         Responses responses=dataSnapshot.getValue(Responses.class);
                         if(getGameStarter().equals(responses.getTurn())){
@@ -759,6 +736,8 @@ public class Match extends AppCompatActivity {
                                             if (task.isSuccessful()) {
                                                 gettingreadycardview.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                gettingreadycardview.setVisibility(View.GONE);
+                                                return;
                                             }
                                         }
                                     });
@@ -776,6 +755,8 @@ public class Match extends AppCompatActivity {
                                             if (task.isSuccessful()) {
                                                 gettingreadycardview.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                gettingreadycardview.setVisibility(View.GONE);
+                                                return;
                                             }
                                         }
                                     });
@@ -785,11 +766,6 @@ public class Match extends AppCompatActivity {
                                 }
 
                             }
-                            else {
-                                Toast.makeText(getApplicationContext(),"Not a valid response, already filled ",Toast.LENGTH_LONG).show();
-                                gettingreadycardview.setVisibility(View.GONE);
-                            }
-
                         }
                         else {
                             //todo not the players turn; so wait for the reply of other player
@@ -816,7 +792,6 @@ public class Match extends AppCompatActivity {
                 databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        gettingreadycardview.setVisibility(View.VISIBLE);
                         Log.d(TAG, "onDataChange: "+dataSnapshot);
                         Responses responses=dataSnapshot.getValue(Responses.class);
                         if(getGameStarter().equals(responses.getTurn())){
@@ -835,6 +810,8 @@ public class Match extends AppCompatActivity {
                                             if (task.isSuccessful()) {
                                                 gettingreadycardview.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                gettingreadycardview.setVisibility(View.GONE);
+                                                return;
                                             }
                                         }
                                     });
@@ -852,6 +829,8 @@ public class Match extends AppCompatActivity {
                                             if (task.isSuccessful()) {
                                                 gettingreadycardview.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                gettingreadycardview.setVisibility(View.GONE);
+                                                return;
                                             }
                                         }
                                     });
@@ -860,10 +839,6 @@ public class Match extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
                                 }
 
-                            }
-                            else {
-                                Toast.makeText(getApplicationContext(),"Not a valid response, already filled ",Toast.LENGTH_LONG).show();
-                                gettingreadycardview.setVisibility(View.GONE);
                             }
 
                         }
@@ -893,7 +868,6 @@ public class Match extends AppCompatActivity {
                 databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        gettingreadycardview.setVisibility(View.VISIBLE);
                         Log.d(TAG, "onDataChange: "+dataSnapshot);
                         Responses responses=dataSnapshot.getValue(Responses.class);
                         if(getGameStarter().equals(responses.getTurn())){
@@ -911,7 +885,10 @@ public class Match extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 gettingreadycardview.setVisibility(View.GONE);
+
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                gettingreadycardview.setVisibility(View.GONE);
+                                                return;
                                             }
                                         }
                                     });
@@ -929,6 +906,8 @@ public class Match extends AppCompatActivity {
                                             if (task.isSuccessful()) {
                                                 gettingreadycardview.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                gettingreadycardview.setVisibility(View.GONE);
+                                                return;
                                             }
                                         }
                                     });
@@ -937,10 +916,6 @@ public class Match extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
                                 }
 
-                            }
-                            else {
-                                Toast.makeText(getApplicationContext(),"Not a valid response, already filled ",Toast.LENGTH_LONG).show();
-                                gettingreadycardview.setVisibility(View.GONE);
                             }
 
                         }
@@ -1120,5 +1095,13 @@ public class Match extends AppCompatActivity {
             }
         }).start();
     }
+
+    @Override
+    public void onBackPressed() {
+
+    }
+
+    //implementing gravity, how to implement gravity feature
+
     }
 
