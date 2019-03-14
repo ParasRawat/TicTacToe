@@ -109,7 +109,7 @@ public class Match extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
                         Toast.makeText(getApplicationContext(), "Challenged player will get first turn", Toast.LENGTH_LONG).show();
-                        gettingreadycardview.setVisibility(View.GONE);
+                        gettingreadycardview.setVisibility(View.VISIBLE);
 
                     }
                     else{

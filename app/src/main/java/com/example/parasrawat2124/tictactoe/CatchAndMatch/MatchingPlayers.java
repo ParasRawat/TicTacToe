@@ -242,6 +242,7 @@ public class MatchingPlayers extends AppCompatActivity{
                     storeGameStarter("player2");
                     storeSecondPlayer(player1);
                     storeGame(player1+"vs"+player2);
+                    DeleteCurrentMatch();
                     startTimer();
                 }
 
@@ -274,5 +275,18 @@ public class MatchingPlayers extends AppCompatActivity{
         SharedPreferences sharedPreferences=getSharedPreferences("SecondPlayer",MODE_PRIVATE);
         SharedPreferences.Editor editor=sharedPreferences.edit().putString("SecondPlayerName",name);
         editor.apply();
+    }
+
+    void DeleteCurrentMatch(){
+        final String player2=getSharedPreferences();
+        final String player1=getChallengerName();
+        DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("ActiveMtach");
+        databaseReference.child(player1+"vs"+player2).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Toast.makeText(getApplicationContext(),"Made Changes",Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 }

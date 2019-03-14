@@ -118,7 +118,7 @@ public class CatchPlayer extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(getApplicationContext(), "Match started success", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Match Initiated success", Toast.LENGTH_SHORT).show();
                     Intent intent=new Intent(CatchPlayer.this,MatchingPlayers.class);
                     intent.putExtra("response","2");
                     storeResponse("2");
