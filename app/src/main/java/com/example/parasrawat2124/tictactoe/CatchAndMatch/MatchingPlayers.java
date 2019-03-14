@@ -147,6 +147,8 @@ public class MatchingPlayers extends AppCompatActivity{
         });
         //set status
 
+        //Player 1 listening to player 2 response.
+
         DatabaseReference statusrefrence=FirebaseDatabase.getInstance().getReference("ActiveMtach");
         statusrefrence.child(getSharedPreferences()+"vs"+getSecondPlayer()).addValueEventListener(new ValueEventListener() {
             @Override
@@ -228,7 +230,6 @@ public class MatchingPlayers extends AppCompatActivity{
     void readyMatch(){
         final String player2=getSharedPreferences();
         final String player1=getChallengerName();
-        Matching matching=new Matching(player1,player2,"","","","ready","ready");
         HashMap<String, Object> hashMap=new HashMap<>();
         hashMap.put("player2status","ready");
         DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("ActiveMtach");

@@ -26,10 +26,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
+import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Match extends AppCompatActivity {
+    TextView winner;
     public static final String TAG="DRAG";
     public static final String IMAGEVIEW_TAG="icon_bitmap";
     ImageView crosss;
@@ -48,7 +50,6 @@ public class Match extends AppCompatActivity {
     String player2turn="player2turn";
     CardView winnercardview;
     ImageView imageView11,imageView12,imageView13,imageView21,imageView22,imageView23,imageView31,imageView32,imageView33;
-    //todo Player 1 is always the challenger player, player 2 is always the challenged player
     CircleImageView gamer1,gamer2;
     TextView gamer1name,gamer2name;
     @Override
@@ -68,6 +69,7 @@ public class Match extends AppCompatActivity {
         imageView22=findViewById(R.id.text22);
         imageView23=findViewById(R.id.text23);
         imageView31=findViewById(R.id.text31);
+        winner=findViewById(R.id.winner);
         imageView32=findViewById(R.id.text32);
         imageView33=findViewById(R.id.text33);
         crosss.setTag(IMAGEVIEW_TAG);
@@ -83,8 +85,22 @@ public class Match extends AppCompatActivity {
         Log.d(TAG, "getSecondPlayer "+getSecondPlayer());
 
 
+        //Setting not your turn logic
+        gettingreadycardview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"Not your Turn",Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onClick: "+"GETTING READY CARD VIEW IS CLICKED");
+
+            }
+        });
+
+
+
+        //IDENTIFICATION OF PLAYER LOGISTICS
         if(getGameStarter().equals("player1")){
             //pushing the game
+            //You started the game as player 1.
             crosss.setVisibility(View.VISIBLE);
             Responses responses=new Responses("empty","empty","empty","empty","empty","empty","empty","empty","empty","false","true","","player2");
             DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("MatchProcess");
@@ -105,6 +121,7 @@ public class Match extends AppCompatActivity {
 
         }
         if(getGameStarter().equals("player2")){
+            //you started the game as player 2, challenged player
             //pushing the game
             zero.setVisibility(View.VISIBLE);
             Responses responses=new Responses("empty","empty","empty","empty","empty","empty","empty","empty","empty","false","true","","player2");
@@ -122,6 +139,9 @@ public class Match extends AppCompatActivity {
                 }
             });
         }
+
+
+
 
         //Fill Credentials
         DatabaseReference databaseReference2=FirebaseDatabase.getInstance().getReference("Gamers");
@@ -155,14 +175,12 @@ public class Match extends AppCompatActivity {
 
 
 
-
-
-
         //Updater Logic
         DatabaseReference updater=FirebaseDatabase.getInstance().getReference("MatchProcess");
         updater.child(getGame()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                checkgravity();
                 Log.d(TAG, "onDataChange: "+"Updater is called");
                 Responses responses=dataSnapshot.getValue(Responses.class);
                 if(!responses.getBlock11().equals("empty")){
@@ -271,6 +289,7 @@ public class Match extends AppCompatActivity {
         imageView11.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -291,7 +310,7 @@ public class Match extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.GONE);
+                                                gettingreadycardview.setVisibility(View.VISIBLE);
                                                 return;
                                             }
                                         }
@@ -310,7 +329,7 @@ public class Match extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.GONE);
+                                                gettingreadycardview.setVisibility(View.VISIBLE);
                                                 return;
                                             }
                                         }
@@ -336,11 +355,6 @@ public class Match extends AppCompatActivity {
                 });
             }
         });
-
-
-
-
-
 
         //ImageView 12
 
@@ -367,7 +381,7 @@ public class Match extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.GONE);
+                                                gettingreadycardview.setVisibility(View.VISIBLE);
                                                 return;
                                             }
                                         }
@@ -385,7 +399,7 @@ public class Match extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.GONE);
+                                                gettingreadycardview.setVisibility(View.VISIBLE);
                                                 return;
                                             }
                                         }
@@ -413,8 +427,6 @@ public class Match extends AppCompatActivity {
                 });
             }
         });
-
-
 
 
         //ImageView 13
@@ -441,7 +453,7 @@ public class Match extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.GONE);
+                                                gettingreadycardview.setVisibility(View.VISIBLE);
                                                 return;
                                             }
                                         }
@@ -458,7 +470,7 @@ public class Match extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.GONE);
+                                                gettingreadycardview.setVisibility(View.VISIBLE);
                                                 return;
                                             }
                                         }
@@ -484,8 +496,6 @@ public class Match extends AppCompatActivity {
             }
         });
 
-
-
         //ImageView 21
         imageView21.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -510,7 +520,7 @@ public class Match extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.GONE);
+                                                gettingreadycardview.setVisibility(View.VISIBLE);
                                                 return;
                                             }
                                         }
@@ -528,7 +538,7 @@ public class Match extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.GONE);
+                                                gettingreadycardview.setVisibility(View.VISIBLE);
                                                 return;
                                             }
                                         }
@@ -584,7 +594,7 @@ public class Match extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.GONE);
+                                                gettingreadycardview.setVisibility(View.VISIBLE);
                                                 return;
                                             }
                                         }
@@ -602,7 +612,7 @@ public class Match extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.GONE);
+                                                gettingreadycardview.setVisibility(View.VISIBLE);
                                                 return;
                                             }
                                         }
@@ -657,9 +667,8 @@ public class Match extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
-                                                gettingreadycardview.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.GONE);
+                                                gettingreadycardview.setVisibility(View.VISIBLE);
                                                 return;
 
                                             }
@@ -677,9 +686,8 @@ public class Match extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
-                                                gettingreadycardview.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.GONE);
+                                                gettingreadycardview.setVisibility(View.VISIBLE);
                                                 return;
                                             }
                                         }
@@ -734,9 +742,8 @@ public class Match extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
-                                                gettingreadycardview.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.GONE);
+                                                gettingreadycardview.setVisibility(View.VISIBLE);
                                                 return;
                                             }
                                         }
@@ -753,9 +760,8 @@ public class Match extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
-                                                gettingreadycardview.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.GONE);
+                                                gettingreadycardview.setVisibility(View.VISIBLE);
                                                 return;
                                             }
                                         }
@@ -808,9 +814,8 @@ public class Match extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
-                                                gettingreadycardview.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.GONE);
+                                                gettingreadycardview.setVisibility(View.VISIBLE);
                                                 return;
                                             }
                                         }
@@ -827,9 +832,8 @@ public class Match extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
-                                                gettingreadycardview.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.GONE);
+                                                gettingreadycardview.setVisibility(View.VISIBLE);
                                                 return;
                                             }
                                         }
@@ -884,10 +888,9 @@ public class Match extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
-                                                gettingreadycardview.setVisibility(View.GONE);
 
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.GONE);
+                                                gettingreadycardview.setVisibility(View.VISIBLE);
                                                 return;
                                             }
                                         }
@@ -904,9 +907,8 @@ public class Match extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
-                                                gettingreadycardview.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.GONE);
+                                                gettingreadycardview.setVisibility(View.VISIBLE);
                                                 return;
                                             }
                                         }
@@ -957,9 +959,7 @@ public class Match extends AppCompatActivity {
                     blink(imageView11);
                     blink(imageView12);
                     blink(imageView13);
-
                     winnercardview.setVisibility(View.VISIBLE);
-
                 }
 
                 if(block21.equals(block22) && block22.equals(block23) && !block21.equals("empty")){
@@ -967,18 +967,14 @@ public class Match extends AppCompatActivity {
                     blink(imageView21);
                     blink(imageView22);
                     blink(imageView23);
-
                     winnercardview.setVisibility(View.VISIBLE);
-
                 }
                 if(block31.equals(block32) && block32.equals(block33) && !block31.equals("empty")){
                     Toast.makeText(getApplicationContext(),"WINNER",Toast.LENGTH_LONG).show();
                     blink(imageView31);
                     blink(imageView32);
                     blink(imageView33);
-
                     winnercardview.setVisibility(View.VISIBLE);
-
                 }
 
                 if(block11.equals(block21) && block21.equals(block31) &&  !block11.equals("empty") ){
@@ -986,18 +982,14 @@ public class Match extends AppCompatActivity {
                     blink(imageView11);
                     blink(imageView21);
                     blink(imageView31);
-
                     winnercardview.setVisibility(View.VISIBLE);
-
                 }
                 if(block12.equals(block22) && block22.equals(block32) && !block12.equals("empty")){
                     Toast.makeText(getApplicationContext(),"WINNER",Toast.LENGTH_LONG).show();
                     blink(imageView12);
                     blink(imageView22);
                     blink(imageView32);
-
                     winnercardview.setVisibility(View.VISIBLE);
-
                 }
 
                 if(block13.equals(block23) && block23.equals(block33)  && !block13.equals("empty")) {
@@ -1005,9 +997,7 @@ public class Match extends AppCompatActivity {
                     blink(imageView13);
                     blink(imageView23);
                     blink(imageView33);
-
                     winnercardview.setVisibility(View.VISIBLE);
-
                 }
 
 
@@ -1016,10 +1006,7 @@ public class Match extends AppCompatActivity {
                     blink(imageView11);
                     blink(imageView22);
                     blink(imageView33);
-
                     winnercardview.setVisibility(View.VISIBLE);
-
-
                 }
 
                 if(block13.equals(block22) && block22.equals(block31)  && !block13.equals("empty")){
@@ -1028,9 +1015,7 @@ public class Match extends AppCompatActivity {
                     blink(imageView13);
                     blink(imageView22);
                     blink(imageView31);
-
                     winnercardview.setVisibility(View.VISIBLE);
-
                 }
 
 
@@ -1101,7 +1086,11 @@ public class Match extends AppCompatActivity {
 
     }
 
-    //implementing gravity, how to implement gravity feature
+    void checkgravity(){
+        Random random=new Random();
+        int num=random.nextInt(10);
+        Log.d(TAG, "checkgravity: "+num);
+    }
 
     }
 
