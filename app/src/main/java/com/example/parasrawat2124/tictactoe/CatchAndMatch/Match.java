@@ -34,7 +34,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Match extends AppCompatActivity {
     String gravity;
-    TextView winner;
+    CircleImageView winnerimage;
+    TextView winnername;
     public static final String TAG="DRAG";
     public static final String IMAGEVIEW_TAG="icon_bitmap";
     ImageView crosss;
@@ -72,7 +73,8 @@ public class Match extends AppCompatActivity {
         imageView22=findViewById(R.id.text22);
         imageView23=findViewById(R.id.text23);
         imageView31=findViewById(R.id.text31);
-        winner=findViewById(R.id.winner);
+        winnername=findViewById(R.id.winner);
+        winnerimage=findViewById(R.id.winnerimage);
         imageView32=findViewById(R.id.text32);
         imageView33=findViewById(R.id.text33);
         crosss.setTag(IMAGEVIEW_TAG);
@@ -2491,6 +2493,12 @@ public class Match extends AppCompatActivity {
                     blink(imageView11);
                     blink(imageView12);
                     blink(imageView13);
+                    if(block11.equals("cross")){
+                        updatewinner("cross");
+                    }
+                    if(block11.equals("zero")){
+                        updatewinner("zero");
+                    }
                     winnercardview.setVisibility(View.VISIBLE);
                 }
 
@@ -2499,6 +2507,12 @@ public class Match extends AppCompatActivity {
                     blink(imageView21);
                     blink(imageView22);
                     blink(imageView23);
+                    if(block21.equals("cross")){
+                        updatewinner("cross");
+                    }
+                    if(block21.equals("zero")){
+                        updatewinner("zero");
+                    }
                     winnercardview.setVisibility(View.VISIBLE);
                 }
                 if(block31.equals(block32) && block32.equals(block33) && !block31.equals("empty")){
@@ -2506,6 +2520,13 @@ public class Match extends AppCompatActivity {
                     blink(imageView31);
                     blink(imageView32);
                     blink(imageView33);
+
+                    if(block31.equals("cross")){
+                        updatewinner("cross");
+                    }
+                    if(block31.equals("zero")){
+                        updatewinner("zero");
+                    }
                     winnercardview.setVisibility(View.VISIBLE);
                 }
 
@@ -2514,6 +2535,13 @@ public class Match extends AppCompatActivity {
                     blink(imageView11);
                     blink(imageView21);
                     blink(imageView31);
+
+                    if(block11.equals("cross")){
+                        updatewinner("cross");
+                    }
+                    if(block11.equals("zero")){
+                        updatewinner("zero");
+                    }
                     winnercardview.setVisibility(View.VISIBLE);
                 }
                 if(block12.equals(block22) && block22.equals(block32) && !block12.equals("empty")){
@@ -2521,6 +2549,13 @@ public class Match extends AppCompatActivity {
                     blink(imageView12);
                     blink(imageView22);
                     blink(imageView32);
+
+                    if(block12.equals("cross")){
+                        updatewinner("cross");
+                    }
+                    if(block12.equals("zero")){
+                        updatewinner("zero");
+                    }
                     winnercardview.setVisibility(View.VISIBLE);
                 }
 
@@ -2529,6 +2564,13 @@ public class Match extends AppCompatActivity {
                     blink(imageView13);
                     blink(imageView23);
                     blink(imageView33);
+
+                    if(block13.equals("cross")){
+                        updatewinner("cross");
+                    }
+                    if(block13.equals("zero")){
+                        updatewinner("zero");
+                    }
                     winnercardview.setVisibility(View.VISIBLE);
                 }
 
@@ -2538,6 +2580,13 @@ public class Match extends AppCompatActivity {
                     blink(imageView11);
                     blink(imageView22);
                     blink(imageView33);
+
+                    if(block11.equals("cross")){
+                        updatewinner("cross");
+                    }
+                    if(block11.equals("zero")){
+                        updatewinner("zero");
+                    }
                     winnercardview.setVisibility(View.VISIBLE);
                 }
 
@@ -2547,6 +2596,13 @@ public class Match extends AppCompatActivity {
                     blink(imageView13);
                     blink(imageView22);
                     blink(imageView31);
+
+                    if(block13.equals("cross")){
+                        updatewinner("cross");
+                    }
+                    if(block13.equals("zero")){
+                        updatewinner("zero");
+                    }
                     winnercardview.setVisibility(View.VISIBLE);
                 }
 
@@ -2667,6 +2723,80 @@ public class Match extends AppCompatActivity {
 
 
     }
+
+
+    void updatewinner(String sign){
+
+
+        Log.d(TAG, "updatewinner: "+sign);
+
+        if(sign.equals("cross")){
+            //Player 1 or the challenger has won the game
+
+            DatabaseReference databaseReference2=FirebaseDatabase.getInstance().getReference("Gamers");
+            databaseReference2.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    for (DataSnapshot data:dataSnapshot.getChildren()
+                            ) {
+                        Log.d(TAG, "onDataChange: "+data);
+                        GamerProfile gamerProfile=data.getValue(GamerProfile.class);
+                        if(gamerProfile.getName().equals(getSharedPreferences())){
+                            winnername.setText(gamerProfile.getName());
+                            Picasso.get().load(gamerProfile.getUri()).placeholder(R.drawable.tictacplaceholder).into(winnerimage);
+
+
+                        }
+
+//                        if(gamerProfile.getName().equals(getSecondPlayer())){
+//                            gamer2name.setText(gamerProfile.getName());
+//                            Picasso.get().load(gamerProfile.getUri()).placeholder(R.drawable.tictacplaceholder).into(gamer2);
+//                        }
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+
+
+        if(sign.equals("zero")){
+
+            DatabaseReference databaseReference2=FirebaseDatabase.getInstance().getReference("Gamers");
+            databaseReference2.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    for (DataSnapshot data:dataSnapshot.getChildren()
+                            ) {
+                        Log.d(TAG, "onDataChange: "+data);
+                        GamerProfile gamerProfile=data.getValue(GamerProfile.class);
+
+                        if(gamerProfile.getName().equals(getSecondPlayer())){
+                            winnername.setText(gamerProfile.getName());
+                            Picasso.get().load(gamerProfile.getUri()).placeholder(R.drawable.tictacplaceholder).into(winnerimage);
+                        }
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+
+    }
+
+
 
     }
 

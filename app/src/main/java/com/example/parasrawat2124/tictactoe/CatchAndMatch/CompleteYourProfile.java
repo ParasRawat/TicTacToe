@@ -24,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.parasrawat2124.tictactoe.Dashboard.Dashboard;
 import com.example.parasrawat2124.tictactoe.ModelClass.GamerProfile;
 import com.example.parasrawat2124.tictactoe.R;
 import com.google.android.gms.tasks.Continuation;
@@ -158,7 +159,7 @@ public class CompleteYourProfile extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(getApplicationContext(), "Succesfully Updated Profile", Toast.LENGTH_SHORT).show();
                                     storeGamerName(name);
-                                    startActivity(new Intent(CompleteYourProfile.this,CatchPlayer.class));
+                                    startActivity(new Intent(CompleteYourProfile.this,Dashboard.class));
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Profile update failed Please try Again", Toast.LENGTH_SHORT).show();
                                 }
@@ -263,7 +264,7 @@ public class CompleteYourProfile extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
            try{
                if(!dataSnapshot.getValue().equals(null)){
-                   startActivity(new Intent(CompleteYourProfile.this,CatchPlayer.class));
+                   startActivity(new Intent(CompleteYourProfile.this,Dashboard.class));
 
                }
                else {
