@@ -18,10 +18,12 @@ import com.example.parasrawat2124.tictactoe.ModelClass.Responses;
 import com.example.parasrawat2124.tictactoe.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -31,6 +33,7 @@ import java.util.Random;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Match extends AppCompatActivity {
+    String gravity;
     TextView winner;
     public static final String TAG="DRAG";
     public static final String IMAGEVIEW_TAG="icon_bitmap";
@@ -175,13 +178,36 @@ public class Match extends AppCompatActivity {
 
 
 
-        //Updater Logic
-        DatabaseReference updater=FirebaseDatabase.getInstance().getReference("MatchProcess");
+        //Updater Logic and Gravity Logic
+        final DatabaseReference updater=FirebaseDatabase.getInstance().getReference("MatchProcess");
         updater.child(getGame()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                checkgravity();
-                Log.d(TAG, "onDataChange: "+"Updater is called");
+
+                DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("MatchProcess").child(getGame()).child("gravity");
+                databaseReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Log.d(TAG, "DATASNAP VALUE FOR GRAVITY: " + dataSnapshot.getValue());
+                        try {
+                            if (dataSnapshot.getValue().toString().equals("true")) {
+                                Toast.makeText(getApplicationContext(), "Gravity Successfully  Activated", Toast.LENGTH_SHORT).show();
+                                gravity="true";
+                            }
+                        }
+                        catch (Exception e){
+                            Log.d(TAG, "onDataChange: "+" NULL POINTER EXCEPTION");
+                            gravity="false";
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+                Log.d(TAG, "UPDATER CALLING SYSTEM "+"Updater is called");
                 Responses responses=dataSnapshot.getValue(Responses.class);
                 if(!responses.getBlock11().equals("empty")){
                     if(responses.getBlock11().equals("zero")){
@@ -192,6 +218,7 @@ public class Match extends AppCompatActivity {
                         imageView11.setImageResource(R.drawable.cross);
                         gettingreadycardview.setVisibility(View.GONE);
                     }
+
                 }
 
                 if(!responses.getBlock12().equals("empty")){
@@ -203,6 +230,7 @@ public class Match extends AppCompatActivity {
                         imageView12.setImageResource(R.drawable.cross);
                         gettingreadycardview.setVisibility(View.GONE);
                     }
+
                 }
 
                 if(!responses.getBlock13().equals("empty")){
@@ -214,6 +242,7 @@ public class Match extends AppCompatActivity {
                         imageView13.setImageResource(R.drawable.cross);
                         gettingreadycardview.setVisibility(View.GONE);
                     }
+
                 }
                 if(!responses.getBlock21().equals("empty")){
                     if(responses.getBlock21().equals("zero")){
@@ -224,6 +253,7 @@ public class Match extends AppCompatActivity {
                         imageView21.setImageResource(R.drawable.cross);
                         gettingreadycardview.setVisibility(View.GONE);
                     }
+
                 }
                 if(!responses.getBlock22().equals("empty")){
                     if(responses.getBlock22().equals("zero")){
@@ -234,6 +264,7 @@ public class Match extends AppCompatActivity {
                         imageView22.setImageResource(R.drawable.cross);
                         gettingreadycardview.setVisibility(View.GONE);
                     }
+
                 }
                 if(!responses.getBlock23().equals("empty")){
                     if(responses.getBlock23().equals("zero")){
@@ -244,6 +275,7 @@ public class Match extends AppCompatActivity {
                         imageView23.setImageResource(R.drawable.cross);
                         gettingreadycardview.setVisibility(View.GONE);
                     }
+
                 }
                 if(!responses.getBlock31().equals("empty")){
                     if(responses.getBlock31().equals("zero")){
@@ -254,6 +286,7 @@ public class Match extends AppCompatActivity {
                         imageView31.setImageResource(R.drawable.cross);
                         gettingreadycardview.setVisibility(View.GONE);
                     }
+
                 }
                 if(!responses.getBlock32().equals("empty")){
                     if(responses.getBlock32().equals("zero")){
@@ -264,6 +297,7 @@ public class Match extends AppCompatActivity {
                         imageView32.setImageResource(R.drawable.cross);
                         gettingreadycardview.setVisibility(View.GONE);
                     }
+
                 }
                 if(!responses.getBlock33().equals("empty")){
                     if(responses.getBlock33().equals("zero")){
@@ -274,7 +308,7 @@ public class Match extends AppCompatActivity {
                         imageView33.setImageResource(R.drawable.cross);
                         gettingreadycardview.setVisibility(View.GONE);
                     }
-                }
+                    }
 
 
             }
@@ -284,75 +318,256 @@ public class Match extends AppCompatActivity {
 
             }
         });
+
+
+
+
+
         final DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("MatchProcess");
+
+
+
+
+
+
+
+
+
+
+
         //ImageView 11
         imageView11.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Log.d(TAG, "onDataChange: "+dataSnapshot);
-                        Responses responses=dataSnapshot.getValue(Responses.class);
-                        //checking the turn
-                        if(getGameStarter().equals(responses.getTurn())){
-                            if(responses.getBlock11().equals("empty")){
-                                //check to allow the user to make change
-                                if(getGameStarter().equals("player1")){
-                                    imageView11.setImageResource(R.drawable.cross);
-                                    HashMap<String,Object> hashMap=new HashMap<>();
-                                    hashMap.put("block11","cross");
-                                    hashMap.put("turn","player2");
-                                    DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
-                                    databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.VISIBLE);
-                                                return;
-                                            }
+                //now we need to throttle down the gravity
+                Log.d(TAG, "GRAVITY AT IMAGE 11  "+gravity);
+                try{
+                    if(gravity.equals("true")){
+
+                        databaseReference.child(getGame()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Log.d(TAG, "DATA CHANGE FOR 11"+dataSnapshot);
+                                Responses responses=dataSnapshot.getValue(Responses.class);
+                                //checking the turn
+                                if(getGameStarter().equals(responses.getTurn())){
+                                        //check to allow the user to make change
+                                        if(getGameStarter().equals("player1")){
+                                            imageView11.setImageResource(R.drawable.cross);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block11","cross");
+                                            hashMap.put("turn","player2");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+                                                        DownGravity();
+                                                        return;
+                                                    }
+                                                }
+                                            });
+
+
                                         }
-                                    });
+                                        else if(getGameStarter().equals("player2")){
+                                            imageView11.setImageResource(R.drawable.zero);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block11","zero");
+                                            hashMap.put("turn","player1");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+                                                        DownGravity();
+                                                        return;
+                                                    }
+                                                }
+                                            });
+                                    }
 
 
                                 }
-                                else if(getGameStarter().equals("player2")){
-                                    imageView11.setImageResource(R.drawable.zero);
-                                    HashMap<String,Object> hashMap=new HashMap<>();
-                                    hashMap.put("block11","zero");
-                                    hashMap.put("turn","player1");
-                                    DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
-                                    databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.VISIBLE);
-                                                return;
-                                            }
+
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                    else {
+                        databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Log.d(TAG, "DATA CHANGE AT 11 "+dataSnapshot);
+                                Responses responses=dataSnapshot.getValue(Responses.class);
+                                //checking the turn
+                                if(getGameStarter().equals(responses.getTurn())){
+                                    //todo Check for the gravity value here
+                                    if(responses.getBlock11().equals("empty")){
+                                        //check to allow the user to make change
+                                        if(getGameStarter().equals("player1")){
+                                            imageView11.setImageResource(R.drawable.cross);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block11","cross");
+                                            hashMap.put("turn","player2");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+                                                        if(LuckyNumer()==1){
+                                                            PushGravity();
+                                                        }
+                                                        else {
+
+                                                        }
+                                                        return;
+                                                    }
+                                                }
+                                            });
+
+
                                         }
-                                    });
+                                        else if(getGameStarter().equals("player2")){
+                                            imageView11.setImageResource(R.drawable.zero);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block11","zero");
+                                            hashMap.put("turn","player1");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+                                                        if(LuckyNumer()==1){
+                                                            PushGravity();
+                                                        }
+                                                        return;
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    }
+
+
                                 }
-                                else {
-                                    Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+
+                }
+                catch (Exception e){
+
+                    Log.d(TAG, "EXCEPTION "+"GRAVITY IS FALSE");
+
+                    databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Log.d(TAG, "onDataChange: "+dataSnapshot);
+                            Responses responses=dataSnapshot.getValue(Responses.class);
+                            //checking the turn
+                            if(getGameStarter().equals(responses.getTurn())){
+                                //todo Check for the gravity value here
+                                if(responses.getBlock11().equals("empty")){
+                                    //check to allow the user to make change
+                                    if(getGameStarter().equals("player1")){
+                                        imageView11.setImageResource(R.drawable.cross);
+                                        HashMap<String,Object> hashMap=new HashMap<>();
+                                        hashMap.put("block11","cross");
+                                        hashMap.put("turn","player2");
+                                        DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                        databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                    gettingreadycardview.setVisibility(View.VISIBLE);
+                                                    Log.d(TAG, "onComplete: "+LuckyNumer());
+                                                    if(LuckyNumer()==1){
+                                                        PushGravity();
+                                                    }
+                                                    else {
+
+                                                    }
+                                                    return;
+                                                }
+                                            }
+                                        });
+
+
+                                    }
+                                    else if(getGameStarter().equals("player2")){
+                                        imageView11.setImageResource(R.drawable.zero);
+                                        HashMap<String,Object> hashMap=new HashMap<>();
+                                        hashMap.put("block11","zero");
+                                        hashMap.put("turn","player1");
+                                        DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                        databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                    gettingreadycardview.setVisibility(View.VISIBLE);
+                                                    Log.d(TAG, "onComplete: "+LuckyNumer());
+                                                    if(LuckyNumer()==1){
+                                                        PushGravity();
+                                                    }
+                                                    return;
+                                                }
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                    }
+
                                 }
+
 
                             }
 
 
+
                         }
 
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
+                        }
+                    });
 
-                    }
+                }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
             }
         });
 
@@ -361,70 +576,236 @@ public class Match extends AppCompatActivity {
         imageView12.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Log.d(TAG, "onDataChange: "+dataSnapshot);
-                        Responses responses=dataSnapshot.getValue(Responses.class);
-                        if(getGameStarter().equals(responses.getTurn())){
 
-                            if(responses.getBlock12().equals("empty")){
-                                //todo allow the player to make the change
-                                if(getGameStarter().equals("player1")){
-                                    imageView12.setImageResource(R.drawable.cross);
-                                    HashMap<String,Object> hashMap=new HashMap<>();
-                                    hashMap.put("block12","cross");
-                                    hashMap.put("turn","player2");
-                                    DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
-                                    databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.VISIBLE);
-                                                return;
-                                            }
-                                        }
-                                    });
 
-                                }
-                                else if(getGameStarter().equals("player2")){
-                                    imageView12.setImageResource(R.drawable.zero);
-                                    HashMap<String,Object> hashMap=new HashMap<>();
-                                    hashMap.put("block12","zero");
-                                    hashMap.put("turn","player1");
-                                    DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
-                                    databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.VISIBLE);
-                                                return;
-                                            }
+                Log.d(TAG, "GRAVITY AT 12 "+gravity);
+
+
+                try{
+                    if(gravity.equals("true")){
+
+                        databaseReference.child(getGame()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Log.d(TAG, "SNAPSHOT AT 12 "+dataSnapshot);
+                                Responses responses=dataSnapshot.getValue(Responses.class);
+                                if(getGameStarter().equals(responses.getTurn())){
+                                        //todo allow the player to make the change
+                                        if(getGameStarter().equals("player1")){
+                                            imageView12.setImageResource(R.drawable.cross);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block12","cross");
+                                            hashMap.put("turn","player2");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+                                                        DownGravity();
+
+                                                        return;
+                                                    }
+                                                }
+                                            });
+
                                         }
-                                    });
+                                        else if(getGameStarter().equals("player2")){
+                                            imageView12.setImageResource(R.drawable.zero);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block12","zero");
+                                            hashMap.put("turn","player1");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+                                                        DownGravity();
+
+                                                        return;
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                        }
+
+
+
                                 }
                                 else {
-                                    Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                    //todo not the players turn; so wait for the reply of other player
+                                    gettingreadycardview.setVisibility(View.GONE);
                                 }
+
 
                             }
 
-                        }
-                        else {
-                            //todo not the players turn; so wait for the reply of other player
-                            gettingreadycardview.setVisibility(View.GONE);
-                        }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-
+                            }
+                        });
                     }
+                    else {
+                        databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Log.d(TAG, "DATA SNAP  "+dataSnapshot);
+                                Responses responses=dataSnapshot.getValue(Responses.class);
+                                if(getGameStarter().equals(responses.getTurn())){
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    if(responses.getBlock12().equals("empty")){
+                                        //todo allow the player to make the change
+                                        if(getGameStarter().equals("player1")){
+                                            imageView12.setImageResource(R.drawable.cross);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block12","cross");
+                                            hashMap.put("turn","player2");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER: "+LuckyNumer());
+                                                        if(LuckyNumer()==1){
+                                                            PushGravity();
+                                                        }
+                                                        return;
+                                                    }
+                                                }
+                                            });
 
+                                        }
+                                        else if(getGameStarter().equals("player2")){
+                                            imageView12.setImageResource(R.drawable.zero);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block12","zero");
+                                            hashMap.put("turn","player1");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER: "+LuckyNumer());
+                                                        if(LuckyNumer()==1){
+                                                            PushGravity();
+                                                        }
+                                                        return;
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    }
+
+                                }
+                                else {
+                                    //todo not the players turn; so wait for the reply of other player
+                                    gettingreadycardview.setVisibility(View.GONE);
+                                }
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                     }
-                });
+                }
+                catch (Exception e){
+
+                    Log.d(TAG, "onClick: "+"GRAVITY IS FALSE/ DOWN");
+
+                    databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Log.d(TAG, "onDataChange: "+dataSnapshot);
+                            Responses responses=dataSnapshot.getValue(Responses.class);
+                            if(getGameStarter().equals(responses.getTurn())){
+
+                                if(responses.getBlock12().equals("empty")){
+                                    //todo allow the player to make the change
+                                    if(getGameStarter().equals("player1")){
+                                        imageView12.setImageResource(R.drawable.cross);
+                                        HashMap<String,Object> hashMap=new HashMap<>();
+                                        hashMap.put("block12","cross");
+                                        hashMap.put("turn","player2");
+                                        DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                        databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                    gettingreadycardview.setVisibility(View.VISIBLE);
+                                                    Log.d(TAG, "onComplete: "+LuckyNumer());
+                                                    if(LuckyNumer()==1){
+                                                        PushGravity();
+                                                    }
+                                                    return;
+                                                }
+                                            }
+                                        });
+
+                                    }
+                                    else if(getGameStarter().equals("player2")){
+                                        imageView12.setImageResource(R.drawable.zero);
+                                        HashMap<String,Object> hashMap=new HashMap<>();
+                                        hashMap.put("block12","zero");
+                                        hashMap.put("turn","player1");
+                                        DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                        databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                    gettingreadycardview.setVisibility(View.VISIBLE);
+                                                    Log.d(TAG, "onComplete: "+LuckyNumer());
+                                                    if(LuckyNumer()==1){
+                                                        PushGravity();
+                                                    }
+                                                    return;
+                                                }
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+
+                            }
+                            else {
+                                //todo not the players turn; so wait for the reply of other player
+                                gettingreadycardview.setVisibility(View.GONE);
+                            }
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+
             }
         });
 
@@ -433,66 +814,224 @@ public class Match extends AppCompatActivity {
         imageView13.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Log.d(TAG, "onDataChange: "+dataSnapshot);
-                        Responses responses=dataSnapshot.getValue(Responses.class);
-                        if(getGameStarter().equals(responses.getTurn())){
 
-                            if(responses.getBlock13().equals("empty")){
-                                //todo allow the player to make the change
-                                if(getGameStarter().equals("player1")){
-                                    imageView13.setImageResource(R.drawable.cross);
-                                    HashMap<String,Object> hashMap=new HashMap<>();
-                                    hashMap.put("block13","cross");
-                                    hashMap.put("turn","player2");
-                                    DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
-                                    databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.VISIBLE);
-                                                return;
-                                            }
+
+                Log.d(TAG, "GRAVITY AT 13 "+gravity);
+
+                try{
+                    if(gravity.equals("true")){
+
+                        databaseReference.child(getGame()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Log.d(TAG, "DATA SNAP AT 13"+dataSnapshot);
+                                Responses responses=dataSnapshot.getValue(Responses.class);
+                                if(getGameStarter().equals(responses.getTurn())){
+                                        //todo allow the player to make the change
+                                        if(getGameStarter().equals("player1")){
+                                            imageView13.setImageResource(R.drawable.cross);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block13","cross");
+                                            hashMap.put("turn","player2");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+                                                        DownGravity();
+
+                                                        return;
+                                                    }
+                                                }
+                                            });
                                         }
-                                    });
-                                }
-                                else if(getGameStarter().equals("player2")){
-                                    imageView13.setImageResource(R.drawable.zero);
-                                    HashMap<String,Object> hashMap=new HashMap<>();
-                                    hashMap.put("block13","zero");
-                                    hashMap.put("turn","player1");
-                                    DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
-                                    databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.VISIBLE);
-                                                return;
-                                            }
+                                        else if(getGameStarter().equals("player2")){
+                                            imageView13.setImageResource(R.drawable.zero);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block13","zero");
+                                            hashMap.put("turn","player1");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+                                                        DownGravity();
+
+                                                        return;
+                                                    }
+                                                }
+                                            });
                                         }
-                                    });
+                                        else {
+                                            Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                        }
+
                                 }
                                 else {
-                                    Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                    //todo not the players turn; so wait for the reply of other player
+                                    gettingreadycardview.setVisibility(View.GONE);
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                    else {
+                        databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Log.d(TAG, "DATA SNAP: "+dataSnapshot);
+                                Responses responses=dataSnapshot.getValue(Responses.class);
+                                if(getGameStarter().equals(responses.getTurn())){
+
+                                    if(responses.getBlock13().equals("empty")){
+                                        //todo allow the player to make the change
+                                        if(getGameStarter().equals("player1")){
+                                            imageView13.setImageResource(R.drawable.cross);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block13","cross");
+                                            hashMap.put("turn","player2");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER: "+LuckyNumer());
+                                                        if(LuckyNumer()==1){
+                                                            PushGravity();
+                                                        }
+                                                        return;
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        else if(getGameStarter().equals("player2")){
+                                            imageView13.setImageResource(R.drawable.zero);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block13","zero");
+                                            hashMap.put("turn","player1");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+                                                        if(LuckyNumer()==1){
+                                                            PushGravity();
+                                                        }
+                                                        return;
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }
+                                else {
+                                    //todo not the players turn; so wait for the reply of other player
+                                    gettingreadycardview.setVisibility(View.GONE);
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+                catch (Exception e){
+
+                    Log.d(TAG, "onClick: "+"GRAVITY IS FALSE/ DOWN");
+
+                    databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Log.d(TAG, "onDataChange: "+dataSnapshot);
+                            Responses responses=dataSnapshot.getValue(Responses.class);
+                            if(getGameStarter().equals(responses.getTurn())){
+
+                                if(responses.getBlock13().equals("empty")){
+                                    //todo allow the player to make the change
+                                    if(getGameStarter().equals("player1")){
+                                        imageView13.setImageResource(R.drawable.cross);
+                                        HashMap<String,Object> hashMap=new HashMap<>();
+                                        hashMap.put("block13","cross");
+                                        hashMap.put("turn","player2");
+                                        DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                        databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                    gettingreadycardview.setVisibility(View.VISIBLE);
+                                                    Log.d(TAG, "onComplete: "+LuckyNumer());
+                                                    if(LuckyNumer()==1){
+                                                        PushGravity();
+                                                    }
+                                                    return;
+                                                }
+                                            }
+                                        });
+                                    }
+                                    else if(getGameStarter().equals("player2")){
+                                        imageView13.setImageResource(R.drawable.zero);
+                                        HashMap<String,Object> hashMap=new HashMap<>();
+                                        hashMap.put("block13","zero");
+                                        hashMap.put("turn","player1");
+                                        DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                        databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                    gettingreadycardview.setVisibility(View.VISIBLE);
+                                                    Log.d(TAG, "onComplete: "+LuckyNumer());
+                                                    if(LuckyNumer()==1){
+                                                        PushGravity();
+                                                    }
+                                                    return;
+                                                }
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             }
+                            else {
+                                //todo not the players turn; so wait for the reply of other player
+                                gettingreadycardview.setVisibility(View.GONE);
+                            }
+
                         }
-                        else {
-                            //todo not the players turn; so wait for the reply of other player
-                            gettingreadycardview.setVisibility(View.GONE);
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
                         }
+                    });
+                }
 
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
             }
         });
 
@@ -500,70 +1039,234 @@ public class Match extends AppCompatActivity {
         imageView21.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Log.d(TAG, "onDataChange: "+dataSnapshot);
-                        Responses responses=dataSnapshot.getValue(Responses.class);
-                        if(getGameStarter().equals(responses.getTurn())){
 
-                            if(responses.getBlock21().equals("empty")){
-                                //todo allow the player to make the change
-                                if(getGameStarter().equals("player1")){
-                                    imageView21.setImageResource(R.drawable.cross);
-                                    HashMap<String,Object> hashMap=new HashMap<>();
-                                    hashMap.put("block21","cross");
-                                    hashMap.put("turn","player2");
-                                    DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
-                                    databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.VISIBLE);
-                                                return;
-                                            }
-                                        }
-                                    });
+                Log.d(TAG, "GRAVITY AT 21 "+gravity);
 
-                                }
-                                else if(getGameStarter().equals("player2")){
-                                    imageView21.setImageResource(R.drawable.zero);
-                                    HashMap<String,Object> hashMap=new HashMap<>();
-                                    hashMap.put("block21","zero");
-                                    hashMap.put("turn","player1");
-                                    DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
-                                    databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.VISIBLE);
-                                                return;
-                                            }
+                try{
+                    if(gravity.equals("true")){
+
+
+                        databaseReference.child(getGame()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Log.d(TAG, "DATA SNAP AT 21 "+dataSnapshot);
+                                Responses responses=dataSnapshot.getValue(Responses.class);
+                                if(getGameStarter().equals(responses.getTurn())){
+                                        //todo allow the player to make the change
+                                        if(getGameStarter().equals("player1")){
+                                            imageView21.setImageResource(R.drawable.cross);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block21","cross");
+                                            hashMap.put("turn","player2");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+                                                       DownGravity();
+
+                                                        return;
+                                                    }
+                                                }
+                                            });
+
                                         }
-                                    });
+                                        else if(getGameStarter().equals("player2")){
+                                            imageView21.setImageResource(R.drawable.zero);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block21","zero");
+                                            hashMap.put("turn","player1");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+                                                        DownGravity();
+                                                        return;
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                        }
+
+
+
                                 }
                                 else {
-                                    Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                    //todo not the players turn; so wait for the reply of other player
+                                    gettingreadycardview.setVisibility(View.GONE);
                                 }
+
 
                             }
 
-                        }
-                        else {
-                            //todo not the players turn; so wait for the reply of other player
-                            gettingreadycardview.setVisibility(View.GONE);
-                        }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-
+                            }
+                        });
                     }
+                    else {
+                        databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Log.d(TAG, "DATA SNAP "+dataSnapshot);
+                                Responses responses=dataSnapshot.getValue(Responses.class);
+                                if(getGameStarter().equals(responses.getTurn())){
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    if(responses.getBlock21().equals("empty")){
+                                        //todo allow the player to make the change
+                                        if(getGameStarter().equals("player1")){
+                                            imageView21.setImageResource(R.drawable.cross);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block21","cross");
+                                            hashMap.put("turn","player2");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+                                                        if(LuckyNumer()==1){
+                                                            PushGravity();
+                                                        }
+                                                        return;
+                                                    }
+                                                }
+                                            });
 
+                                        }
+                                        else if(getGameStarter().equals("player2")){
+                                            imageView21.setImageResource(R.drawable.zero);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block21","zero");
+                                            hashMap.put("turn","player1");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+                                                        if(LuckyNumer()==1){
+                                                            PushGravity();
+                                                        }
+                                                        return;
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    }
+
+                                }
+                                else {
+                                    //todo not the players turn; so wait for the reply of other player
+                                    gettingreadycardview.setVisibility(View.GONE);
+                                }
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                     }
-                });
+                }
+                catch (Exception e){
+
+                    Log.d(TAG, "onClick: "+"GRAVITY IS DOWN");
+                    databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Log.d(TAG, "onDataChange: "+dataSnapshot);
+                            Responses responses=dataSnapshot.getValue(Responses.class);
+                            if(getGameStarter().equals(responses.getTurn())){
+
+                                if(responses.getBlock21().equals("empty")){
+                                    //todo allow the player to make the change
+                                    if(getGameStarter().equals("player1")){
+                                        imageView21.setImageResource(R.drawable.cross);
+                                        HashMap<String,Object> hashMap=new HashMap<>();
+                                        hashMap.put("block21","cross");
+                                        hashMap.put("turn","player2");
+                                        DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                        databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                    gettingreadycardview.setVisibility(View.VISIBLE);
+                                                    Log.d(TAG, "onComplete: "+LuckyNumer());
+                                                    if(LuckyNumer()==1){
+                                                        PushGravity();
+                                                    }
+                                                    return;
+                                                }
+                                            }
+                                        });
+
+                                    }
+                                    else if(getGameStarter().equals("player2")){
+                                        imageView21.setImageResource(R.drawable.zero);
+                                        HashMap<String,Object> hashMap=new HashMap<>();
+                                        hashMap.put("block21","zero");
+                                        hashMap.put("turn","player1");
+                                        DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                        databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                    gettingreadycardview.setVisibility(View.VISIBLE);
+                                                    Log.d(TAG, "onComplete: "+LuckyNumer());
+                                                    if(LuckyNumer()==1){
+                                                        PushGravity();
+                                                    }
+                                                    return;
+                                                }
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+
+                            }
+                            else {
+                                //todo not the players turn; so wait for the reply of other player
+                                gettingreadycardview.setVisibility(View.GONE);
+                            }
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+
+
             }
         });
 
@@ -574,69 +1277,235 @@ public class Match extends AppCompatActivity {
         imageView22.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Log.d(TAG, "onDataChange: "+dataSnapshot);
-                        Responses responses=dataSnapshot.getValue(Responses.class);
-                        if(getGameStarter().equals(responses.getTurn())){
 
-                            if(responses.getBlock22().equals("empty")){
-                                //todo allow the player to make the change
-                                if(getGameStarter().equals("player1")){
-                                    imageView22.setImageResource(R.drawable.cross);
-                                    HashMap<String,Object> hashMap=new HashMap<>();
-                                    hashMap.put("block22","cross");
-                                    hashMap.put("turn","player2");
-                                    DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
-                                    databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.VISIBLE);
-                                                return;
-                                            }
-                                        }
-                                    });
+                Log.d(TAG, "GRAVITY AT 22 "+gravity);
 
-                                }
-                                else if(getGameStarter().equals("player2")){
-                                    imageView22.setImageResource(R.drawable.zero);
-                                    HashMap<String,Object> hashMap=new HashMap<>();
-                                    hashMap.put("block22","zero");
-                                    hashMap.put("turn","player1");
-                                    DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
-                                    databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.VISIBLE);
-                                                return;
-                                            }
+                try{
+                    if(gravity.equals("true")){
+                        databaseReference.child(getGame()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Log.d(TAG, "DATASNAP AT 22 "+dataSnapshot);
+                                Responses responses=dataSnapshot.getValue(Responses.class);
+                                if(getGameStarter().equals(responses.getTurn())){
+                                        //todo allow the player to make the change
+                                        if(getGameStarter().equals("player1")){
+                                            imageView22.setImageResource(R.drawable.cross);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block22","cross");
+                                            hashMap.put("turn","player2");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+                                                        DownGravity();
+
+                                                        return;
+                                                    }
+                                                }
+                                            });
+
                                         }
-                                    });
+                                        else if(getGameStarter().equals("player2")){
+                                            imageView22.setImageResource(R.drawable.zero);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block22","zero");
+                                            hashMap.put("turn","player1");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+
+                                                        DownGravity();
+
+                                                        return;
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                        }
+
+
                                 }
                                 else {
-                                    Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                    //todo not the players turn; so wait for the reply of other player
+                                    gettingreadycardview.setVisibility(View.GONE);
                                 }
 
+
                             }
-                        }
-                        else {
-                            //todo not the players turn; so wait for the reply of other player
-                            gettingreadycardview.setVisibility(View.GONE);
-                        }
 
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }
+                        });
 
                     }
-                });
+                    else {
+                        databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Log.d(TAG, "DATASNAP  "+dataSnapshot);
+                                Responses responses=dataSnapshot.getValue(Responses.class);
+                                if(getGameStarter().equals(responses.getTurn())){
+
+                                    if(responses.getBlock22().equals("empty")){
+                                        //todo allow the player to make the change
+                                        if(getGameStarter().equals("player1")){
+                                            imageView22.setImageResource(R.drawable.cross);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block22","cross");
+                                            hashMap.put("turn","player2");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+                                                        if(LuckyNumer()==1){
+                                                            PushGravity();
+                                                        }
+                                                        return;
+                                                    }
+                                                }
+                                            });
+
+                                        }
+                                        else if(getGameStarter().equals("player2")){
+                                            imageView22.setImageResource(R.drawable.zero);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block22","zero");
+                                            hashMap.put("turn","player1");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+                                                        if(LuckyNumer()==1){
+                                                            PushGravity();
+                                                        }
+                                                        return;
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    }
+                                }
+                                else {
+                                    //todo not the players turn; so wait for the reply of other player
+                                    gettingreadycardview.setVisibility(View.GONE);
+                                }
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+                catch (Exception e){
+
+                    Log.d(TAG, "onClick: "+"GRAVITY IS DOWN");
+
+                    databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Log.d(TAG, "onDataChange: "+dataSnapshot);
+                            Responses responses=dataSnapshot.getValue(Responses.class);
+                            if(getGameStarter().equals(responses.getTurn())){
+
+                                if(responses.getBlock22().equals("empty")){
+                                    //todo allow the player to make the change
+                                    if(getGameStarter().equals("player1")){
+                                        imageView22.setImageResource(R.drawable.cross);
+                                        HashMap<String,Object> hashMap=new HashMap<>();
+                                        hashMap.put("block22","cross");
+                                        hashMap.put("turn","player2");
+                                        DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                        databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                    gettingreadycardview.setVisibility(View.VISIBLE);
+                                                    Log.d(TAG, "onComplete: "+LuckyNumer());
+                                                    if(LuckyNumer()==1){
+                                                        PushGravity();
+                                                    }
+                                                    return;
+                                                }
+                                            }
+                                        });
+
+                                    }
+                                    else if(getGameStarter().equals("player2")){
+                                        imageView22.setImageResource(R.drawable.zero);
+                                        HashMap<String,Object> hashMap=new HashMap<>();
+                                        hashMap.put("block22","zero");
+                                        hashMap.put("turn","player1");
+                                        DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                        databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                    gettingreadycardview.setVisibility(View.VISIBLE);
+                                                    Log.d(TAG, "onComplete: "+LuckyNumer());
+                                                    if(LuckyNumer()==1){
+                                                        PushGravity();
+                                                    }
+                                                    return;
+                                                }
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+                            }
+                            else {
+                                //todo not the players turn; so wait for the reply of other player
+                                gettingreadycardview.setVisibility(View.GONE);
+                            }
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                }
+
+
+
             }
         });
 
@@ -648,71 +1517,238 @@ public class Match extends AppCompatActivity {
         imageView23.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Log.d(TAG, "onDataChange: "+dataSnapshot);
-                        Responses responses=dataSnapshot.getValue(Responses.class);
-                        if(getGameStarter().equals(responses.getTurn())){
 
-                            if(responses.getBlock23().equals("empty")){
-                                //todo allow the player to make the change
-                                if(getGameStarter().equals("player1")){
-                                    imageView23.setImageResource(R.drawable.cross);
-                                    HashMap<String,Object> hashMap=new HashMap<>();
-                                    hashMap.put("block23","cross");
-                                    hashMap.put("turn","player2");
-                                    DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
-                                    databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.VISIBLE);
-                                                return;
+                Log.d(TAG, "GRAVITY AT 23 "+gravity);
 
-                                            }
+                try{
+                    if(gravity.equals("true")){
+                        databaseReference.child(getGame()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Log.d(TAG, "onDataChange: "+dataSnapshot);
+                                Responses responses=dataSnapshot.getValue(Responses.class);
+                                if(getGameStarter().equals(responses.getTurn())){
+                                        //todo allow the player to make the change
+                                        if(getGameStarter().equals("player1")){
+                                            imageView23.setImageResource(R.drawable.cross);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block23","cross");
+                                            hashMap.put("turn","player2");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+                                                        DownGravity();
+
+                                                        return;
+
+                                                    }
+                                                }
+                                            });
+
                                         }
-                                    });
+                                        else if(getGameStarter().equals("player2")){
+                                            imageView23.setImageResource(R.drawable.zero);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block23","zero");
+                                            hashMap.put("turn","player1");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+                                                        DownGravity();
 
-                                }
-                                else if(getGameStarter().equals("player2")){
-                                    imageView23.setImageResource(R.drawable.zero);
-                                    HashMap<String,Object> hashMap=new HashMap<>();
-                                    hashMap.put("block23","zero");
-                                    hashMap.put("turn","player1");
-                                    DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
-                                    databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.VISIBLE);
-                                                return;
-                                            }
+                                                        return;
+                                                    }
+                                                }
+                                            });
                                         }
-                                    });
+                                        else {
+                                            Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                        }
+
+
+
                                 }
                                 else {
-                                    Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                    //todo not the players turn; so wait for the reply of other player
+                                    gettingreadycardview.setVisibility(View.GONE);
                                 }
+
 
                             }
 
-                        }
-                        else {
-                            //todo not the players turn; so wait for the reply of other player
-                            gettingreadycardview.setVisibility(View.GONE);
-                        }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }
+                        });
 
                     }
-                });
+                    else {
+                        databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Log.d(TAG, "onDataChange: "+dataSnapshot);
+                                Responses responses=dataSnapshot.getValue(Responses.class);
+                                if(getGameStarter().equals(responses.getTurn())){
+
+                                    if(responses.getBlock23().equals("empty")){
+                                        //todo allow the player to make the change
+                                        if(getGameStarter().equals("player1")){
+                                            imageView23.setImageResource(R.drawable.cross);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block23","cross");
+                                            hashMap.put("turn","player2");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "onComplete: "+LuckyNumer());
+                                                        if(LuckyNumer()==1){
+                                                            PushGravity();
+                                                        }
+                                                        return;
+
+                                                    }
+                                                }
+                                            });
+
+                                        }
+                                        else if(getGameStarter().equals("player2")){
+                                            imageView23.setImageResource(R.drawable.zero);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block23","zero");
+                                            hashMap.put("turn","player1");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "onComplete: "+LuckyNumer());
+                                                        if(LuckyNumer()==1){
+                                                            PushGravity();
+                                                        }
+                                                        return;
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    }
+
+                                }
+                                else {
+                                    //todo not the players turn; so wait for the reply of other player
+                                    gettingreadycardview.setVisibility(View.GONE);
+                                }
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+                catch (Exception e){
+
+                    Log.d(TAG, "onClick: "+"GRAVITY IS DOWN");
+                    databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Log.d(TAG, "onDataChange: "+dataSnapshot);
+                            Responses responses=dataSnapshot.getValue(Responses.class);
+                            if(getGameStarter().equals(responses.getTurn())){
+
+                                if(responses.getBlock23().equals("empty")){
+                                    //todo allow the player to make the change
+                                    if(getGameStarter().equals("player1")){
+                                        imageView23.setImageResource(R.drawable.cross);
+                                        HashMap<String,Object> hashMap=new HashMap<>();
+                                        hashMap.put("block23","cross");
+                                        hashMap.put("turn","player2");
+                                        DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                        databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                    gettingreadycardview.setVisibility(View.VISIBLE);
+                                                    Log.d(TAG, "onComplete: "+LuckyNumer());
+                                                    if(LuckyNumer()==1){
+                                                        PushGravity();
+                                                    }
+                                                    return;
+
+                                                }
+                                            }
+                                        });
+
+                                    }
+                                    else if(getGameStarter().equals("player2")){
+                                        imageView23.setImageResource(R.drawable.zero);
+                                        HashMap<String,Object> hashMap=new HashMap<>();
+                                        hashMap.put("block23","zero");
+                                        hashMap.put("turn","player1");
+                                        DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                        databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                    gettingreadycardview.setVisibility(View.VISIBLE);
+                                                    Log.d(TAG, "onComplete: "+LuckyNumer());
+                                                    if(LuckyNumer()==1){
+                                                        PushGravity();
+                                                    }
+                                                    return;
+                                                }
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+
+                            }
+                            else {
+                                //todo not the players turn; so wait for the reply of other player
+                                gettingreadycardview.setVisibility(View.GONE);
+                            }
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                }
+
+
             }
         });
 
@@ -723,69 +1759,234 @@ public class Match extends AppCompatActivity {
         imageView31.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Log.d(TAG, "onDataChange: "+dataSnapshot);
-                        Responses responses=dataSnapshot.getValue(Responses.class);
-                        if(getGameStarter().equals(responses.getTurn())){
 
-                            if(responses.getBlock31().equals("empty")){
-                                //todo allow the player to make the change
-                                if(getGameStarter().equals("player1")){
-                                    imageView31.setImageResource(R.drawable.cross);
-                                    HashMap<String,Object> hashMap=new HashMap<>();
-                                    hashMap.put("block31","cross");
-                                    hashMap.put("turn","player2");
-                                    DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
-                                    databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.VISIBLE);
-                                                return;
-                                            }
-                                        }
-                                    });
+                Log.d(TAG, "GRAVITY AT 31 "+gravity);
 
-                                }
-                                else if(getGameStarter().equals("player2")){
-                                    imageView31.setImageResource(R.drawable.zero);
-                                    HashMap<String,Object> hashMap=new HashMap<>();
-                                    hashMap.put("block31","zero");
-                                    hashMap.put("turn","player1");
-                                    DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
-                                    databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.VISIBLE);
-                                                return;
-                                            }
+                try{
+                    if(gravity.equals("true")){
+
+
+
+                        databaseReference.child(getGame()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Log.d(TAG, "DATA SANP AT 31 "+dataSnapshot);
+                                Responses responses=dataSnapshot.getValue(Responses.class);
+                                if(getGameStarter().equals(responses.getTurn())){
+
+                                        //todo allow the player to make the change
+                                        if(getGameStarter().equals("player1")){
+                                            imageView31.setImageResource(R.drawable.cross);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block31","cross");
+                                            hashMap.put("turn","player2");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+                                                       DownGravity();
+
+                                                        return;
+                                                    }
+                                                }
+                                            });
+
                                         }
-                                    });
+                                        else if(getGameStarter().equals("player2")){
+                                            imageView31.setImageResource(R.drawable.zero);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block31","zero");
+                                            hashMap.put("turn","player1");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+                                                        DownGravity();
+                                                        return;
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                        }
+
+
                                 }
                                 else {
-                                    Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                    //todo not the players turn; so wait for the reply of other player
+                                    gettingreadycardview.setVisibility(View.GONE);
                                 }
 
+
                             }
-                        }
-                        else {
-                            //todo not the players turn; so wait for the reply of other player
-                            gettingreadycardview.setVisibility(View.GONE);
-                        }
 
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
+                            }
+                        });
                     }
+                    else {
+                        databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Log.d(TAG, "DATASNAP "+dataSnapshot);
+                                Responses responses=dataSnapshot.getValue(Responses.class);
+                                if(getGameStarter().equals(responses.getTurn())){
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    if(responses.getBlock31().equals("empty")){
+                                        //todo allow the player to make the change
+                                        if(getGameStarter().equals("player1")){
+                                            imageView31.setImageResource(R.drawable.cross);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block31","cross");
+                                            hashMap.put("turn","player2");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+                                                        if(LuckyNumer()==1){
+                                                            PushGravity();
+                                                        }
+                                                        return;
+                                                    }
+                                                }
+                                            });
 
+                                        }
+                                        else if(getGameStarter().equals("player2")){
+                                            imageView31.setImageResource(R.drawable.zero);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block31","zero");
+                                            hashMap.put("turn","player1");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER: "+LuckyNumer());
+                                                        if(LuckyNumer()==1){
+                                                            PushGravity();
+                                                        }
+                                                        return;
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    }
+                                }
+                                else {
+                                    //todo not the players turn; so wait for the reply of other player
+                                    gettingreadycardview.setVisibility(View.GONE);
+                                }
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                     }
-                });
+                }
+                catch (Exception e){
+
+                    Log.d(TAG, "onClick: "+"GRAVITY IS DOWN");
+                    databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Log.d(TAG, "onDataChange: "+dataSnapshot);
+                            Responses responses=dataSnapshot.getValue(Responses.class);
+                            if(getGameStarter().equals(responses.getTurn())){
+
+                                if(responses.getBlock31().equals("empty")){
+                                    //todo allow the player to make the change
+                                    if(getGameStarter().equals("player1")){
+                                        imageView31.setImageResource(R.drawable.cross);
+                                        HashMap<String,Object> hashMap=new HashMap<>();
+                                        hashMap.put("block31","cross");
+                                        hashMap.put("turn","player2");
+                                        DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                        databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                    gettingreadycardview.setVisibility(View.VISIBLE);
+                                                    Log.d(TAG, "onComplete: "+LuckyNumer());
+                                                    if(LuckyNumer()==1){
+                                                        PushGravity();
+                                                    }
+                                                    return;
+                                                }
+                                            }
+                                        });
+
+                                    }
+                                    else if(getGameStarter().equals("player2")){
+                                        imageView31.setImageResource(R.drawable.zero);
+                                        HashMap<String,Object> hashMap=new HashMap<>();
+                                        hashMap.put("block31","zero");
+                                        hashMap.put("turn","player1");
+                                        DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                        databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                    gettingreadycardview.setVisibility(View.VISIBLE);
+                                                    Log.d(TAG, "onComplete: "+LuckyNumer());
+                                                    if(LuckyNumer()==1){
+                                                        PushGravity();
+                                                    }
+                                                    return;
+                                                }
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+                            }
+                            else {
+                                //todo not the players turn; so wait for the reply of other player
+                                gettingreadycardview.setVisibility(View.GONE);
+                            }
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                }
+
+
             }
         });
 
@@ -795,70 +1996,236 @@ public class Match extends AppCompatActivity {
         imageView32.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Log.d(TAG, "onDataChange: "+dataSnapshot);
-                        Responses responses=dataSnapshot.getValue(Responses.class);
-                        if(getGameStarter().equals(responses.getTurn())){
+                Log.d(TAG, "GRAVITY AT 32 "+gravity);
 
-                            if(responses.getBlock32().equals("empty")){
-                                //todo allow the player to make the change
-                                if(getGameStarter().equals("player1")){
-                                    imageView32.setImageResource(R.drawable.cross);
-                                    HashMap<String,Object> hashMap=new HashMap<>();
-                                    hashMap.put("block32","cross");
-                                    hashMap.put("turn","player2");
-                                    DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
-                                    databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.VISIBLE);
-                                                return;
-                                            }
-                                        }
-                                    });
 
-                                }
-                                else if(getGameStarter().equals("player2")){
-                                    imageView32.setImageResource(R.drawable.zero);
-                                    HashMap<String,Object> hashMap=new HashMap<>();
-                                    hashMap.put("block32","zero");
-                                    hashMap.put("turn","player1");
-                                    DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
-                                    databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.VISIBLE);
-                                                return;
-                                            }
+                try{
+                    if(gravity.equals("true")){
+                        databaseReference.child(getGame()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Log.d(TAG, "DATA SNAP AT 32 "+dataSnapshot);
+                                Responses responses=dataSnapshot.getValue(Responses.class);
+                                if(getGameStarter().equals(responses.getTurn())){
+
+                                        //todo allow the player to make the change
+                                        if(getGameStarter().equals("player1")){
+                                            imageView32.setImageResource(R.drawable.cross);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block32","cross");
+                                            hashMap.put("turn","player2");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+                                                        DownGravity();
+
+                                                        return;
+                                                    }
+                                                }
+                                            });
+
                                         }
-                                    });
+                                        else if(getGameStarter().equals("player2")){
+                                            imageView32.setImageResource(R.drawable.zero);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block32","zero");
+                                            hashMap.put("turn","player1");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+                                                        DownGravity();
+
+                                                        return;
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                        }
+
+
+
                                 }
                                 else {
-                                    Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                    //todo not the players turn; so wait for the reply of other player
+                                    gettingreadycardview.setVisibility(View.GONE);
                                 }
+
 
                             }
 
-                        }
-                        else {
-                            //todo not the players turn; so wait for the reply of other player
-                            gettingreadycardview.setVisibility(View.GONE);
-                        }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }
+                        });
 
                     }
-                });
+                    else {
+                        databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Log.d(TAG, "DATA SNAP "+dataSnapshot);
+                                Responses responses=dataSnapshot.getValue(Responses.class);
+                                if(getGameStarter().equals(responses.getTurn())){
+
+                                    if(responses.getBlock32().equals("empty")){
+                                        //todo allow the player to make the change
+                                        if(getGameStarter().equals("player1")){
+                                            imageView32.setImageResource(R.drawable.cross);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block32","cross");
+                                            hashMap.put("turn","player2");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+                                                        if(LuckyNumer()==1){
+                                                            PushGravity();
+                                                        }
+                                                        return;
+                                                    }
+                                                }
+                                            });
+
+                                        }
+                                        else if(getGameStarter().equals("player2")){
+                                            imageView32.setImageResource(R.drawable.zero);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block32","zero");
+                                            hashMap.put("turn","player1");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMEBR "+LuckyNumer());
+                                                        if(LuckyNumer()==1){
+                                                            PushGravity();
+                                                        }
+                                                        return;
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    }
+
+                                }
+                                else {
+                                    //todo not the players turn; so wait for the reply of other player
+                                    gettingreadycardview.setVisibility(View.GONE);
+                                }
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+                catch (Exception e){
+                    Log.d(TAG, "onClick: "+"GRAVITY IS DOWN");
+
+                    databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Log.d(TAG, "onDataChange: "+dataSnapshot);
+                            Responses responses=dataSnapshot.getValue(Responses.class);
+                            if(getGameStarter().equals(responses.getTurn())){
+
+                                if(responses.getBlock32().equals("empty")){
+                                    //todo allow the player to make the change
+                                    if(getGameStarter().equals("player1")){
+                                        imageView32.setImageResource(R.drawable.cross);
+                                        HashMap<String,Object> hashMap=new HashMap<>();
+                                        hashMap.put("block32","cross");
+                                        hashMap.put("turn","player2");
+                                        DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                        databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                    gettingreadycardview.setVisibility(View.VISIBLE);
+                                                    Log.d(TAG, "onComplete: "+LuckyNumer());
+                                                    if(LuckyNumer()==1){
+                                                        PushGravity();
+                                                    }
+                                                    return;
+                                                }
+                                            }
+                                        });
+
+                                    }
+                                    else if(getGameStarter().equals("player2")){
+                                        imageView32.setImageResource(R.drawable.zero);
+                                        HashMap<String,Object> hashMap=new HashMap<>();
+                                        hashMap.put("block32","zero");
+                                        hashMap.put("turn","player1");
+                                        DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                        databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                    gettingreadycardview.setVisibility(View.VISIBLE);
+                                                    Log.d(TAG, "onComplete: "+LuckyNumer());
+                                                    if(LuckyNumer()==1){
+                                                        PushGravity();
+                                                    }
+                                                    return;
+                                                }
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+
+                            }
+                            else {
+                                //todo not the players turn; so wait for the reply of other player
+                                gettingreadycardview.setVisibility(View.GONE);
+                            }
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+
+
+
             }
         });
 
@@ -869,71 +2236,236 @@ public class Match extends AppCompatActivity {
         imageView33.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Log.d(TAG, "onDataChange: "+dataSnapshot);
-                        Responses responses=dataSnapshot.getValue(Responses.class);
-                        if(getGameStarter().equals(responses.getTurn())){
 
-                            if(responses.getBlock33().equals("empty")){
-                                //todo allow the player to make the change
-                                if(getGameStarter().equals("player1")){
-                                    imageView33.setImageResource(R.drawable.cross);
-                                    HashMap<String,Object> hashMap=new HashMap<>();
-                                    hashMap.put("block33","cross");
-                                    hashMap.put("turn","player2");
-                                    DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
-                                    databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
+                Log.d(TAG, "GRAVITY AT 33: "+gravity);
 
-                                                Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.VISIBLE);
-                                                return;
-                                            }
+                try{
+                    if(gravity.equals("true")){
+                        databaseReference.child(getGame()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Log.d(TAG, "DATASNAP AT 33: "+dataSnapshot);
+                                Responses responses=dataSnapshot.getValue(Responses.class);
+                                if(getGameStarter().equals(responses.getTurn())){
+                                        //todo allow the player to make the change
+                                        if(getGameStarter().equals("player1")){
+                                            imageView33.setImageResource(R.drawable.cross);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block33","cross");
+                                            hashMap.put("turn","player2");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+                                                        DownGravity();
+                                                        return;
+                                                    }
+                                                }
+                                            });
+
                                         }
-                                    });
-
-                                }
-                                else if(getGameStarter().equals("player2")){
-                                    imageView33.setImageResource(R.drawable.zero);
-                                    HashMap<String,Object> hashMap=new HashMap<>();
-                                    hashMap.put("block33","zero");
-                                    hashMap.put("turn","player1");
-                                    DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
-                                    databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
-                                                gettingreadycardview.setVisibility(View.VISIBLE);
-                                                return;
-                                            }
+                                        else if(getGameStarter().equals("player2")){
+                                            imageView33.setImageResource(R.drawable.zero);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block33","zero");
+                                            hashMap.put("turn","player1");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
+                                                        DownGravity();
+                                                        return;
+                                                    }
+                                                }
+                                            });
                                         }
-                                    });
+                                        else {
+                                            Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                        }
+
+
+
                                 }
                                 else {
-                                    Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                    //todo not the players turn; so wait for the reply of other player
+                                    gettingreadycardview.setVisibility(View.GONE);
                                 }
+
 
                             }
 
-                        }
-                        else {
-                            //todo not the players turn; so wait for the reply of other player
-                            gettingreadycardview.setVisibility(View.GONE);
-                        }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }
+                        });
 
                     }
-                });
+                    else {
+                        databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Log.d(TAG, "DATASNAP: "+dataSnapshot);
+                                Responses responses=dataSnapshot.getValue(Responses.class);
+                                if(getGameStarter().equals(responses.getTurn())){
+
+                                    if(responses.getBlock33().equals("empty")){
+                                        //todo allow the player to make the change
+                                        if(getGameStarter().equals("player1")){
+                                            imageView33.setImageResource(R.drawable.cross);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block33","cross");
+                                            hashMap.put("turn","player2");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMBER: "+LuckyNumer());
+                                                        if(LuckyNumer()==1){
+                                                            PushGravity();
+                                                        }
+                                                        return;
+                                                    }
+                                                }
+                                            });
+
+                                        }
+                                        else if(getGameStarter().equals("player2")){
+                                            imageView33.setImageResource(R.drawable.zero);
+                                            HashMap<String,Object> hashMap=new HashMap<>();
+                                            hashMap.put("block33","zero");
+                                            hashMap.put("turn","player1");
+                                            DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                            databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                        gettingreadycardview.setVisibility(View.VISIBLE);
+                                                        Log.d(TAG, "LUCKY NUMEBR "+LuckyNumer());
+                                                        if(LuckyNumer()==1){
+                                                            PushGravity();
+                                                        }
+                                                        return;
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    }
+
+                                }
+                                else {
+                                    //todo not the players turn; so wait for the reply of other player
+                                    gettingreadycardview.setVisibility(View.GONE);
+                                }
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+                catch (Exception e){
+
+                    Log.d(TAG, "onClick: "+"GRAVITY IS DOWN");
+                    databaseReference.child(getGame()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Log.d(TAG, "onDataChange: "+dataSnapshot);
+                            Responses responses=dataSnapshot.getValue(Responses.class);
+                            if(getGameStarter().equals(responses.getTurn())){
+
+                                if(responses.getBlock33().equals("empty")){
+                                    //todo allow the player to make the change
+                                    if(getGameStarter().equals("player1")){
+                                        imageView33.setImageResource(R.drawable.cross);
+                                        HashMap<String,Object> hashMap=new HashMap<>();
+                                        hashMap.put("block33","cross");
+                                        hashMap.put("turn","player2");
+                                        DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                        databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+
+                                                    Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                    gettingreadycardview.setVisibility(View.VISIBLE);
+                                                    Log.d(TAG, "onComplete: "+LuckyNumer());
+                                                    if(LuckyNumer()==1){
+                                                        PushGravity();
+                                                    }
+                                                    return;
+                                                }
+                                            }
+                                        });
+
+                                    }
+                                    else if(getGameStarter().equals("player2")){
+                                        imageView33.setImageResource(R.drawable.zero);
+                                        HashMap<String,Object> hashMap=new HashMap<>();
+                                        hashMap.put("block33","zero");
+                                        hashMap.put("turn","player1");
+                                        DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+                                        databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
+                                                    gettingreadycardview.setVisibility(View.VISIBLE);
+                                                    Log.d(TAG, "onComplete: "+LuckyNumer());
+                                                    if(LuckyNumer()==1){
+                                                        PushGravity();
+                                                    }
+                                                    return;
+                                                }
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        Toast.makeText(getApplicationContext(),"I dont know what to do",Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+
+                            }
+                            else {
+                                //todo not the players turn; so wait for the reply of other player
+                                gettingreadycardview.setVisibility(View.GONE);
+                            }
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+
+
+
             }
         });
 
@@ -1086,10 +2618,54 @@ public class Match extends AppCompatActivity {
 
     }
 
-    void checkgravity(){
+    int LuckyNumer(){
         Random random=new Random();
         int num=random.nextInt(10);
-        Log.d(TAG, "checkgravity: "+num);
+        Log.d(TAG, "LUCKY NUMBER: "+num);
+        //gravity will be initiated and removed
+
+        if(num%2==0){
+            return 1;
+        }
+        else {
+            return 0;
+        }
+
+
+
+    }
+
+    void PushGravity(){
+        HashMap<String ,Object> hashMap=new HashMap<>();
+        hashMap.put("gravity","true");
+        DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+        databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
+                if(task.isSuccessful()){
+                    Log.d(TAG, "onComplete: "+"gravity pushed");
+                }
+            }
+        });
+
+
+
+    }
+
+    void DownGravity(){
+        DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+        databaseReference1.child(getGame()).child("gravity").removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
+                if(task.isSuccessful()){
+                    Log.d(TAG, "onComplete: "+"GRAVITY DOWN");
+                }
+            }
+        });
+
+
     }
 
     }
