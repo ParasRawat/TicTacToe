@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.parasrawat2124.tictactoe.Dashboard.Dashboard;
 import com.example.parasrawat2124.tictactoe.ModelClass.GamerProfile;
 import com.example.parasrawat2124.tictactoe.ModelClass.Responses;
 import com.example.parasrawat2124.tictactoe.R;
@@ -36,6 +37,7 @@ public class Match extends AppCompatActivity {
     String gravity;
     CircleImageView winnerimage;
     TextView winnername;
+    CircleImageView power;
     public static final String TAG="DRAG";
     public static final String IMAGEVIEW_TAG="icon_bitmap";
     ImageView crosss;
@@ -50,9 +52,8 @@ public class Match extends AppCompatActivity {
     String block31="block31";
     String block32="block32";
     String block33="block33";
-    String player1turn="player1turn";
-    String player2turn="player2turn";
     CardView winnercardview;
+    TextView powerinfo;
     ImageView imageView11,imageView12,imageView13,imageView21,imageView22,imageView23,imageView31,imageView32,imageView33;
     CircleImageView gamer1,gamer2;
     TextView gamer1name,gamer2name;
@@ -81,7 +82,8 @@ public class Match extends AppCompatActivity {
         zero.setTag(IMAGEVIEW_TAG);
         gettingreadycardview=findViewById(R.id.gettingreadycardview);
         winnercardview=findViewById(R.id.winnercardview);
-
+        power=findViewById(R.id.power);
+        powerinfo=findViewById(R.id.powerinfo);
         //if game starter is player 1, then you are the challenger
         //if game started is player 2, then your are the challenged player
         Log.d(TAG, "getSharedPrefereces "+getSharedPreferences());
@@ -180,35 +182,37 @@ public class Match extends AppCompatActivity {
 
 
 
-        //Updater Logic and Gravity Logic
+        //Updater Logic and Gravity Logic and Newton;
+        DatabaseReference databaseReference3=FirebaseDatabase.getInstance().getReference("MatchProcess").child(getGame()).child("gravity");
+        databaseReference3.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d(TAG, "DATASNAP VALUE FOR GRAVITY: " + dataSnapshot.getValue());
+                try {
+                    if (dataSnapshot.getValue().toString().equals("true")) {
+                        Toast.makeText(getApplicationContext(), "Gravity Successfully  Activated", Toast.LENGTH_SHORT).show();
+                        gravity="true";
+                        power.setImageResource(R.drawable.overwrite);
+                    }
+                }
+                catch (Exception e){
+                    Log.d(TAG, "onDataChange: "+" NULL POINTER EXCEPTION");
+                    gravity="false";
+                    power.setImageResource(0);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
         final DatabaseReference updater=FirebaseDatabase.getInstance().getReference("MatchProcess");
         updater.child(getGame()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("MatchProcess").child(getGame()).child("gravity");
-                databaseReference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Log.d(TAG, "DATASNAP VALUE FOR GRAVITY: " + dataSnapshot.getValue());
-                        try {
-                            if (dataSnapshot.getValue().toString().equals("true")) {
-                                Toast.makeText(getApplicationContext(), "Gravity Successfully  Activated", Toast.LENGTH_SHORT).show();
-                                gravity="true";
-                            }
-                        }
-                        catch (Exception e){
-                            Log.d(TAG, "onDataChange: "+" NULL POINTER EXCEPTION");
-                            gravity="false";
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-
                 Log.d(TAG, "UPDATER CALLING SYSTEM "+"Updater is called");
                 Responses responses=dataSnapshot.getValue(Responses.class);
                 if(!responses.getBlock11().equals("empty")){
@@ -325,18 +329,19 @@ public class Match extends AppCompatActivity {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
         final DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("MatchProcess");
-
-
-
-
-
-
-
-
-
-
-
         //ImageView 11
         imageView11.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -499,7 +504,7 @@ public class Match extends AppCompatActivity {
                             Responses responses=dataSnapshot.getValue(Responses.class);
                             //checking the turn
                             if(getGameStarter().equals(responses.getTurn())){
-                                //todo Check for the gravity value here
+
                                 if(responses.getBlock11().equals("empty")){
                                     //check to allow the user to make change
                                     if(getGameStarter().equals("player1")){
@@ -518,8 +523,8 @@ public class Match extends AppCompatActivity {
                                                     if(LuckyNumer()==1){
                                                         PushGravity();
                                                     }
-                                                    else {
-
+                                                    if(LuckyNumer()==2){
+                                                        PushNewton();
                                                     }
                                                     return;
                                                 }
@@ -543,6 +548,10 @@ public class Match extends AppCompatActivity {
                                                     Log.d(TAG, "onComplete: "+LuckyNumer());
                                                     if(LuckyNumer()==1){
                                                         PushGravity();
+                                                    }
+
+                                                    if(LuckyNumer()==2){
+                                                        PushNewton();
                                                     }
                                                     return;
                                                 }
@@ -2260,7 +2269,6 @@ public class Match extends AppCompatActivity {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
                                                     if (task.isSuccessful()) {
-
                                                         Toast.makeText(getApplicationContext(), "Successfully Pushed, Waiting reply from other player", Toast.LENGTH_SHORT).show();
                                                         gettingreadycardview.setVisibility(View.VISIBLE);
                                                         Log.d(TAG, "LUCKY NUMBER "+LuckyNumer());
@@ -2649,7 +2657,7 @@ public class Match extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                int timeToBlink = 500;    //in milissegunds
+                int timeToBlink = 500;
                 try {
                     Thread.sleep(timeToBlink);
                 } catch (Exception e) {
@@ -2676,20 +2684,22 @@ public class Match extends AppCompatActivity {
 
     int LuckyNumer(){
         Random random=new Random();
-        int num=random.nextInt(10);
+        int num=random.nextInt(20);
         Log.d(TAG, "LUCKY NUMBER: "+num);
         //gravity will be initiated and removed
 
-        if(num%2==0){
+        if(num<5){
             return 1;
+        }
+        else if(num>5 && num<=10){
+            return 2;
         }
         else {
             return 0;
         }
-
-
-
     }
+
+
 
     void PushGravity(){
         HashMap<String ,Object> hashMap=new HashMap<>();
@@ -2748,12 +2758,7 @@ public class Match extends AppCompatActivity {
 
 
                         }
-
-//                        if(gamerProfile.getName().equals(getSecondPlayer())){
-//                            gamer2name.setText(gamerProfile.getName());
-//                            Picasso.get().load(gamerProfile.getUri()).placeholder(R.drawable.tictacplaceholder).into(gamer2);
-//                        }
-                    }
+                        }
 
                 }
 
@@ -2793,6 +2798,23 @@ public class Match extends AppCompatActivity {
             });
 
         }
+
+    }
+
+    void PushNewton(){
+
+        HashMap<String ,Object> hashMap=new HashMap<>();
+        hashMap.put("newton","true");
+        DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("MatchProcess");
+        databaseReference1.child(getGame()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
+                if(task.isSuccessful()){
+                    Log.d(TAG, "onComplete: "+"Newton Pushed");
+                }
+            }
+        });
 
     }
 

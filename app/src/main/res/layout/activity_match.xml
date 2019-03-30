@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_margin="8dp"
-        android:textSize="48dp"
+        android:textSize="24dp"
         android:id="@+id/vs"
         android:textColor="@color/colorPrimaryDark"
         android:fontFamily="@font/caesar_dressing"
@@ -277,6 +277,25 @@
 
     </android.support.v7.widget.CardView>
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/power"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_below="@+id/vs"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp" />
 
+    <TextView
+        android:textColor="@android:color/holo_blue_dark"
+        android:layout_margin="8dp"
+        android:textStyle="bold"
+        android:id="@+id/powerinfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/column1"
+        android:layout_alignParentStart="true"
+        android:text="Special Power Info"
+        android:fontFamily="@font/caesar_dressing"
+        android:textAlignment="center" />
 
 </RelativeLayout>
