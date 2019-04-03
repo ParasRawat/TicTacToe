@@ -281,6 +281,7 @@
         android:id="@+id/power"
         android:layout_width="80dp"
         android:layout_height="80dp"
+        android:src="@drawable/gravity"
         android:layout_below="@+id/vs"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp" />
