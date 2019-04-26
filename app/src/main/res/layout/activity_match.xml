@@ -57,143 +57,148 @@
         android:fontFamily="@font/caesar_dressing"
         android:text="VS"/>
 
-    <View
-        android:id="@+id/centrehoriontalline"
+    <!--<View-->
+    <!--android:id="@+id/centrehoriontalline"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_margin="8dp"-->
+    <!--android:background="@color/colorPrimaryDark" />-->
+    <!--<View-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:layout_below="@+id/vs"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_margin="8dp"-->
+    <!--android:background="@color/colorPrimaryDark" />-->
+    <!--<View-->
+    <!--android:layout_marginRight="16dp"-->
+    <!--android:layout_marginLeft="16dp"-->
+    <!--android:id="@+id/row2"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="2dp"-->
+    <!--android:layout_below="@+id/centrehoriontalline"-->
+    <!--android:layout_marginTop="50dp"-->
+    <!--android:background="@color/colorPrimaryDark" />-->
+    <!--<View-->
+    <!--android:id="@+id/row1"-->
+    <!--android:layout_marginLeft="16dp"-->
+    <!--android:layout_marginRight="16dp"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="2dp"-->
+    <!--android:layout_above="@+id/centrehoriontalline"-->
+    <!--android:layout_marginBottom="50dp"-->
+    <!--android:background="@color/colorPrimaryDark" />-->
+
+    <!--<View-->
+    <!--android:id="@+id/column1"-->
+    <!--android:layout_width="2dp"-->
+    <!--android:layout_height="350dp"-->
+    <!--android:layout_marginLeft="8dp"-->
+    <!--android:layout_marginRight="8dp"-->
+    <!--android:layout_below="@+id/gamer1name"-->
+    <!--android:layout_toEndOf="@+id/gamer2"-->
+    <!--android:layout_marginTop="32dp"-->
+    <!--android:background="@color/colorPrimaryDark" />-->
+
+    <!--<View-->
+    <!--android:layout_marginRight="8dp"-->
+    <!--android:layout_marginLeft="8dp"-->
+    <!--android:id="@+id/column2"-->
+    <!--android:layout_width="2dp"-->
+    <!--android:layout_height="350dp"-->
+    <!--android:layout_marginTop="32dp"-->
+    <!--android:layout_below="@+id/gamer2name"-->
+    <!--android:layout_marginEnd="8dp"-->
+    <!--android:layout_toStartOf="@+id/gamer1"-->
+    <!--android:background="@color/colorPrimaryDark" />-->
+
+    <GridLayout
+        android:id="@+id/match_area"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_centerVertical="true"
-        android:layout_margin="8dp"
-        android:background="@color/colorPrimaryDark" />
-    <View
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/vs"
-        android:layout_centerVertical="true"
-        android:layout_margin="8dp"
-        android:background="@color/colorPrimaryDark" />
-    <View
-        android:layout_marginRight="16dp"
-        android:layout_marginLeft="16dp"
-        android:id="@+id/row2"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_below="@+id/centrehoriontalline"
-        android:layout_marginTop="50dp"
-        android:background="@color/colorPrimaryDark" />
-    <View
-        android:id="@+id/row1"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_above="@+id/centrehoriontalline"
-        android:layout_marginBottom="50dp"
-        android:background="@color/colorPrimaryDark" />
+        android:layout_height="300dp"
+        android:rowCount="3"
+        android:columnCount="3"
+        android:background="@color/colorPrimaryDark"
+        android:layout_below="@id/power"
+        android:layout_margin="16dp">
+        <ImageView
+            android:padding="8dp"
+            android:id="@+id/text11"
+            android:background="@android:color/white"
+            android:layout_marginEnd="2dp"
+            android:layout_marginBottom="2dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"/>
 
-    <View
-        android:id="@+id/column1"
-        android:layout_width="2dp"
-        android:layout_height="350dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_below="@+id/gamer1name"
-        android:layout_toEndOf="@+id/gamer2"
-        android:layout_marginTop="32dp"
-        android:background="@color/colorPrimaryDark" />
+        <ImageView
+            android:padding="8dp"
+            android:id="@+id/text12"
+            android:background="@android:color/white"
+            android:layout_marginEnd="2dp"
+            android:layout_marginBottom="2dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"/>
 
-    <View
-        android:layout_marginRight="8dp"
-        android:layout_marginLeft="8dp"
-        android:id="@+id/column2"
-        android:layout_width="2dp"
-        android:layout_height="350dp"
-        android:layout_marginTop="32dp"
-        android:layout_below="@+id/gamer2name"
-        android:layout_marginEnd="8dp"
-        android:layout_toStartOf="@+id/gamer1"
-        android:background="@color/colorPrimaryDark" />
+        <ImageView
+            android:padding="8dp"
+            android:id="@+id/text13"
+            android:background="@android:color/white"
+            android:layout_marginBottom="2dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"/>
 
-    <ImageView
-        android:padding="8dp"
-        android:id="@+id/text11"
-        android:layout_margin="8dp"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_above="@+id/row1"
-        android:layout_marginEnd="-8dp"
-        android:layout_toStartOf="@+id/column1" />
+        <ImageView
+            android:padding="8dp"
+            android:id="@+id/text21"
+            android:background="@android:color/white"
+            android:layout_marginEnd="2dp"
+            android:layout_marginBottom="2dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"/>
 
-    <ImageView
-        android:id="@+id/text13"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_alignStart="@+id/gamer1"
-        android:layout_alignTop="@+id/text11"
-        android:padding="8dp" />
+        <ImageView
+            android:padding="8dp"
+            android:id="@+id/text22"
+            android:background="@android:color/white"
+            android:layout_marginEnd="2dp"
+            android:layout_marginBottom="2dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1" />
 
-    <ImageView
-        android:padding="8dp"
-        android:layout_margin="8dp"
-        android:id="@+id/text12"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_alignBottom="@+id/row1"
-        android:layout_centerHorizontal="true" />
+        <ImageView
+            android:padding="8dp"
+            android:id="@+id/text23"
+            android:background="@android:color/white"
+            android:layout_marginBottom="2dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1" />
 
-    <ImageView
-        android:padding="8dp"
-        android:layout_margin="8dp"
-        android:id="@+id/text31"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_alignTop="@+id/row2"
-        android:layout_alignEnd="@+id/column1" />
+        <ImageView
+            android:padding="8dp"
+            android:id="@+id/text31"
+            android:background="@android:color/white"
+            android:layout_marginEnd="2dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"/>
 
-    <ImageView
-        android:padding="8dp"
-        android:layout_margin="8dp"
-        android:id="@+id/text32"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_below="@+id/row2"
-        android:layout_centerHorizontal="true" />
+        <ImageView
+            android:padding="8dp"
+            android:id="@+id/text32"
+            android:background="@android:color/white"
+            android:layout_marginEnd="2dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"/>
 
-    <ImageView
-        android:padding="8dp"
-        android:id="@+id/text33"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_alignStart="@+id/gamer1"
-        android:layout_alignTop="@+id/text32" />
+        <ImageView
+            android:padding="8dp"
+            android:id="@+id/text33"
+            android:background="@android:color/white"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"/>
+    </GridLayout>
 
-    <ImageView
-        android:padding="8dp"
-        android:layout_margin="8dp"
-        android:id="@+id/text21"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="-8dp"
-        android:layout_toStartOf="@+id/column1" />
-
-    <ImageView
-        android:padding="8dp"
-        android:layout_margin="8dp"
-        android:id="@+id/text22"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_centerInParent="true" />
-
-    <ImageView
-        android:padding="8dp"
-        android:layout_margin="8dp"
-        android:id="@+id/text23"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="-8dp"
-        android:layout_toEndOf="@+id/column2" />
 
     <ImageView
         android:visibility="gone"
@@ -232,7 +237,7 @@
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
-       android:visibility="gone"
+        android:visibility="gone"
         android:id="@+id/winnercardview"
         android:alpha="0.9"
         android:layout_width="match_parent"
@@ -281,7 +286,6 @@
         android:id="@+id/power"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:src="@drawable/gravity"
         android:layout_below="@+id/vs"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp" />
@@ -293,7 +297,7 @@
         android:id="@+id/powerinfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/column1"
+        android:layout_below="@+id/match_area"
         android:layout_alignParentStart="true"
         android:text="Special Power Info"
         android:fontFamily="@font/caesar_dressing"
