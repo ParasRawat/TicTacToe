@@ -31,6 +31,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -95,7 +96,6 @@ public class Match extends AppCompatActivity {
         Log.d(TAG, "getGame "+getGame());
         Log.d(TAG, "getSecondPlayer "+getSecondPlayer());
 
-
         //Setting not your turn logic
         gettingreadycardview.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,7 +113,7 @@ public class Match extends AppCompatActivity {
             //pushing the game
             //You started the game as player 1.
             crosss.setVisibility(View.VISIBLE);
-            Responses responses=new Responses("empty","empty","empty","empty","empty","empty","empty","empty","empty","false","true","","player2");
+            Responses responses=new Responses("empty","empty","empty","empty","empty","empty","empty","empty","empty","false","true","","player2",getSharedPreferences(),getSecondPlayer());
             DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("MatchProcess");
             databaseReference.child(getGame()).setValue(responses).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
@@ -135,7 +135,7 @@ public class Match extends AppCompatActivity {
             //you started the game as player 2, challenged player
             //pushing the game
             zero.setVisibility(View.VISIBLE);
-            Responses responses=new Responses("empty","empty","empty","empty","empty","empty","empty","empty","empty","false","true","","player2");
+            Responses responses=new Responses("empty","empty","empty","empty","empty","empty","empty","empty","empty","false","true","","player2",getSharedPreferences(),getSecondPlayer());
             DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("MatchProcess");
             databaseReference.child(getGame()).setValue(responses).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
@@ -3313,7 +3313,6 @@ public class Match extends AppCompatActivity {
         String name=sharedPreferences.getString("name","0");
         return name;
     }
-
 
     String getGameStarter(){
         SharedPreferences sharedPreferences=getSharedPreferences("Starter",MODE_PRIVATE);
