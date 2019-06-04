@@ -19,12 +19,14 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.parasrawat2124.tictactoe.Dashboard.Dashboard;
+import com.example.parasrawat2124.tictactoe.Login_and_Registration.LoginScreen;
 import com.example.parasrawat2124.tictactoe.ModelClass.GamerProfile;
 import com.example.parasrawat2124.tictactoe.R;
 import com.google.android.gms.tasks.Continuation;
@@ -58,6 +60,7 @@ public class CompleteYourProfile extends AppCompatActivity {
     TextView gamername;
     Uri imageuri;
     String phototofile;
+    Button logout;
     ProgressBar progressBar,progressintermeidate;
     public static final int PICK_IMAGE_REQUEST=1;
     public static final int CLICK_IMAGE_REQUEST=2;
@@ -78,6 +81,7 @@ public class CompleteYourProfile extends AppCompatActivity {
         gamername=findViewById(R.id.gamernamenameedittext);
         browse=findViewById(R.id.browse);
         opencam=findViewById(R.id.opencam);
+        logout=findViewById(R.id.logout);
         progressBar=findViewById(R.id.progressbar);
         progressBar.setVisibility(View.GONE);
         progressintermeidate=findViewById(R.id.progressbarintermidiate);
@@ -111,6 +115,13 @@ public class CompleteYourProfile extends AppCompatActivity {
             }
         });
 
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(CompleteYourProfile.this,LoginScreen.class));
+            }
+        });
         opencam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
     tools:context=".SplashScreen">
 
     <TextView
@@ -17,12 +16,12 @@
         android:text="TIC TAC TOE"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="48dp"
-
         android:textStyle="bold" />
 
     <ImageView
         android:layout_margin="8dp"
         android:layout_below="@+id/ticheading"
+        android:layout_centerVertical="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/ticimage"

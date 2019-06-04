@@ -3,16 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@drawable/background"
     android:layout_height="match_parent"
     tools:context=".Login_and_Registration.LoginScreen">
 
-    <com.google.android.gms.common.SignInButton
+    <Button
+        android:textColor="@android:color/holo_red_dark"
         android:id="@+id/sign_in_button"
-        android:layout_width="180dp"
-        android:textAlignment="center"
+        android:layout_width="wrap_content"
+        android:fontFamily="@font/caesar_dressing"
+        android:textSize="40dp"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:padding="4dp"
+        android:background="@drawable/ripple"
+        android:text="Sign In" />
 
 
 

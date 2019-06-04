@@ -184,6 +184,14 @@
         android:layout_height="60dp"
         app:SpinKit_Color="@color/colorPrimaryDark" />
 
+    <Button
+        android:id="@+id/logout"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/title"
+        android:layout_alignBottom="@+id/title"
+        android:text="Logount" />
+
 
 
 </RelativeLayout>

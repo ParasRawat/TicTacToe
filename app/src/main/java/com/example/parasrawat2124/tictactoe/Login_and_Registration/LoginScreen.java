@@ -8,6 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.parasrawat2124.tictactoe.CatchAndMatch.CatchPlayer;
@@ -42,9 +45,11 @@ public class LoginScreen extends AppCompatActivity {
         setContentView(R.layout.activity_login_screen);
         firebaseAuth=FirebaseAuth.getInstance();
         firebaseUser=firebaseAuth.getCurrentUser();
-        SignInButton signInButton = findViewById(R.id.sign_in_button);
+        Button signInButton = findViewById(R.id.sign_in_button);
         //both email and password as well google login are added inside the app.
 
+        Animation hyperspacejump=AnimationUtils.loadAnimation(this,R.anim.antihypereffect);
+        signInButton.startAnimation(hyperspacejump);
         //Google sign in option to request for email
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -71,11 +76,11 @@ public class LoginScreen extends AppCompatActivity {
     void updateUI(FirebaseUser account){
         try{
         if(!account.equals(null)){
-            Toast.makeText(getApplicationContext(),"Sigining in with google was successfuull",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"AUTO SIGN IN",Toast.LENGTH_LONG).show();
             startActivity(new Intent(LoginScreen.this,CompleteYourProfile.class));
         }
         else {
-            Toast.makeText(getApplicationContext(),"Error while signign in ",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"ERROR WHILE AUTO SIGN IN ",Toast.LENGTH_LONG).show();
         }}
         catch (Exception e){
 
@@ -101,7 +106,7 @@ public class LoginScreen extends AppCompatActivity {
                 FirebaseAuthenticateWithGoogle(account);
             }
             catch (ApiException e){
-                Toast.makeText(getApplicationContext(),"Signing in has been falied with result id "+e,Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"DIRECT SIGN IN FAILED "+e,Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -113,12 +118,12 @@ public class LoginScreen extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(getApplicationContext(),"Sign in with Google Success",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"SUCCESS SIGN IN",Toast.LENGTH_LONG).show();
                     FirebaseUser user=firebaseAuth.getCurrentUser();
                     updateUI(user);
                 }
                 else {
-                    Toast.makeText(getApplicationContext(),"Signing in was fail",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"SIGN IN FAILED",Toast.LENGTH_LONG).show();
                     updateUI(null);
                 }
 
