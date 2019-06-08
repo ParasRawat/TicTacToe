@@ -156,7 +156,7 @@
             android:layout_height="48dp"
             android:background="@drawable/buttonstyle"
             android:padding="10dp"
-            android:text="Login"
+            android:text="Update"
             android:textAlignment="center"
             android:fontFamily="@font/caesar_dressing"
             android:textColor="@android:color/white" />
@@ -186,12 +186,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Check Availability"/>
+
     <Button
         android:id="@+id/logout"
         android:layout_width="100dp"
+        android:background="@drawable/ripple"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/title"
-        android:layout_alignBottom="@+id/title"
+        android:layout_above="@+id/buttoncardview"
+        android:fontFamily="@font/caesar_dressing"
+        android:textColor="@android:color/holo_blue_dark"
+        android:layout_alignEnd="@+id/namecardview"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"
         android:text="Logount" />
 
     <ImageView

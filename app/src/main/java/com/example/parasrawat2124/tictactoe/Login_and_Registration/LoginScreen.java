@@ -1,6 +1,7 @@
 package com.example.parasrawat2124.tictactoe.Login_and_Registration;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.solver.widgets.Snapshot;
@@ -83,7 +84,8 @@ public class LoginScreen extends AppCompatActivity {
     void updateUI(final FirebaseUser account){
         try{
         if(account!=null){
-            Toast.makeText(getApplicationContext(),"AUTO SIGN IN, CONFIRMING REGISTRATION",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Running Transaction, Verifying Profile...",Toast.LENGTH_LONG).show();
+
             startActivity(new Intent(LoginScreen.this,CompleteYourProfile.class));
         }
         else {
@@ -139,4 +141,12 @@ public class LoginScreen extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+
+        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+        homeIntent.addCategory(Intent.CATEGORY_HOME);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(homeIntent);
+    }
 }
