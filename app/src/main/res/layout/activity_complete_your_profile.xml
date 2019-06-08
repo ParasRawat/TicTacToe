@@ -4,13 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
     tools:context=".CatchAndMatch.CompleteYourProfile">
-
 
     <TextView
         android:id="@+id/title"
-        android:textSize="26dp"
+        android:textSize="24dp"
         android:layout_margin="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,8 +21,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/gamerimage"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_below="@+id/title"
         android:layout_margin="8dp"
         android:layout_centerHorizontal="true"/>
@@ -108,8 +106,8 @@
     <android.support.v7.widget.CardView
         android:id="@+id/emailcardview"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_below="@id/namecardview"
+        android:layout_height="60dp"
+        android:layout_below="@id/availablity"
         android:layout_margin="8dp"
         app:cardElevation="8dp">
 
@@ -129,7 +127,7 @@
 
             <TextView
                 android:layout_margin="8dp"
-                android:textSize="16dp"
+                android:textSize="14dp"
                 android:id="@+id/gameremail"
                 android:text="parasmynamee@gmail.com"
                 android:fontFamily="@font/caesar_dressing"
@@ -146,7 +144,8 @@
         android:id="@+id/buttoncardview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/emailcardview"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="8dp"
         android:layout_centerHorizontal="true"
         app:cardCornerRadius="24dp"
         app:cardElevation="16dp">
@@ -163,27 +162,30 @@
             android:textColor="@android:color/white" />
     </android.support.v7.widget.CardView>
 
-    <com.github.ybq.android.spinkit.SpinKitView xmlns:app="http://schemas.android.com/apk/res-auto"
+    <ProgressBar
         android:id="@+id/progressbar"
-        style="@style/SpinKitView.Small.CubeGrid"
-        android:layout_width="60dp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/buttoncardview"
-        android:layout_margin="8dp"
-        android:padding="2dp"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
         android:layout_height="60dp"
-        app:SpinKit_Color="@color/colorPrimaryDark" />
-    <com.github.ybq.android.spinkit.SpinKitView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/progressbarintermidiate"
-        style="@style/SpinKitView.Small.CubeGrid"
-        android:layout_width="60dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="8dp"
-        android:padding="2dp"
-        android:layout_height="60dp"
-        app:SpinKit_Color="@color/colorPrimaryDark" />
 
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:layout_below="@+id/emailcardview"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="8dp"
+        android:padding="2dp" />
+
+    <TextView
+
+        android:id="@+id/availablity"
+        android:layout_below="@id/namecardview"
+        android:layout_margin="8dp"
+        android:textStyle="bold"
+        android:padding="4dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/holo_blue_dark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Check Availability"/>
     <Button
         android:id="@+id/logout"
         android:layout_width="100dp"
@@ -191,6 +193,13 @@
         android:layout_alignEnd="@+id/title"
         android:layout_alignBottom="@+id/title"
         android:text="Logount" />
+
+    <ImageView
+        android:id="@+id/result"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignTop="@+id/availablity"
+        android:layout_alignEnd="@+id/namecardview" />
 
 
 

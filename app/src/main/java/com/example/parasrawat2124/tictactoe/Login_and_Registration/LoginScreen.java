@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.parasrawat2124.tictactoe.CatchAndMatch.CatchPlayer;
 import com.example.parasrawat2124.tictactoe.CatchAndMatch.CompleteYourProfile;
+import com.example.parasrawat2124.tictactoe.ModelClass.GamerProfile;
 import com.example.parasrawat2124.tictactoe.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -22,6 +23,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.internal.GmsClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -29,6 +31,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.security.spec.ECField;
 
@@ -38,7 +45,7 @@ public class LoginScreen extends AppCompatActivity {
     FirebaseUser firebaseUser;
     GoogleSignInClient googleSignInClient;
     public static final String TAG="LOGIN";
-
+    //Here he will login through his Gmail Account;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,14 +80,14 @@ public class LoginScreen extends AppCompatActivity {
         updateUI(firebaseUser);
     }
 
-    void updateUI(FirebaseUser account){
+    void updateUI(final FirebaseUser account){
         try{
-        if(!account.equals(null)){
-            Toast.makeText(getApplicationContext(),"AUTO SIGN IN",Toast.LENGTH_LONG).show();
+        if(account!=null){
+            Toast.makeText(getApplicationContext(),"AUTO SIGN IN, CONFIRMING REGISTRATION",Toast.LENGTH_LONG).show();
             startActivity(new Intent(LoginScreen.this,CompleteYourProfile.class));
         }
         else {
-            Toast.makeText(getApplicationContext(),"ERROR WHILE AUTO SIGN IN ",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"NOT SIGNED IN ",Toast.LENGTH_LONG).show();
         }}
         catch (Exception e){
 

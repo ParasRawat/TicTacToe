@@ -17,6 +17,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -60,11 +61,14 @@ public class CompleteYourProfile extends AppCompatActivity {
     TextView gamername;
     Uri imageuri;
     String phototofile;
+    TextView availability;
     Button logout;
-    ProgressBar progressBar,progressintermeidate;
+    ProgressBar progressBar;
+    ImageView result;
     public static final int PICK_IMAGE_REQUEST=1;
     public static final int CLICK_IMAGE_REQUEST=2;
     StorageReference storageReference;
+    Boolean namestatus=false;
     public static final String TAG="CompleteProfile";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +77,7 @@ public class CompleteYourProfile extends AppCompatActivity {
         //In this activity we have the logged in google user.
         firebaseAuth=FirebaseAuth.getInstance();
         firebaseUser=firebaseAuth.getCurrentUser();
+        availability=findViewById(R.id.availablity);
         buttoncardview=findViewById(R.id.buttoncardview);
         gamerImage=findViewById(R.id.gamerimage);
         gameremail=findViewById(R.id.gameremail);
@@ -81,27 +86,24 @@ public class CompleteYourProfile extends AppCompatActivity {
         gamername=findViewById(R.id.gamernamenameedittext);
         browse=findViewById(R.id.browse);
         opencam=findViewById(R.id.opencam);
+        result=findViewById(R.id.result);
         logout=findViewById(R.id.logout);
         progressBar=findViewById(R.id.progressbar);
         progressBar.setVisibility(View.GONE);
-        progressintermeidate=findViewById(R.id.progressbarintermidiate);
-        storageReference=FirebaseStorage.getInstance().getReference("GamerImages");
-        checkProfile(firebaseUser.getEmail());
-        title=findViewById(R.id.title);
 
+        storageReference=FirebaseStorage.getInstance().getReference("GamerImages");
+        title=findViewById(R.id.title);
         //Setting visibilities as false
-        buttoncardview.setVisibility(View.GONE);
-        gamerImage.setVisibility(View.GONE);
-        emailcardview.setVisibility(View.GONE);
-        browse.setVisibility(View.GONE);
-        opencam.setVisibility(View.GONE);
-        namecardview.setVisibility(View.GONE);
-        title.setVisibility(View.GONE);
         buttoncardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!gamername.getText().toString().equals(null)){
-                    UploadFile();
+                if(gamername.getText().toString()!=null){
+                    if(namestatus) {
+                        UploadFile();
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(),"PLEASE SELECT A UNIQUE NAME",Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -114,12 +116,46 @@ public class CompleteYourProfile extends AppCompatActivity {
 
             }
         });
+        availability.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("Gamers");
+                if(gamername.getText().toString().equals("")){
+                    Toast.makeText(getApplicationContext(),"Enter name",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    databaseReference.child(gamername.getText().toString()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Log.d(TAG, "onClick: =============="+dataSnapshot.getValue());
+                            if(dataSnapshot.getValue()==null){
+                                Toast.makeText(getApplicationContext(),"Accepted",Toast.LENGTH_SHORT).show();
+                                Log.d(TAG, "onClick: =============="+dataSnapshot.getValue());
+                                result.setImageResource(R.drawable.ok);
+                                namestatus=true;
 
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext(),"Name Taken, Try Different",Toast.LENGTH_SHORT).show();
+                                result.setImageResource(R.drawable.no);
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    }) ;
+
+                }
+            }
+        });
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(CompleteYourProfile.this,LoginScreen.class));
+                startActivity(new Intent(   CompleteYourProfile.this,LoginScreen.class));
             }
         });
         opencam.setOnClickListener(new View.OnClickListener() {
@@ -159,10 +195,10 @@ public class CompleteYourProfile extends AppCompatActivity {
 
                     if (task.isSuccessful()) {
                         final String name = gamername.getText().toString();
-                        String email = firebaseUser.getEmail();
+                        final String email = firebaseUser.getEmail();
                         Uri uri = task.getResult();
                         String downloadurl = uri.toString();
-                        GamerProfile gamerProfile = new GamerProfile(name, email, downloadurl);
+                        final GamerProfile gamerProfile = new GamerProfile(name, email, downloadurl);
                         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Gamers");
                         databaseReference.child(name).setValue(gamerProfile).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
@@ -170,6 +206,8 @@ public class CompleteYourProfile extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(getApplicationContext(), "Succesfully Updated Profile", Toast.LENGTH_SHORT).show();
                                     storeGamerName(name);
+                                    DatabaseReference emailref=FirebaseDatabase.getInstance().getReference("RegisteredEmails");
+
                                     startActivity(new Intent(CompleteYourProfile.this,Dashboard.class));
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Profile update failed Please try Again", Toast.LENGTH_SHORT).show();
@@ -194,6 +232,9 @@ public class CompleteYourProfile extends AppCompatActivity {
                 double totalBytes=taskSnapshot.getTotalByteCount();
                 int progress= (int)(100*(bytesTransferred/totalBytes));
                 progressBar.setProgress(progress);
+                if(progress==100){
+                    progressBar.setVisibility(View.GONE);
+                }
 
                 }
             });
@@ -265,51 +306,6 @@ public class CompleteYourProfile extends AppCompatActivity {
         }
 
         return image;
-
-    }
-    void checkProfile(String email){
-        String name=getSharedPreferences();
-        DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("Gamers");
-        databaseReference.child(name).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-           try{
-               if(!dataSnapshot.getValue().equals(null)){
-                   startActivity(new Intent(CompleteYourProfile.this,Dashboard.class));
-
-               }
-               else {
-                   //Setting visibilities as false
-                   buttoncardview.setVisibility(View.VISIBLE);
-                   gamerImage.setVisibility(View.VISIBLE);
-                   emailcardview.setVisibility(View.VISIBLE);
-                   browse.setVisibility(View.VISIBLE);
-                   opencam.setVisibility(View.VISIBLE);
-                   namecardview.setVisibility(View.VISIBLE);
-                   title.setVisibility(View.VISIBLE);
-                   progressintermeidate.setVisibility(View.GONE);
-                   Toast.makeText(getApplicationContext(),"Please Complete your profile",Toast.LENGTH_SHORT).show();
-               }
-           }
-           catch (Exception e){
-               buttoncardview.setVisibility(View.VISIBLE);
-               gamerImage.setVisibility(View.VISIBLE);
-               emailcardview.setVisibility(View.VISIBLE);
-               browse.setVisibility(View.VISIBLE);
-               opencam.setVisibility(View.VISIBLE);
-               namecardview.setVisibility(View.VISIBLE);
-               title.setVisibility(View.VISIBLE);
-               progressintermeidate.setVisibility(View.GONE);
-               Toast.makeText(getApplicationContext(),"Exception Occured",Toast.LENGTH_SHORT).show();
-
-           }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
 
     }
     void storeGamerName(String name){
