@@ -96,16 +96,48 @@ public class CompleteYourProfile extends AppCompatActivity {
         storageReference=FirebaseStorage.getInstance().getReference("GamerImages");
         title=findViewById(R.id.title);
         //Setting visibilities as false
+        buttoncardview.setVisibility(View.GONE);
+        gameremail.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
         buttoncardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(gamername.getText().toString()!=null){
-                    if(namestatus) {
-                        UploadFile();
+                if(!gamername.getText().toString().equals("")){
+                    DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("Gamers");
+                    if(gamername.getText().toString().equals("")){
+                        Toast.makeText(getApplicationContext(),"Enter name",Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        Toast.makeText(getApplicationContext(),"PLEASE SELECT A UNIQUE NAME",Toast.LENGTH_SHORT).show();
+                        databaseReference.child(gamername.getText().toString()).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Log.d(TAG, "onClick: =============="+dataSnapshot.getValue());
+                                if(dataSnapshot.getValue()==null){
+                                    Toast.makeText(getApplicationContext(),"Accepted",Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG, "onClick: =============="+dataSnapshot.getValue());
+                                    result.setImageResource(R.drawable.ok);
+                                    namestatus=true;
+                                    UploadFile();
+
+
+                                }
+                                else{
+                                    Toast.makeText(getApplicationContext(),"Name Taken",Toast.LENGTH_SHORT).show();
+
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        }) ;
+
                     }
+
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"Please Enter a  name",Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -135,11 +167,13 @@ public class CompleteYourProfile extends AppCompatActivity {
                                 Log.d(TAG, "onClick: =============="+dataSnapshot.getValue());
                                 result.setImageResource(R.drawable.ok);
                                 namestatus=true;
+                                buttoncardview.setVisibility(View.VISIBLE);
 
                             }
                             else{
                                 Toast.makeText(getApplicationContext(),"Name Taken, Try Different",Toast.LENGTH_SHORT).show();
-                                result.setImageResource(R.drawable.no);
+
+                                buttoncardview.setVisibility(View.GONE);
 
                             }
                         }
@@ -196,7 +230,7 @@ public class CompleteYourProfile extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Uri> task) {
 
                     if (task.isSuccessful()) {
-                        final String name = gamername.getText().toString();
+                        final String name = gamername.getText().toString().toLowerCase();
                         final String email = firebaseUser.getEmail();
                         Uri uri = task.getResult();
                         String downloadurl = uri.toString();
@@ -208,7 +242,7 @@ public class CompleteYourProfile extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(getApplicationContext(), "Succesfully Updated Profile", Toast.LENGTH_SHORT).show();
                                     storeGamerName(name);
-                                    DatabaseReference emailref=FirebaseDatabase.getInstance().getReference("RegisteredEmails");
+
 
                                     startActivity(new Intent(CompleteYourProfile.this,Dashboard.class));
                                 } else {
@@ -230,10 +264,14 @@ public class CompleteYourProfile extends AppCompatActivity {
                 public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                     //todo show the progress of Image Upload.
                 progressBar.setVisibility(View.VISIBLE);
+                Toast.makeText(getApplicationContext(),"Uploading..",Toast.LENGTH_SHORT).show();
                 double bytesTransferred=taskSnapshot.getBytesTransferred();
                 double totalBytes=taskSnapshot.getTotalByteCount();
-                int progress= (int)(100*(bytesTransferred/totalBytes));
-                progressBar.setProgress(progress);
+                    Log.d(TAG, "onProgress: TOTAL BYTES======="+totalBytes);
+                    Log.d(TAG, "onProgress:  Transfered Bytes=== "+bytesTransferred);
+                double progress= 100*(bytesTransferred/totalBytes);
+                progressBar.setProgress((int)progress);
+                    Log.d(TAG, "onProgress: Progress ======"+progress);
                 if(progress==100){
                     progressBar.setVisibility(View.GONE);
                 }

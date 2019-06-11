@@ -43,6 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
+            android:background="@drawable/ripple"
             android:textColor="@color/colorPrimaryDark"
             android:fontFamily="@font/caesar_dressing"
             android:text="Browse"
@@ -64,6 +65,7 @@
             android:id="@+id/opencameratextview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/ripple"
             android:padding="8dp"
             android:text="Camera"
             android:fontFamily="@font/caesar_dressing"
@@ -98,7 +100,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/nametextview"
-                android:fontFamily="@font/caesar_dressing"
                 android:textColor="@color/colorPrimaryDark" />
         </RelativeLayout>
 
@@ -126,10 +127,10 @@
                 android:textStyle="bold" />
 
             <TextView
+
                 android:layout_margin="8dp"
                 android:textSize="14dp"
                 android:id="@+id/gameremail"
-                android:text="parasmynamee@gmail.com"
                 android:fontFamily="@font/caesar_dressing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -166,8 +167,9 @@
         android:id="@+id/progressbar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-
+        android:layout_height="20dp"
+        android:progressBackgroundTint="@color/colorPrimaryDark"
+        android:progressTint="@color/colorPrimaryDark"
         android:backgroundTint="@color/colorPrimaryDark"
         android:layout_below="@+id/emailcardview"
         android:layout_centerHorizontal="true"
@@ -182,6 +184,7 @@
         android:textStyle="bold"
         android:padding="4dp"
         android:layout_centerHorizontal="true"
+        android:background="@drawable/ripple"
         android:textColor="@android:color/holo_blue_dark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -190,15 +193,15 @@
     <Button
         android:id="@+id/logout"
         android:layout_width="100dp"
+        android:layout_height="24dp"
+        android:layout_alignTop="@+id/gamerimage"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
         android:background="@drawable/ripple"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/buttoncardview"
         android:fontFamily="@font/caesar_dressing"
+        android:text="Logount"
         android:textColor="@android:color/holo_blue_dark"
-        android:layout_alignEnd="@+id/namecardview"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp"
-        android:text="Logount" />
+        android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/result"
