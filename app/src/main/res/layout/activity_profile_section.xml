@@ -1,9 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Dashboard.ProfileSection">
 
-</android.support.constraint.ConstraintLayout>
+    <ImageView
+        android:id="@+id/img_user"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="16dp"
+        android:src="@drawable/userimage"/>
+    <TextView
+        android:id="@+id/t_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:textSize="20sp"
+        android:layout_toEndOf="@id/img_user"
+        android:text="adieu"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/t_useremail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/t_username"
+        android:layout_toEndOf="@id/img_user"
+        android:text="adieu@gmail.com"/>
+    <LinearLayout
+        android:id="@+id/lay_stats"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/img_user"
+        android:gravity="center"
+        android:layout_margin="16dp">
+        <TextView
+            android:id="@+id/t_won"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="won : 15"/>
+        <TextView
+            android:id="@+id/t_lose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="lose : 5"
+            android:layout_marginStart="32dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/lay_global"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/lay_stats"
+        android:gravity="center"
+        android:layout_margin="16dp">
+        <TextView
+            android:id="@+id/t_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:text="rank : 10"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/t_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="score : 332"
+            android:layout_marginStart="32dp"/>
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lay_global"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp">
+        <LinearLayout
+            android:id="@+id/img_powers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+        <ImageView
+            android:id="@+id/img_gravity"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:src="@drawable/gravity"
+            android:layout_weight="1"/>
+        <ImageView
+            android:id="@+id/img_bull"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:src="@drawable/overwrite"
+            android:layout_weight="1"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_below="@id/img_powers">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:text="x 5"
+                android:textAlignment="center"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:text="x 2"
+                android:textAlignment="center"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

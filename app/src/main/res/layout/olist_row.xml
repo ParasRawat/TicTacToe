@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:orientation="horizontal"
+    android:id="@+id/lay_row">
+
+    <TextView
+        android:id="@+id/t_username"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="username"
+        android:layout_marginStart="16dp"
+        android:textAlignment="center"/>
+    <TextView
+        android:id="@+id/t_status"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="8dp"
+        android:text="O"
+        android:textAlignment="center"/>
+
+</RelativeLayout>
