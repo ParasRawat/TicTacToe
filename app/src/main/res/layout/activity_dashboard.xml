@@ -5,8 +5,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Dashboard.Dashboard">
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="WELCOME"
+    android:layout_centerHorizontal="true"
+    android:textSize="28dp"
+    android:fontFamily="@font/caesar_dressing"
+    android:textStyle="bold"
+    android:id="@+id/welcome"
+    android:textColor="@android:color/holo_blue_dark"
+    />
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="150dp"
+        android:id="@+id/gamerimage"
+        android:padding="4dp"
+        android:background="@drawable/image_border"
+        android:layout_height="150dp"
+        android:layout_below="@+id/welcome"
+        android:layout_margin="8dp"
+        android:layout_centerHorizontal="true" />
 
+    <TextView
+        android:id="@+id/gamername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/gamerimage"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/caesar_dressing"
+        android:text="Name"
+        android:textColor="@android:color/holo_green_dark"
+        android:textSize="24dp"
+        android:textStyle="bold" />
     <TextView
         android:id="@+id/play"
         android:layout_width="wrap_content"
@@ -15,6 +46,7 @@
         android:layout_centerVertical="true"
         android:fontFamily="@font/caesar_dressing"
         android:text="Play"
+        android:background="@drawable/ripple"
         android:layout_margin="8dp"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="30dp" />
@@ -29,6 +61,7 @@
         android:fontFamily="@font/caesar_dressing"
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
+        android:background="@drawable/ripple"
         android:layout_height="wrap_content"
         android:text="History"/>
 
@@ -41,6 +74,7 @@
         android:layout_centerHorizontal="true"
         android:textColor="@color/colorPrimaryDark"
         android:fontFamily="@font/caesar_dressing"
+        android:background="@drawable/ripple"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -54,6 +88,7 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@id/profile"
         android:textSize="30dp"
+        android:background="@drawable/ripple"
         android:textColor="@color/colorPrimaryDark"/>
     <TextView
         android:id="@+id/exit"
@@ -64,6 +99,7 @@
         android:fontFamily="@font/caesar_dressing"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/logout"
+        android:background="@drawable/ripple"
         android:textSize="30dp"
         android:textColor="@color/colorPrimaryDark"/>
 

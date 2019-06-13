@@ -1,6 +1,7 @@
 package com.example.parasrawat2124.tictactoe.Login_and_Registration;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.parasrawat2124.tictactoe.CatchAndMatch.CatchPlayer;
 import com.example.parasrawat2124.tictactoe.CatchAndMatch.CompleteYourProfile;
+import com.example.parasrawat2124.tictactoe.Dashboard.Dashboard;
 import com.example.parasrawat2124.tictactoe.ModelClass.GamerProfile;
 import com.example.parasrawat2124.tictactoe.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -86,7 +88,7 @@ public class LoginScreen extends AppCompatActivity {
         if(account!=null){
             Toast.makeText(getApplicationContext(),"Running Transaction, Verifying Profile...",Toast.LENGTH_LONG).show();
 
-            startActivity(new Intent(LoginScreen.this,CompleteYourProfile.class));
+           VerifyAccount();
         }
         else {
             Toast.makeText(getApplicationContext(),"NOT SIGNED IN ",Toast.LENGTH_LONG).show();
@@ -148,5 +150,46 @@ public class LoginScreen extends AppCompatActivity {
         homeIntent.addCategory(Intent.CATEGORY_HOME);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(homeIntent);
+    }
+    void VerifyAccount(){
+
+        final String email=FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("Gamers");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //LOGIC FOR VERIFYING A CHILD
+                for (DataSnapshot data:dataSnapshot.getChildren()
+                     ) {
+
+                        GamerProfile gamerProfile=data.getValue(GamerProfile.class);
+                        if(gamerProfile.getEmail().equals(email)){
+                            Toast.makeText(getApplicationContext(),"Welcome",Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(LoginScreen.this,Dashboard.class));
+
+                            //gamer identified
+                            storeGamerName(gamerProfile.getName());
+                            return;
+                        }
+                }
+                storeGamerName("0");
+                startActivity(new Intent(LoginScreen.this,CompleteYourProfile.class));
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+    void storeGamerName(String name){
+        SharedPreferences sharedPreferences=getSharedPreferences("Gamers",MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putString("name",name);
+        editor.apply();
+
     }
 }
