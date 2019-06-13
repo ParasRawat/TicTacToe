@@ -12,7 +12,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.parasrawat2124.tictactoe.CatchAndMatch.CatchPlayer;
+import com.example.parasrawat2124.tictactoe.CatchAndMatch.Match;
+import com.example.parasrawat2124.tictactoe.DummyMatch;
+import com.example.parasrawat2124.tictactoe.Dummyactivity;
 import com.example.parasrawat2124.tictactoe.Login_and_Registration.LoginScreen;
+import com.example.parasrawat2124.tictactoe.ModelClass.DummyMatchModel;
 import com.example.parasrawat2124.tictactoe.ModelClass.GamerProfile;
 import com.example.parasrawat2124.tictactoe.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,8 +28,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 public class Dashboard extends AppCompatActivity {
     TextView play, history, profile ,exit,logout,gamername;
+    ArrayList<ArrayList<Integer>> grid=new ArrayList<>();
     ImageView gamerimage;
     public static final String TAG="dashboard";
     @Override
@@ -40,15 +47,27 @@ public class Dashboard extends AppCompatActivity {
         gamername=findViewById(R.id.gamername);
         exit=findViewById(R.id.exit);
         String name=getGamer();
+        final String challenged="paras2";
+        final String challenger="puru";
+        //Pushing null grid conditions
+        for(int i=0;i<3;i++){
+            ArrayList<Integer> arr=new ArrayList<>();
+            for(int j=0;j<3;j++){
+                arr.add(0);
+            }
+            grid.add(arr);
+        }
         gamername.setText(name);
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Dashboard.this,CatchPlayer.class));
+                DummyMatchModel dummyMatchModel=new DummyMatchModel(grid,"challenged");
+                String matchid=challenger+"vs"+challenged;
+                DatabaseReference databaseReference2=FirebaseDatabase.getInstance().getReference("DummyMatch");
+                databaseReference2.child(matchid).setValue(dummyMatchModel);
+                startActivity(new Intent(Dashboard.this,DummyMatch.class));
             }
         });
-
-        //Picasso.get().load(gamerProfile.getUri()).placeholder(R.drawable.tictacplaceholder).into(gamer1);
 
         history.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +104,17 @@ public class Dashboard extends AppCompatActivity {
 
             }
         });
+
+
+        //THESE ARE DUMMY CHANGES FOR TESTING PURPOSE ONLY
+
+
+        DummyMatchModel dummyMatchModel=new DummyMatchModel(grid,"challenged");
+        String matchid=challenger+"vs"+challenged;
+        DatabaseReference databaseReference2=FirebaseDatabase.getInstance().getReference("DummyMatch");
+        databaseReference2.child(matchid).setValue(dummyMatchModel);
+
+
     }
 
     @Override

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@android:color/white"
+    android:layout_height="match_parent"
+    tools:context=".DummyMatch">
+
+    <ImageView
+        android:id="@+id/sign"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_margin="8dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <!--<GridLayout-->
+        <!--android:id="@+id/match_area"-->
+        <!--android:layout_width="300dp"-->
+        <!--android:layout_height="250dp"-->
+        <!--android:rowCount="3"-->
+        <!--android:columnCount="3"-->
+        <!--android:background="@color/colorPrimaryDark"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:layout_margin="16dp">-->
+        <!--<ImageView-->
+            <!--android:padding="8dp"-->
+            <!--android:id="@+id/text11"-->
+            <!--android:background="@android:color/white"-->
+            <!--android:layout_marginEnd="2dp"-->
+            <!--android:layout_marginBottom="2dp"-->
+            <!--android:layout_rowWeight="0.5"-->
+            <!--android:layout_columnWeight="0.5"/>-->
+
+        <!--<ImageView-->
+            <!--android:padding="8dp"-->
+            <!--android:id="@+id/text12"-->
+            <!--android:background="@android:color/white"-->
+            <!--android:layout_marginEnd="2dp"-->
+            <!--android:layout_marginBottom="2dp"-->
+            <!--android:layout_rowWeight="0.5"-->
+            <!--android:layout_columnWeight="0.5"/>-->
+
+        <!--<ImageView-->
+            <!--android:padding="8dp"-->
+            <!--android:id="@+id/text13"-->
+            <!--android:background="@android:color/white"-->
+            <!--android:layout_marginBottom="2dp"-->
+            <!--android:layout_rowWeight="0.5"-->
+            <!--android:layout_columnWeight="0.5"/>-->
+
+        <!--<ImageView-->
+            <!--android:padding="8dp"-->
+            <!--android:id="@+id/text21"-->
+            <!--android:background="@android:color/white"-->
+            <!--android:layout_marginEnd="2dp"-->
+            <!--android:layout_marginBottom="2dp"-->
+            <!--android:layout_rowWeight="0.5"-->
+            <!--android:layout_columnWeight="0.5"/>-->
+
+        <!--<ImageView-->
+            <!--android:padding="8dp"-->
+            <!--android:id="@+id/text22"-->
+            <!--android:background="@android:color/white"-->
+            <!--android:layout_marginEnd="2dp"-->
+            <!--android:layout_marginBottom="2dp"-->
+            <!--android:layout_rowWeight="0.5"-->
+            <!--android:layout_columnWeight="0.5" />-->
+
+        <!--<ImageView-->
+            <!--android:padding="8dp"-->
+            <!--android:id="@+id/text23"-->
+            <!--android:background="@android:color/white"-->
+            <!--android:layout_marginBottom="2dp"-->
+            <!--android:layout_rowWeight="0.5"-->
+            <!--android:layout_columnWeight="0.5" />-->
+
+        <!--<ImageView-->
+            <!--android:padding="8dp"-->
+            <!--android:id="@+id/text31"-->
+            <!--android:background="@android:color/white"-->
+            <!--android:layout_marginEnd="2dp"-->
+            <!--android:layout_rowWeight="0.5"-->
+            <!--android:layout_columnWeight="0.5"/>-->
+
+        <!--<ImageView-->
+            <!--android:padding="8dp"-->
+            <!--android:id="@+id/text32"-->
+            <!--android:background="@android:color/white"-->
+            <!--android:layout_marginEnd="2dp"-->
+            <!--android:layout_rowWeight="0.5"-->
+            <!--android:layout_columnWeight="0.5"/>-->
+
+        <!--<ImageView-->
+            <!--android:padding="8dp"-->
+            <!--android:id="@+id/text33"-->
+            <!--android:background="@android:color/white"-->
+            <!--android:layout_rowWeight="0.5"-->
+            <!--android:layout_columnWeight="0.5"/>-->
+    <!--</GridLayout>-->
+
+
+</RelativeLayout>

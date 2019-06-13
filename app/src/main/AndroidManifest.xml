@@ -55,7 +55,9 @@
         <activity android:name=".CatchAndMatch.MatchingPlayers" />
         <activity android:name=".Dashboard.Dashboard" />
         <activity android:name=".Dashboard.PastMatches" />
-        <activity android:name=".Dashboard.ProfileSection"></activity>
+        <activity android:name=".Dashboard.ProfileSection" />
+        <activity android:name=".Dummyactivity" />
+        <activity android:name=".DummyMatch"></activity>
     </application>
 
 </manifest>
