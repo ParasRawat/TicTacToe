@@ -57,6 +57,9 @@
         <activity android:name=".Dashboard.PastMatches" />
         <activity android:name=".Dashboard.ProfileSection" />
         <activity android:name=".Dummyactivity" />
+        <activity android:name=".CatchAndMatch.RequestActivity" />
+        <activity android:name=".ResultActivity"/>
+
         <activity android:name=".DummyMatch"></activity>
     </application>
 

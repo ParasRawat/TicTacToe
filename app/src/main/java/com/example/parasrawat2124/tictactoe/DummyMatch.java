@@ -1,6 +1,7 @@
 package com.example.parasrawat2124.tictactoe;
 
 import android.content.SharedPreferences;
+import android.graphics.YuvImage;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,8 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.example.parasrawat2124.tictactoe.ModelClass.DummyMatchModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -113,7 +116,10 @@ public class DummyMatch extends AppCompatActivity {
                             });
                         }
                         else {
+
                             Toast.makeText(getApplicationContext(),"Not your turn",Toast.LENGTH_SHORT).show();
+                            YoYo.with(Techniques.Tada).duration(700)
+                                    .repeat(1).playOn(matcharea);
                         }
 
                     }else {
@@ -137,6 +143,9 @@ public class DummyMatch extends AppCompatActivity {
 
                     }else{
                             Toast.makeText(getApplicationContext(),"Not your turn",Toast.LENGTH_SHORT).show();
+
+                            YoYo.with(Techniques.Tada).duration(700)
+                                    .repeat(1).playOn(matcharea);
                         }
 
                     }
@@ -185,6 +194,8 @@ public class DummyMatch extends AppCompatActivity {
                         }
                         else {
                             Toast.makeText(getApplicationContext(),"Not your turn",Toast.LENGTH_SHORT).show();
+                            YoYo.with(Techniques.Tada).duration(700)
+                                    .repeat(1).playOn(matcharea);
                         }
 
                     }else {
@@ -207,6 +218,9 @@ public class DummyMatch extends AppCompatActivity {
 
                     }else{
                             Toast.makeText(getApplicationContext(),"Not your turn",Toast.LENGTH_SHORT).show();
+
+                            YoYo.with(Techniques.Tada).duration(700)
+                                    .repeat(1).playOn(matcharea);
                         }
 
                     }
@@ -252,6 +266,9 @@ public class DummyMatch extends AppCompatActivity {
                         }
                         else {
                             Toast.makeText(getApplicationContext(),"Not your turn",Toast.LENGTH_SHORT).show();
+
+                            YoYo.with(Techniques.Tada).duration(700)
+                                    .repeat(1).playOn(matcharea);
                         }
 
                     }else {
@@ -274,6 +291,9 @@ public class DummyMatch extends AppCompatActivity {
 
                         }else{
                             Toast.makeText(getApplicationContext(),"Not your turn",Toast.LENGTH_SHORT).show();
+
+                            YoYo.with(Techniques.Tada).duration(700)
+                                    .repeat(1).playOn(matcharea);
                         }
 
                     }
@@ -318,6 +338,9 @@ public class DummyMatch extends AppCompatActivity {
                         }
                         else {
                             Toast.makeText(getApplicationContext(),"Not your turn",Toast.LENGTH_SHORT).show();
+
+                            YoYo.with(Techniques.Tada).duration(700)
+                                    .repeat(1).playOn(matcharea);
                         }
 
                     }else {
@@ -340,6 +363,9 @@ public class DummyMatch extends AppCompatActivity {
 
                         }else{
                             Toast.makeText(getApplicationContext(),"Not your turn",Toast.LENGTH_SHORT).show();
+
+                            YoYo.with(Techniques.Tada).duration(700)
+                                    .repeat(1).playOn(matcharea);
                         }
 
                     }
@@ -383,6 +409,9 @@ public class DummyMatch extends AppCompatActivity {
                         }
                         else {
                             Toast.makeText(getApplicationContext(),"Not your turn",Toast.LENGTH_SHORT).show();
+
+                            YoYo.with(Techniques.Tada).duration(700)
+                                    .repeat(1).playOn(matcharea);
                         }
 
                     }else {
@@ -405,6 +434,9 @@ public class DummyMatch extends AppCompatActivity {
 
                         }else{
                             Toast.makeText(getApplicationContext(),"Not your turn",Toast.LENGTH_SHORT).show();
+
+                            YoYo.with(Techniques.Tada).duration(700)
+                                    .repeat(1).playOn(matcharea);
                         }
 
                     }
@@ -449,6 +481,9 @@ public class DummyMatch extends AppCompatActivity {
                         }
                         else {
                             Toast.makeText(getApplicationContext(),"Not your turn",Toast.LENGTH_SHORT).show();
+
+                            YoYo.with(Techniques.Tada).duration(700)
+                                    .repeat(1).playOn(matcharea);
                         }
 
                     }else {
@@ -471,6 +506,9 @@ public class DummyMatch extends AppCompatActivity {
 
                         }else{
                             Toast.makeText(getApplicationContext(),"Not your turn",Toast.LENGTH_SHORT).show();
+
+                            YoYo.with(Techniques.Tada).duration(700)
+                                    .repeat(1).playOn(matcharea);
                         }
 
                     }
@@ -516,6 +554,9 @@ public class DummyMatch extends AppCompatActivity {
                         }
                         else {
                             Toast.makeText(getApplicationContext(),"Not your turn",Toast.LENGTH_SHORT).show();
+
+                            YoYo.with(Techniques.Tada).duration(700)
+                                    .repeat(1).playOn(matcharea);
                         }
 
                     }else {
@@ -538,6 +579,9 @@ public class DummyMatch extends AppCompatActivity {
 
                         }else{
                             Toast.makeText(getApplicationContext(),"Not your turn",Toast.LENGTH_SHORT).show();
+
+                            YoYo.with(Techniques.Tada).duration(700)
+                                    .repeat(1).playOn(matcharea);
                         }
 
                     }
@@ -582,6 +626,9 @@ public class DummyMatch extends AppCompatActivity {
                         }
                         else {
                             Toast.makeText(getApplicationContext(),"Not your turn",Toast.LENGTH_SHORT).show();
+
+                            YoYo.with(Techniques.Tada).duration(700)
+                                    .repeat(1).playOn(matcharea);
                         }
 
                     }else {
@@ -604,6 +651,9 @@ public class DummyMatch extends AppCompatActivity {
 
                         }else{
                             Toast.makeText(getApplicationContext(),"Not your turn",Toast.LENGTH_SHORT).show();
+
+                            YoYo.with(Techniques.Tada).duration(700)
+                                    .repeat(1).playOn(matcharea);
                         }
 
                     }
@@ -648,6 +698,9 @@ public class DummyMatch extends AppCompatActivity {
                         }
                         else {
                             Toast.makeText(getApplicationContext(),"Not your turn",Toast.LENGTH_SHORT).show();
+
+                            YoYo.with(Techniques.Tada).duration(700)
+                                    .repeat(1).playOn(matcharea);
                         }
 
                     }else {
@@ -670,6 +723,9 @@ public class DummyMatch extends AppCompatActivity {
 
                         }else{
                             Toast.makeText(getApplicationContext(),"Not your turn",Toast.LENGTH_SHORT).show();
+
+                            YoYo.with(Techniques.Tada).duration(700)
+                                    .repeat(1).playOn(matcharea);
                         }
 
                     }
