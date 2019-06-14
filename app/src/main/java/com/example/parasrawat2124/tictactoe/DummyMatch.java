@@ -192,6 +192,7 @@ public class DummyMatch extends AppCompatActivity {
                         bullpower=true;
                         YoYo.with(Techniques.Wobble).duration(700)
                                 .repeat(3).playOn(bull);
+                        Toast.makeText(getApplicationContext(),"BULL ACTIVATED",Toast.LENGTH_SHORT).show();
 
                     }else{
                         //not your turn
@@ -207,6 +208,7 @@ public class DummyMatch extends AppCompatActivity {
                         bullpower=true;
                         YoYo.with(Techniques.Wobble).duration(700)
                                 .repeat(3).playOn(bull);
+                        Toast.makeText(getApplicationContext(),"BULL ACTIVATED",Toast.LENGTH_SHORT).show();
 
                     }else{
                         //not your turn
