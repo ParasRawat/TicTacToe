@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.CompoundButton;
 import android.widget.GridLayout;
 import android.widget.ImageView;
@@ -66,7 +68,7 @@ public class DummyMatch extends AppCompatActivity {
         final String matchid=challenger+"vs"+challenged;
         matcharea.setVisibility(View.GONE);
         //VERIFYING WHETHER THE USER IS CHALLENGER OR CHALLENGED
-
+        final Animation hyperspacejump=AnimationUtils.loadAnimation(this,R.anim.antihypereffect);
 
         if(getGamer().equals(challenged)){
             symbol="zero";
@@ -131,12 +133,15 @@ public class DummyMatch extends AppCompatActivity {
                         //Gravity is applied by challenged person
                         ArrayList<ArrayList<Integer>> arr=dummyMatchModel.getGrid();
                        arr=ApplyGravityChalleneged(arr);
+                        matcharea.startAnimation(hyperspacejump);
                        DummyMatchModel dummyMatchModel=new DummyMatchModel(arr,"challenged");
                        DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("DummyMatch");
                        databaseReference.child(matchid).setValue(dummyMatchModel).addOnCompleteListener(new OnCompleteListener<Void>() {
                            @Override
                            public void onComplete(@NonNull Task<Void> task) {
                           Toast.makeText(getApplicationContext(),"Applied Gravity", Toast.LENGTH_SHORT).show();
+
+
                            }
                        });
 
@@ -151,12 +156,14 @@ public class DummyMatch extends AppCompatActivity {
                         //Gravity is applied by challenger
                         ArrayList<ArrayList<Integer>> arr=dummyMatchModel.getGrid();
                         arr=ApplyGravityChalleneger(arr);
+                        matcharea.startAnimation(hyperspacejump);
                         DummyMatchModel dummyMatchModel=new DummyMatchModel(arr,"challenger");
                         DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("DummyMatch");
                         databaseReference.child(matchid).setValue(dummyMatchModel).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 Toast.makeText(getApplicationContext(),"Applied Gravity", Toast.LENGTH_SHORT).show();
+
                             }
                         });
 
@@ -1098,5 +1105,6 @@ public class DummyMatch extends AppCompatActivity {
         arr.set(2,thirdrow);
         return arr;
     }
+
 
 }
