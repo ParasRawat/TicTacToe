@@ -26,7 +26,7 @@ public class ProfileSection extends AppCompatActivity {
     SharedPreferences sharedpref;
     TextView name,email,won,lost,rank,score,gravity,bull;
     ImageView imguser;
-    int sc=0,rk=0,gr=0,bu=0;
+    int sc=0,rk=1,gr=0,bu=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +58,17 @@ public class ProfileSection extends AppCompatActivity {
                 won.setText("won : "+user.getWon());
                 lost.setText("lost : "+user.getLost());
                 sc=(2*user.getWon())-user.getLost();
+                score.setText("score : "+sc);
                 bu=user.getWon()/3;
                 gr=user.getWon()/5;
+                bull.setText("x "+bu);
+                gravity.setText("x "+gr);
                 imguser.setImageURI(Uri.parse(user.getUri()));
+                //update computed values
+                dbref.child(USERNAME).child("score").setValue(sc);
+                dbref.child(USERNAME).child("bulls").setValue(bu);
+                dbref.child(USERNAME).child("gravities").setValue(gr);
+                checkRank(sc);
             }
 
             @Override
@@ -68,14 +76,24 @@ public class ProfileSection extends AppCompatActivity {
 
             }
         });
+
+
+    }
+
+    public void checkRank(int sc){
         //compute rank=number of records with higher scores than userscore + 1
+        final int score=sc;
+        Log.d("userscore",""+score);
         dbref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                for(DataSnapshot ds:dataSnapshot.getChildren()){
-                    UserProfile user=ds.getValue(UserProfile.class);
-                    if(user.getScore()>=sc && !user.getUsername().equals(USERNAME)) rk++;
+                UserProfile user=dataSnapshot.getValue(UserProfile.class);
+                if(user.getScore()>score && !user.getUsername().equals(USERNAME)){
+                    rank.setText("rank : "+(++rk));
+                    dbref.child(USERNAME).child("rank").setValue(rk);
                 }
+                Log.d("userscore",user.getScore()+" "+score+" "+rk);
+
             }
 
             @Override
@@ -98,16 +116,5 @@ public class ProfileSection extends AppCompatActivity {
 
             }
         });
-        //update computed values
-        dbref.child(USERNAME).child("score").setValue(sc);
-        dbref.child(USERNAME).child("rank").setValue(rk);
-        dbref.child(USERNAME).child("bulls").setValue(bu);
-        dbref.child(USERNAME).child("gravities").setValue(gr);
-
-        score.setText("score : "+sc);
-        rank.setText("rank : "+rk);
-        bull.setText("x "+bu);
-        gravity.setText("x "+gr);
-
     }
 }

@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Dashboard.ProfileSection"
-    android:background="@drawable/background">
+    tools:context=".Dashboard.ProfileSection">
 
     <ImageView
         android:id="@+id/img_user"
@@ -43,7 +42,7 @@
         android:orientation="horizontal"
         android:layout_below="@id/img_user"
         android:gravity="center"
-        android:layout_margin="32dp">
+        android:layout_margin="16dp">
         <TextView
             android:id="@+id/t_won"
             android:layout_width="wrap_content"
@@ -90,6 +89,7 @@
             android:textSize="18sp"/>
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/my_twists"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:background="@color/colorPrimaryDark"
@@ -100,6 +100,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="My twists"
+            android:textColor="#fff"
             android:textStyle="bold"
             android:textAllCaps="true"
             android:textSize="20dp"/>
@@ -107,15 +108,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="32dp"
+        android:layout_below="@id/my_twists"
         android:gravity="center">
     <ImageView
         android:id="@+id/img_gravity"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:src="@drawable/gravity"
-        android:layout_margin="32dp"
+        android:layout_margin="16dp"
         android:scaleType="centerCrop"/>
     <TextView
         android:id="@+id/t_gravity"
@@ -127,7 +127,7 @@
         android:fontFamily="@font/caesar_dressing"
         android:textColor="@color/colorPrimaryDark"
         android:layout_toEndOf="@id/img_gravity"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="32dp"
         android:layout_marginStart="16dp"/>
     <ImageView
         android:id="@+id/img_bull"
@@ -135,7 +135,8 @@
         android:layout_height="100dp"
         android:src="@drawable/overwrite"
         android:layout_below="@id/img_gravity"
-        android:layout_margin="32dp"/>
+        android:layout_margin="16dp"
+        android:scaleType="centerCrop"/>
     <TextView
         android:id="@+id/t_bull"
         android:layout_width="wrap_content"
@@ -147,7 +148,7 @@
         android:textColor="@color/colorPrimaryDark"
         android:layout_below="@id/img_gravity"
         android:layout_toEndOf="@id/img_bull"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="32dp"
         android:layout_marginStart="16dp"/>
     </RelativeLayout>
 
