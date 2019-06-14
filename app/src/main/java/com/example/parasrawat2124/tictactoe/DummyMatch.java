@@ -41,6 +41,7 @@ public class DummyMatch extends AppCompatActivity {
     ImageView gravity;
     ImageView bull;
     DummyMatchModel dummyMatchModel;
+    Boolean bullpower=false;
     public static final String TAG="dummymatch";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +90,7 @@ public class DummyMatch extends AppCompatActivity {
                 Log.d(TAG, "onDataChange: ====================="+"UPDATING DUMMY MODEL");
                 Toast.makeText(getApplicationContext(),"Data Fetching",Toast.LENGTH_LONG).show();
                 GridUpdate(dummyMatchModel.getGrid());
+                bullpower=false;
                 matcharea.setVisibility(View.VISIBLE);
 
             }
@@ -140,7 +142,8 @@ public class DummyMatch extends AppCompatActivity {
                            @Override
                            public void onComplete(@NonNull Task<Void> task) {
                           Toast.makeText(getApplicationContext(),"Applied Gravity", Toast.LENGTH_SHORT).show();
-
+                               YoYo.with(Techniques.Pulse).duration(700)
+                                       .repeat(1).playOn(gravity);
 
                            }
                        });
@@ -163,6 +166,8 @@ public class DummyMatch extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 Toast.makeText(getApplicationContext(),"Applied Gravity", Toast.LENGTH_SHORT).show();
+                                YoYo.with(Techniques.Pulse).duration(700)
+                                        .repeat(1).playOn(gravity);
 
                             }
                         });
@@ -176,8 +181,41 @@ public class DummyMatch extends AppCompatActivity {
                 }
             }
         });
+        //BULL LOGIC
+        bull.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(dummyMatchModel.getTurn().equals("challenged")){
+                    if(currentuser.equals("challenged")){
+                        //APPLY POWER
+                        //CHECK AVAILABILITY OF BULL SYSTEM
+                        bullpower=true;
+                        YoYo.with(Techniques.Wobble).duration(700)
+                                .repeat(3).playOn(bull);
+
+                    }else{
+                        //not your turn
+                        Toast.makeText(getApplicationContext(),"Not your turn",Toast.LENGTH_SHORT).show();
+                    }
 
 
+                }else{
+                    //challenger power
+                    if(currentuser.equals("challenger")){
+                        //APPLY POWER
+                        //CHECK THE AVAILABILITY OF BULL SYSTEM.
+                        bullpower=true;
+                        YoYo.with(Techniques.Wobble).duration(700)
+                                .repeat(3).playOn(bull);
+
+                    }else{
+                        //not your turn
+                        Toast.makeText(getApplicationContext(),"Not your turn",Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            }
+        });
 
 
 
@@ -190,7 +228,7 @@ public class DummyMatch extends AppCompatActivity {
                 //LET ZERO-1
                 //CROSS-2
                 ArrayList<ArrayList<Integer>> arr=dummyMatchModel.getGrid();
-                if(arr.get(0).get(0)==0){
+                if(arr.get(0).get(0)==0 || bullpower){
 
                     if(dummyMatchModel.getTurn().equals("challenged")){
 
@@ -267,7 +305,7 @@ public class DummyMatch extends AppCompatActivity {
                 //LET ZERO-1
                 //CROSS-2
                 ArrayList<ArrayList<Integer>> arr=dummyMatchModel.getGrid();
-                if(arr.get(0).get(1)==0){
+                if(arr.get(0).get(1)==0 || bullpower){
 
                     if(dummyMatchModel.getTurn().equals("challenged")){
 
@@ -339,7 +377,7 @@ public class DummyMatch extends AppCompatActivity {
                 //LET ZERO-1
                 //CROSS-2
                 ArrayList<ArrayList<Integer>> arr=dummyMatchModel.getGrid();
-                if(arr.get(0).get(2)==0){
+                if(arr.get(0).get(2)==0 || bullpower){
 
                     if(dummyMatchModel.getTurn().equals("challenged")){
 
@@ -411,7 +449,7 @@ public class DummyMatch extends AppCompatActivity {
                 //LET ZERO-1
                 //CROSS-2
                 ArrayList<ArrayList<Integer>> arr=dummyMatchModel.getGrid();
-                if(arr.get(1).get(0)==0){
+                if(arr.get(1).get(0)==0 || bullpower){
 
                     if(dummyMatchModel.getTurn().equals("challenged")){
 
@@ -482,7 +520,7 @@ public class DummyMatch extends AppCompatActivity {
                 //LET ZERO-1
                 //CROSS-2
                 ArrayList<ArrayList<Integer>> arr=dummyMatchModel.getGrid();
-                if(arr.get(1).get(1)==0){
+                if(arr.get(1).get(1)==0 || bullpower){
 
                     if(dummyMatchModel.getTurn().equals("challenged")){
 
@@ -554,7 +592,7 @@ public class DummyMatch extends AppCompatActivity {
                 //LET ZERO-1
                 //CROSS-2
                 ArrayList<ArrayList<Integer>> arr=dummyMatchModel.getGrid();
-                if(arr.get(1).get(2)==0){
+                if(arr.get(1).get(2)==0 || bullpower){
 
                     if(dummyMatchModel.getTurn().equals("challenged")){
 
@@ -627,7 +665,7 @@ public class DummyMatch extends AppCompatActivity {
                 //LET ZERO-1
                 //CROSS-2
                 ArrayList<ArrayList<Integer>> arr=dummyMatchModel.getGrid();
-                if(arr.get(2).get(0)==0){
+                if(arr.get(2).get(0)==0 || bullpower){
 
                     if(dummyMatchModel.getTurn().equals("challenged")){
 
@@ -699,7 +737,7 @@ public class DummyMatch extends AppCompatActivity {
                 //LET ZERO-1
                 //CROSS-2
                 ArrayList<ArrayList<Integer>> arr=dummyMatchModel.getGrid();
-                if(arr.get(2).get(1)==0){
+                if(arr.get(2).get(1)==0 || bullpower){
 
                     if(dummyMatchModel.getTurn().equals("challenged")){
 
@@ -771,7 +809,7 @@ public class DummyMatch extends AppCompatActivity {
                 //LET ZERO-1
                 //CROSS-2
                 ArrayList<ArrayList<Integer>> arr=dummyMatchModel.getGrid();
-                if(arr.get(2).get(2)==0){
+                if(arr.get(2).get(2)==0 || bullpower){
 
                     if(dummyMatchModel.getTurn().equals("challenged")){
 
