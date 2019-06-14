@@ -86,12 +86,6 @@
             android:orientation="horizontal"
             android:weightSum="2">
         <ImageView
-            android:id="@+id/img_gravity"
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:src="@drawable/gravity"
-            android:layout_weight="1"/>
-        <ImageView
             android:id="@+id/img_bull"
             android:layout_width="0dp"
             android:layout_height="100dp"

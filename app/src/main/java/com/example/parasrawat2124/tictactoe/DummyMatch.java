@@ -8,8 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
@@ -32,6 +35,9 @@ public class DummyMatch extends AppCompatActivity {
     ImageView sign;
     String symbol;
     GridLayout matcharea;
+    Switch aSwitch;
+    ImageView gravity;
+    ImageView bull;
     DummyMatchModel dummyMatchModel;
     public static final String TAG="dummymatch";
     @Override
@@ -39,12 +45,16 @@ public class DummyMatch extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dummy_match);
         sign=findViewById(R.id.sign);
+
         matcharea=findViewById(R.id.match_area);
         imageView11=findViewById(R.id.text11);
         imageView12=findViewById(R.id.text12);
         imageView13=findViewById(R.id.text13);
         imageView21=findViewById(R.id.text21);
+        aSwitch=findViewById(R.id.powerswitch);
         imageView22=findViewById(R.id.text22);
+        gravity=findViewById(R.id.gravity);
+        bull=findViewById(R.id.bull);
         imageView23=findViewById(R.id.text23);
         imageView31=findViewById(R.id.text31);
         imageView32=findViewById(R.id.text32);
@@ -69,7 +79,7 @@ public class DummyMatch extends AppCompatActivity {
             currentuser="challenger";
         }
         //FETCHING TABLE INSTANCE
-        DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("DummyMatch");
+        final DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("DummyMatch");
         databaseReference.child(matchid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -86,6 +96,82 @@ public class DummyMatch extends AppCompatActivity {
 
             }
         });
+
+
+        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+
+                    //VERIFY HERE WHETHER THE USER HAS THE POWER OVER HIM OR NOT
+                    gravity.setVisibility(View.VISIBLE);
+                    bull.setVisibility(View.VISIBLE);
+                    YoYo.with(Techniques.RubberBand).duration(1000)
+                            .repeat(1).playOn(gravity);
+                    YoYo.with(Techniques.Tada).duration(800)
+                            .repeat(1).playOn(bull);
+
+                }else {
+
+                    gravity.setVisibility(View.GONE);
+                    bull.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        //POWER FUNCTIONS
+
+        gravity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(dummyMatchModel.getTurn().equals("challenged")){
+                    if(currentuser.equals("challenged")){
+
+                        //Gravity is applied by challenged person
+                        ArrayList<ArrayList<Integer>> arr=dummyMatchModel.getGrid();
+                       arr=ApplyGravityChalleneged(arr);
+                       DummyMatchModel dummyMatchModel=new DummyMatchModel(arr,"challenged");
+                       DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("DummyMatch");
+                       databaseReference.child(matchid).setValue(dummyMatchModel).addOnCompleteListener(new OnCompleteListener<Void>() {
+                           @Override
+                           public void onComplete(@NonNull Task<Void> task) {
+                          Toast.makeText(getApplicationContext(),"Applied Gravity", Toast.LENGTH_SHORT).show();
+                           }
+                       });
+
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(),"Not your turn",Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    //challenger turn
+                    if(currentuser.equals("challenger")){
+
+                        //Gravity is applied by challenger
+                        ArrayList<ArrayList<Integer>> arr=dummyMatchModel.getGrid();
+                        arr=ApplyGravityChalleneger(arr);
+                        DummyMatchModel dummyMatchModel=new DummyMatchModel(arr,"challenger");
+                        DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("DummyMatch");
+                        databaseReference.child(matchid).setValue(dummyMatchModel).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Toast.makeText(getApplicationContext(),"Applied Gravity", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+
+
+                    }else {
+                        Toast.makeText(getApplicationContext(),"Not your turn",Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            }
+        });
+
+
+
+
 
         imageView11.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -755,7 +841,7 @@ public class DummyMatch extends AppCompatActivity {
             imageView11.setImageResource(R.drawable.redcross);
         }
         else{
-
+            imageView11.setImageResource(0);
         }
 
 
@@ -766,7 +852,7 @@ public class DummyMatch extends AppCompatActivity {
             imageView12.setImageResource(R.drawable.redcross);
         }
         else{
-
+            imageView12.setImageResource(0);
         }
 
         if(firstrow.get(2)==1){
@@ -776,7 +862,7 @@ public class DummyMatch extends AppCompatActivity {
         imageView13.setImageResource(R.drawable.redcross);
         }
         else{
-
+            imageView13.setImageResource(0);
         }
 
 
@@ -788,6 +874,7 @@ public class DummyMatch extends AppCompatActivity {
         }
         else {
 
+            imageView21.setImageResource(0);
         }
 
         if(secondrow.get(1)==1){
@@ -797,7 +884,7 @@ public class DummyMatch extends AppCompatActivity {
         imageView22.setImageResource(R.drawable.redcross);
         }
         else {
-
+            imageView22.setImageResource(0);
         }
 
         if(secondrow.get(2)==1){
@@ -807,7 +894,7 @@ public class DummyMatch extends AppCompatActivity {
         imageView23.setImageResource(R.drawable.redcross);
         }
         else {
-
+            imageView23.setImageResource(0);
         }
 
         if(thirdrow.get(0)==1){
@@ -817,7 +904,7 @@ public class DummyMatch extends AppCompatActivity {
             imageView31.setImageResource(R.drawable.redcross);
         }
         else {
-
+            imageView31.setImageResource(0);
         }
         if(thirdrow.get(1)==1){
             imageView32.setImageResource(R.drawable.greencircle);
@@ -826,7 +913,7 @@ public class DummyMatch extends AppCompatActivity {
             imageView32.setImageResource(R.drawable.redcross);
         }
         else {
-
+            imageView32.setImageResource(0);
         }
         if(thirdrow.get(2)==1){
             imageView33.setImageResource(R.drawable.greencircle);
@@ -835,7 +922,7 @@ public class DummyMatch extends AppCompatActivity {
             imageView33.setImageResource(R.drawable.redcross);
         }
         else {
-
+            imageView33.setImageResource(0);
         }
 
     }
@@ -942,6 +1029,73 @@ public class DummyMatch extends AppCompatActivity {
                 });
             }
         }).start();
+    }
+
+    ArrayList<ArrayList<Integer>> ApplyGravityChalleneged(ArrayList<ArrayList<Integer>> arr){
+
+        ArrayList<Integer> firstrow=arr.get(0);
+        ArrayList<Integer> secondrow=arr.get(1);
+        ArrayList<Integer> thirdrow=arr.get(2);
+        //Comparing second row and third row
+        for(int i=0;i<3;i++){
+            if(thirdrow.get(i)==0 && secondrow.get(i)==1){
+                thirdrow.set(i,1);
+                secondrow.set(i,0);
+            }
+        }
+        //Comparing first row and second row;
+        for(int i=0;i<3;i++){
+
+            if(secondrow.get(i)==0 && firstrow.get(i)==1){
+                secondrow.set(i,1);
+                firstrow.set(i,0);
+            }
+        }
+
+        //Comparing second row and third row again
+        for(int i=0;i<3;i++){
+            if(thirdrow.get(i)==0 && secondrow.get(i)==1){
+                thirdrow.set(i,1);
+                secondrow.set(i,0);
+            }
+        }
+        arr.set(0,firstrow);
+        arr.set(1,secondrow);
+        arr.set(2,thirdrow);
+        return arr;
+    }
+    ArrayList<ArrayList<Integer>> ApplyGravityChalleneger(ArrayList<ArrayList<Integer>> arr){
+
+        ArrayList<Integer> firstrow=arr.get(0);
+        ArrayList<Integer> secondrow=arr.get(1);
+        ArrayList<Integer> thirdrow=arr.get(2);
+        //Comparing second row and third row
+        for(int i=0;i<3;i++){
+            if(thirdrow.get(i)==0 && secondrow.get(i)==2){
+                thirdrow.set(i,2);
+                secondrow.set(i,0);
+            }
+        }
+        //Comparing first row and second row;
+        for(int i=0;i<3;i++){
+
+            if(secondrow.get(i)==0 && firstrow.get(i)==2){
+                secondrow.set(i,2);
+                firstrow.set(i,0);
+            }
+        }
+
+        //Comparing second row and third row again
+        for(int i=0;i<3;i++){
+            if(thirdrow.get(i)==0 && secondrow.get(i)==2){
+                thirdrow.set(i,2);
+                secondrow.set(i,0);
+            }
+        }
+        arr.set(0,firstrow);
+        arr.set(1,secondrow);
+        arr.set(2,thirdrow);
+        return arr;
     }
 
 }

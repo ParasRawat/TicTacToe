@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.example.parasrawat2124.tictactoe.CatchAndMatch.CatchPlayer;
 import com.example.parasrawat2124.tictactoe.CatchAndMatch.Match;
 import com.example.parasrawat2124.tictactoe.CatchAndMatch.RequestActivity;
@@ -62,6 +64,9 @@ public class Dashboard extends AppCompatActivity {
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                YoYo.with(Techniques.Tada).duration(400)
+                        .playOn(play);
                 DummyMatchModel dummyMatchModel=new DummyMatchModel(grid,"challenged");
                 String matchid=challenger+"vs"+challenged;
                 DatabaseReference databaseReference2=FirebaseDatabase.getInstance().getReference("DummyMatch");
@@ -73,6 +78,8 @@ public class Dashboard extends AppCompatActivity {
         history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                YoYo.with(Techniques.Tada).duration(400)
+                        .playOn(history);
                 startActivity(new Intent(Dashboard.this,PastMatches.class));
             }
         });
@@ -80,12 +87,16 @@ public class Dashboard extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                YoYo.with(Techniques.Tada).duration(400)
+                        .playOn(profile);
                 startActivity(new Intent(Dashboard.this,ProfileSection.class));
             }
         });
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                YoYo.with(Techniques.Tada).duration(400)
+                        .playOn(logout);
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(Dashboard.this,LoginScreen.class));
             }
