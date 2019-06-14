@@ -121,6 +121,7 @@ public class DummyMatch extends AppCompatActivity {
 
         //POWER FUNCTIONS
 
+        //GRAVITY LOGIC
         gravity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
