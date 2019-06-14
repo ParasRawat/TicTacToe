@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 public class ProfileSection extends AppCompatActivity {
 
@@ -63,7 +64,8 @@ public class ProfileSection extends AppCompatActivity {
                 gr=user.getWon()/5;
                 bull.setText("x "+bu);
                 gravity.setText("x "+gr);
-                imguser.setImageURI(Uri.parse(user.getUri()));
+                Picasso.get().load(user.getUri()).into(imguser);
+                //imguser.setImageURI(Uri.parse(user.getUri()));
                 //update computed values
                 dbref.child(USERNAME).child("score").setValue(sc);
                 dbref.child(USERNAME).child("bulls").setValue(bu);

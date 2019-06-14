@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.parasrawat2124.tictactoe.Adapters.OnlineAdapter;
+import com.example.parasrawat2124.tictactoe.ModelClass.UserProfile;
 import com.example.parasrawat2124.tictactoe.R;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -22,13 +23,13 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class OnlineFragment extends Fragment {
 
     String USERNAME="";
     DatabaseReference dbref;
     RecyclerView rec;
+    String tabname;
 
     @Nullable
     @Override
@@ -39,88 +40,46 @@ public class OnlineFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Bundle args=getArguments();
-        String tabname=args.getString("tabname");
+        tabname=args.getString("tabname");
         USERNAME=args.getString("username");
 
         rec=view.findViewById(R.id.list);
         dbref=FirebaseDatabase.getInstance().getReference("Users");
 
-        switch (tabname){
-            case "RANDOM": fetchRandom();break;
-            case "FRIENDS": fetchFriends();
-        }
-
-
-    }
-
-    public void fetchRandom(){
-
-        final ArrayList<String> usernames=new ArrayList<>();
-        final ArrayList<String> status=new ArrayList<>();
-        dbref.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                String st=dataSnapshot.child("status").getValue().toString();
-                if(st.equals("online")){
-                    usernames.add(dataSnapshot.getKey());
-                    status.add(st);
-                }
-                setAdapter(usernames,status);
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    public void fetchFriends(){
-
-        dbref.child(USERNAME).child("friends").addValueEventListener(new ValueEventListener() {
+        dbref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<ArrayList<String>> t=new GenericTypeIndicator<ArrayList<String>>() {};
-                final ArrayList<String> frns=dataSnapshot.getValue(t);
-                final ArrayList<String> status=new ArrayList<>();
-                final ArrayList<String> usernames=new ArrayList<>();
-                //final HashMap<String,String> map=new HashMap<>();
-
-                for(int i=0;i<frns.size();i++){
-                    final String fname=frns.get(i);
-                    dbref.child(fname).child("status").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            usernames.add(fname);
-                            status.add(dataSnapshot.getValue().toString());
-                            //map.put(fname,dataSnapshot.getValue().toString());
-                            //TODO check for duplicate entries
-                            //TODO this can be optimized as adapter can be notified only the change!
-                            setAdapter(usernames,status);
+                ArrayList<String> frns=new ArrayList<>();
+                for(DataSnapshot ds:dataSnapshot.getChildren()){
+                    UserProfile user=ds.getValue(UserProfile.class);
+                    if(user.getUsername().equals(USERNAME)){
+                        frns=user.getFriends();
+                    }
+                }
+                ArrayList<String> fnames=new ArrayList<>(),rnames=new ArrayList<>();
+                ArrayList<String> fstatus=new ArrayList<>(),rstatus=new ArrayList<>();
+                for(DataSnapshot ds:dataSnapshot.getChildren()){
+                    UserProfile user=ds.getValue(UserProfile.class);
+                    Log.d("userinfo","friends"+frns.toString());
+                    Log.d("userinfo",user.getUsername());
+                    if(frns.contains(user.getUsername())){
+                        fnames.add(user.getUsername());
+                        fstatus.add(user.getStatus());
+                        Log.d("userinfo",user.getUsername()+"FAdded");
+                    }
+                    else{
+                        if(user.getStatus().equals("online") && (!user.getUsername().equals(USERNAME))){
+                            rnames.add(user.getUsername());
+                            rstatus.add(user.getStatus());
+                            Log.d("userinfo",user.getUsername()+"RAdded");
                         }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
+                    }
                 }
 
+                switch (tabname){
+                    case "RANDOM": setAdapter(rnames,rstatus);break;
+                    case "FRIENDS": setAdapter(fnames,fstatus);
+                }
             }
 
             @Override
@@ -128,11 +87,14 @@ public class OnlineFragment extends Fragment {
 
             }
         });
+
+
     }
 
     public void setAdapter(ArrayList<String> names, ArrayList<String> status){
-        OnlineAdapter adapter=new OnlineAdapter(names,status);
+        OnlineAdapter adapter=new OnlineAdapter(names,status,getActivity());
         rec.setLayoutManager(new LinearLayoutManager(getContext()));
         rec.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 }

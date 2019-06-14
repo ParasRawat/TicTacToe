@@ -8,6 +8,25 @@ public class UserProfile {
     ArrayList<String> friends=new ArrayList<>(),matches=new ArrayList<>(),reqreceived=new ArrayList<>(),reqsent=new ArrayList<>();
     int won,lost,gravities,bulls,rank,score;
 
+    public UserProfile(){}
+
+    public UserProfile(String name,String email,String uri){
+        username=name;
+        this.email=email;
+        status="online";
+        this.uri=uri;
+        friends=null;
+        matches=null;
+        reqreceived=null;
+        reqsent=null;
+        won=0;
+        lost=0;
+        gravities=0;
+        bulls=0;
+        rank=0;
+        score=0;
+    }
+
     public String getUsername() {
         return username;
     }

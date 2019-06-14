@@ -1,13 +1,14 @@
 package com.example.parasrawat2124.tictactoe.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,10 +20,13 @@ public class OnlineAdapter extends RecyclerView.Adapter<OnlineAdapter.viewHolder
 
     ArrayList<String> usernames=new ArrayList<>();
     ArrayList<String> stat=new ArrayList<>();
+    Context context;
+    int pos=-1;
 
-    public OnlineAdapter(ArrayList<String> un,ArrayList<String> s){
+    public OnlineAdapter(ArrayList<String> un, ArrayList<String> s,Context context){
         usernames=un;
         stat=s;
+        this.context=context;
     }
 
     @NonNull
@@ -33,15 +37,32 @@ public class OnlineAdapter extends RecyclerView.Adapter<OnlineAdapter.viewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull viewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull final viewHolder viewHolder,final int i) {
         viewHolder.name.setText(usernames.get(i));
         viewHolder.status.setText(stat.get(i));
         viewHolder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //TODO add effect
+                pos=i;
+                notifyDataSetChanged();
+
+                Intent i=new Intent("challenged");
+                i.putExtra("name",viewHolder.name.getText().toString());
+                LocalBroadcastManager.getInstance(context).sendBroadcast(i);
             }
         });
+
+        if(i==pos){
+            viewHolder.layout.setBackgroundResource(R.color.colorPrimaryDark);
+            viewHolder.name.setTextColor(Color.WHITE);
+            viewHolder.status.setTextColor(Color.WHITE);
+        }
+        else {
+            viewHolder.layout.setBackgroundColor(Color.WHITE);
+            viewHolder.name.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+            viewHolder.status.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+        }
     }
 
     @Override

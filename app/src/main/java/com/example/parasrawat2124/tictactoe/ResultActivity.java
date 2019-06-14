@@ -45,7 +45,7 @@ public class ResultActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         GenericTypeIndicator<ArrayList<String>> t=new GenericTypeIndicator<ArrayList<String>>() {};
                         ArrayList<String> arrlist=dataSnapshot.getValue(t);
-                        arrlist.add(CHALLENGED);
+                        if(!arrlist.contains(CHALLENGED))   arrlist.add(CHALLENGED);
                         //TODO check for duplicate entries
                         dbref.child("friends").setValue(arrlist);
                     }

@@ -18,11 +18,7 @@
         <activity
             android:name=".SplashScreen"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <provider
@@ -51,13 +47,26 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".CatchAndMatch.Match" />
+        <activity android:name=".CatchAndMatch.Match" >
+
+        </activity>
         <activity android:name=".CatchAndMatch.MatchingPlayers" />
         <activity android:name=".Dashboard.Dashboard" />
         <activity android:name=".Dashboard.PastMatches" />
-        <activity android:name=".Dashboard.ProfileSection" />
-        <activity android:name=".Dummyactivity" />
-        <activity android:name=".CatchAndMatch.RequestActivity" />
+        <activity android:name=".Dashboard.ProfileSection" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Dummyactivity" >
+
+        </activity>
+        <activity android:name=".CatchAndMatch.RequestActivity"
+            android:windowSoftInputMode="adjustPan">
+
+        </activity>
         <activity android:name=".ResultActivity"/>
 
         <activity android:name=".DummyMatch"></activity>
