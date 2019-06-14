@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -45,6 +47,8 @@ public class RequestActivity extends AppCompatActivity {
     RecyclerView rec;
     ViewPager pager;
     EditText e_challenged;
+    CardView timercard;
+    TextView timertext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +58,8 @@ public class RequestActivity extends AppCompatActivity {
         //definitions
         Button send=findViewById(R.id.b_sendreq);
         e_challenged=findViewById(R.id.e_user);
+        timertext=findViewById(R.id.countdowntextview);
+        timercard=findViewById(R.id.countdowncard);
         TextView user=findViewById(R.id.t_username);
         user.setText(USERNAME);
 
@@ -176,6 +182,10 @@ public class RequestActivity extends AppCompatActivity {
                 else Toast.makeText(RequestActivity.this,"Select a Gamer to send request",Toast.LENGTH_LONG).show();
             }
         });
+
+        //start match when accept request
+        LocalBroadcastManager.getInstance(this).registerReceiver(matchReceiver,new IntentFilter("match"));
+
     }
 
     public void fetchRequests(){
@@ -212,4 +222,32 @@ public class RequestActivity extends AppCompatActivity {
             Log.d("userselect",CHALLENGED);
         }
     };
+
+    public BroadcastReceiver matchReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            startTimer();
+        }
+    };
+
+    void startTimer() {
+        timercard.setVisibility(View.VISIBLE);
+        CountDownTimer cTimer = new CountDownTimer(4000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                int mil= (int) millisUntilFinished/1000;
+                //Log.d(TAG, "onTick: "+mil);
+                if(mil==1){
+                    timertext.setText("Start");
+                }
+                else {
+                    timertext.setText("" + mil);
+                }
+            }
+            public void onFinish() {
+                //Log.d(TAG, "onFinish: "+"On Finished Called");
+                startActivity(new Intent(RequestActivity.this,Match.class));
+            }
+        };
+        cTimer.start();
+    }
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -56,10 +57,11 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.viewHold
                 SharedPreferences.Editor editor=sharedPreferences.edit();
                 editor.putString("challenger",CHALLENGER);
                 editor.putString("challenged",CHALLENGED);
-                editor.putString("id",CHALLENGER+"vs"+CHALLENGED);
+                editor.putString("id",CHALLENGER+"vs"+CHALLENGED+((Math.random()*100)+1));
                 editor.apply();
 
-                //startTimer();
+                Intent i=new Intent("match");
+                LocalBroadcastManager.getInstance(context).sendBroadcast(i);
             }
         });
     }
@@ -80,25 +82,4 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.viewHold
              acceptB=itemView.findViewById(R.id.b_accept);
          }
      }
-
-    void startTimer() {
-        //countdowncard.setVisibility(View.VISIBLE);
-        CountDownTimer cTimer = new CountDownTimer(4000, 1000) {
-            public void onTick(long millisUntilFinished) {
-                int mil= (int) millisUntilFinished/1000;
-                //Log.d(TAG, "onTick: "+mil);
-//                if(mil==0){
-//                    countdowntextview.setText("Start");
-//                }
-//                else {
-//                    countdowntextview.setText("" + mil);
-//                }
-            }
-            public void onFinish() {
-                //Log.d(TAG, "onFinish: "+"On Finished Called");
-                context.startActivity(new Intent(context,Match.class));
-            }
-        };
-        cTimer.start();
-    }
 }
