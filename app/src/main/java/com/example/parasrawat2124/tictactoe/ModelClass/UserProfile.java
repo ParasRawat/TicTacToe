@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public class UserProfile {
 
-    String username,email,status;
+    String username,email,status,uri;
     ArrayList<String> friends=new ArrayList<>(),matches=new ArrayList<>(),reqreceived=new ArrayList<>(),reqsent=new ArrayList<>();
-    int won,lost;
+    int won,lost,gravities,bulls,rank,score;
 
     public String getUsername() {
         return username;
@@ -78,5 +78,45 @@ public class UserProfile {
 
     public void setLost(int lost) {
         this.lost = lost;
+    }
+
+    public int getGravities() {
+        return gravities;
+    }
+
+    public void setGravities(int gravities) {
+        this.gravities = gravities;
+    }
+
+    public int getBulls() {
+        return bulls;
+    }
+
+    public void setBulls(int bulls) {
+        this.bulls = bulls;
+    }
+
+    public int getRank() {
+        return rank;
+    }
+
+    public void setRank(int rank) {
+        this.rank = rank;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 }
