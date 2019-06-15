@@ -135,5 +135,44 @@
         android:layout_marginBottom="8dp"
         android:text="Powers " />
 
+    <TextView
+        android:id="@+id/challenger"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Challenger"
+        android:textSize="20dp"
+        android:layout_margin="8dp"
+        android:fontFamily="@font/caesar_dressing"
+        android:textStyle="bold"
+        android:textColor="@android:color/holo_blue_dark"/>
+
+    <ImageView
+        android:id="@+id/challengerturn"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_below="@+id/challenger"
+        android:layout_alignStart="@+id/match_area"
+        android:layout_marginTop="-4dp" />
+
+    <TextView
+        android:id="@+id/challenged"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/challenger"
+        android:layout_alignParentEnd="true"
+        android:fontFamily="@font/caesar_dressing"
+        android:text="Challenged"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/challengedturn"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_below="@+id/challenger"
+        android:layout_alignEnd="@+id/match_area"
+        android:layout_marginTop="-4dp" />
+
 
 </RelativeLayout>

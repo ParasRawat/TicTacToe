@@ -41,6 +41,7 @@ public class DummyMatch extends AppCompatActivity {
     ImageView gravity;
     ImageView bull;
     DummyMatchModel dummyMatchModel;
+    ImageView challengedturn,challengerturn;
     Boolean bullpower=false;
     public static final String TAG="dummymatch";
     @Override
@@ -48,7 +49,8 @@ public class DummyMatch extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dummy_match);
         sign=findViewById(R.id.sign);
-
+        challengedturn=findViewById(R.id.challengedturn);
+        challengerturn=findViewById(R.id.challengerturn);
         matcharea=findViewById(R.id.match_area);
         imageView11=findViewById(R.id.text11);
         imageView12=findViewById(R.id.text12);
@@ -62,7 +64,7 @@ public class DummyMatch extends AppCompatActivity {
         imageView31=findViewById(R.id.text31);
         imageView32=findViewById(R.id.text32);
         imageView33=findViewById(R.id.text33);
-        String challenged="paras2";
+        final String challenged="paras2";
         String challenger="puru";
         final String currentuser;
         //Pushing null grid conditions
@@ -90,6 +92,14 @@ public class DummyMatch extends AppCompatActivity {
                 Log.d(TAG, "onDataChange: ====================="+"UPDATING DUMMY MODEL");
                 Toast.makeText(getApplicationContext(),"Data Fetching",Toast.LENGTH_LONG).show();
                 GridUpdate(dummyMatchModel.getGrid());
+                if(dummyMatchModel.getTurn().equals("challenger")){
+                        challengerturn.setImageResource(R.drawable.chance);
+                        challengedturn.setImageResource(0);
+                }else {
+
+                    challengedturn.setImageResource(R.drawable.chance);
+                    challengerturn.setImageResource(0);
+                }
                 bullpower=false;
                 matcharea.setVisibility(View.VISIBLE);
 

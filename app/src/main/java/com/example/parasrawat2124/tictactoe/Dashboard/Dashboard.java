@@ -37,6 +37,7 @@ public class Dashboard extends AppCompatActivity {
     TextView play, history, profile ,exit,logout,gamername;
     ArrayList<ArrayList<Integer>> grid=new ArrayList<>();
     ImageView gamerimage;
+
     public static final String TAG="dashboard";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
