@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.parasrawat2124.tictactoe.Adapters.RequestAdapter;
+import com.example.parasrawat2124.tictactoe.DummyMatch;
 import com.example.parasrawat2124.tictactoe.ModelClass.UserProfile;
 import com.example.parasrawat2124.tictactoe.R;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -37,16 +39,19 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import static com.example.parasrawat2124.tictactoe.ResultActivity.CHALLENGER;
+
 public class RequestActivity extends AppCompatActivity {
 
     //TODO fetch current user
-    public final String USERNAME="asdfg",CHALLENGER=USERNAME;
+
     public static String CHALLENGED="";
     DatabaseReference dbref;
     ArrayList<String> reqrec=new ArrayList<>();
     RecyclerView rec;
     ViewPager pager;
     EditText e_challenged;
+    String USERNAME;
     CardView timercard;
     TextView timertext;
 
@@ -56,7 +61,9 @@ public class RequestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_request);
 
         //definitions
-        Button send=findViewById(R.id.b_sendreq);
+         USERNAME=getGamer();
+        final String CHALLENGER=USERNAME;
+        final Button send=findViewById(R.id.b_sendreq);
         e_challenged=findViewById(R.id.e_user);
         timertext=findViewById(R.id.countdowntextview);
         timercard=findViewById(R.id.countdowncard);
@@ -245,9 +252,16 @@ public class RequestActivity extends AppCompatActivity {
             }
             public void onFinish() {
                 //Log.d(TAG, "onFinish: "+"On Finished Called");
-                startActivity(new Intent(RequestActivity.this,Match.class));
+                startActivity(new Intent(RequestActivity.this,DummyMatch.class));
             }
         };
         cTimer.start();
     }
+
+    String getGamer(){
+        SharedPreferences sharedPreferences=getSharedPreferences("Gamers",MODE_PRIVATE);
+        String name=sharedPreferences.getString("name","0");
+        return name;
+    }
+
 }

@@ -31,6 +31,7 @@ import android.widget.Toast;
 import com.example.parasrawat2124.tictactoe.Dashboard.Dashboard;
 import com.example.parasrawat2124.tictactoe.Login_and_Registration.LoginScreen;
 import com.example.parasrawat2124.tictactoe.ModelClass.GamerProfile;
+import com.example.parasrawat2124.tictactoe.ModelClass.UserProfile;
 import com.example.parasrawat2124.tictactoe.R;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -236,6 +237,10 @@ public class CompleteYourProfile extends AppCompatActivity {
                         String downloadurl = uri.toString();
                         final GamerProfile gamerProfile = new GamerProfile(name, email, downloadurl);
                         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Gamers");
+                        UserProfile userProfile=new UserProfile(name,email,uri.toString());
+                        //PUSHING DATA TO NEW TABLE
+                        DatabaseReference databaseReference1=FirebaseDatabase.getInstance().getReference("Users");
+                        databaseReference1.child(name).setValue(userProfile);
                         databaseReference.child(name).setValue(gamerProfile).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -252,8 +257,6 @@ public class CompleteYourProfile extends AppCompatActivity {
 
 
                         });
-
-
                     }
                 }
 
@@ -355,13 +358,6 @@ public class CompleteYourProfile extends AppCompatActivity {
         editor.apply();
 
     }
-
-    String getSharedPreferences(){
-        SharedPreferences sharedPreferences=getSharedPreferences("Gamers",MODE_PRIVATE);
-        String name=sharedPreferences.getString("name","0");
-        return name;
-    }
-
     @Override
     public void onBackPressed() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);

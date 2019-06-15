@@ -64,8 +64,8 @@ public class DummyMatch extends AppCompatActivity {
         imageView31=findViewById(R.id.text31);
         imageView32=findViewById(R.id.text32);
         imageView33=findViewById(R.id.text33);
-        final String challenged="paras2";
-        String challenger="puru";
+        final String challenged=getChallenged();
+        String challenger=getChallenger();
         final String currentuser;
         //Pushing null grid conditions
         final String matchid=challenger+"vs"+challenged;
@@ -991,6 +991,15 @@ public class DummyMatch extends AppCompatActivity {
         return sharedPreferences.getString("name","0");
 
     }
+    String getChallenger(){
+        SharedPreferences sharedPreferences=getApplicationContext().getSharedPreferences("Match",MODE_PRIVATE);
+        return sharedPreferences.getString("challenger","0");
+    }
+
+    String getChallenged(){
+        SharedPreferences sharedPreferences=getApplicationContext().getSharedPreferences("Match",MODE_PRIVATE);
+        return sharedPreferences.getString("challenged","0");
+    }
     void checkWinner(ArrayList<ArrayList<Integer>> arr){
         int i11=arr.get(0).get(0);
         int i12=arr.get(0).get(1);
@@ -1156,5 +1165,11 @@ public class DummyMatch extends AppCompatActivity {
         return arr;
     }
 
+//    SharedPreferences sharedPreferences=context.getSharedPreferences("Match",MODE_PRIVATE);
+//    SharedPreferences.Editor editor=sharedPreferences.edit();
+//                editor.putString("challenger",CHALLENGER);
+//                editor.putString("challenged",CHALLENGED);
+//                editor.putString("id",CHALLENGER+"vs"+CHALLENGED);
+//                editor.apply();
 
 }

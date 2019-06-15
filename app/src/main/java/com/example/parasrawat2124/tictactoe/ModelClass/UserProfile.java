@@ -15,10 +15,14 @@ public class UserProfile {
         this.email=email;
         status="online";
         this.uri=uri;
-        friends=null;
-        matches=null;
-        reqreceived=null;
-        reqsent=null;
+        friends=new ArrayList<>();
+        friends.add("");
+        matches=new ArrayList<>();
+        matches.add("");
+        reqreceived=new ArrayList<>();
+        reqreceived.add("");
+        reqsent=new ArrayList<>();
+        reqsent.add("");
         won=0;
         lost=0;
         gravities=0;

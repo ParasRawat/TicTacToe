@@ -54,13 +54,6 @@ public class Dashboard extends AppCompatActivity {
         final String challenged="paras2";
         final String challenger="puru";
         //Pushing null grid conditions
-        for(int i=0;i<3;i++){
-            ArrayList<Integer> arr=new ArrayList<>();
-            for(int j=0;j<3;j++){
-                arr.add(0);
-            }
-            grid.add(arr);
-        }
         gamername.setText(name);
         play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,11 +61,7 @@ public class Dashboard extends AppCompatActivity {
 
                 YoYo.with(Techniques.Tada).duration(400)
                         .playOn(play);
-                DummyMatchModel dummyMatchModel=new DummyMatchModel(grid,"challenged");
-                String matchid=challenger+"vs"+challenged;
-                DatabaseReference databaseReference2=FirebaseDatabase.getInstance().getReference("DummyMatch");
-                databaseReference2.child(matchid).setValue(dummyMatchModel);
-                startActivity(new Intent(Dashboard.this,DummyMatch.class));
+                startActivity(new Intent(Dashboard.this,RequestActivity.class));
             }
         });
 
