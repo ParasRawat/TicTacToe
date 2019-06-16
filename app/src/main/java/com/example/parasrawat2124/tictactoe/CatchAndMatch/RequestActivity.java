@@ -45,8 +45,8 @@ public class RequestActivity extends AppCompatActivity {
 
     //TODO fetch current user
 
-    public static String CHALLENGED="";
-    DatabaseReference dbref;
+    public static String CHALLENGED="",CHALLENGER="";
+    DatabaseReference dbref,dbrefmatch;
     ArrayList<String> reqrec=new ArrayList<>();
     RecyclerView rec;
     ViewPager pager;
@@ -61,9 +61,10 @@ public class RequestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_request);
 
         //definitions
-         USERNAME=getGamer();
-        final String CHALLENGER=USERNAME;
-        final Button send=findViewById(R.id.b_sendreq);
+        //USERNAME=getGamer();
+        USERNAME=getGamer();
+
+        Button send=findViewById(R.id.b_sendreq);
         e_challenged=findViewById(R.id.e_user);
         timertext=findViewById(R.id.countdowntextview);
         timercard=findViewById(R.id.countdowncard);
@@ -71,6 +72,68 @@ public class RequestActivity extends AppCompatActivity {
         user.setText(USERNAME);
 
         dbref=FirebaseDatabase.getInstance().getReference("Users");
+
+        //status=online
+        dbref.child(USERNAME).child("status").setValue("online");
+
+        //notify challenger that his request has been accepted
+        dbrefmatch=FirebaseDatabase.getInstance().getReference("PlayStatus");
+        if(dbrefmatch!=null){
+            dbrefmatch.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for(DataSnapshot ds:dataSnapshot.getChildren()){
+                        String matchid=ds.getKey();
+                        Log.d("requestAc",ds.getKey());
+                        Log.d("requestAc",ds.getValue().toString());
+                        if(matchid.contains(USERNAME)){
+                            if(ds.hasChild("ChallengedStatus") &&
+                                    ds.hasChild("ChallengedStatus") &&
+                                    ds.hasChild("Challenger") &&
+                                    ds.hasChild("Challenged")) {
+                                String challengedSt=ds.child("ChallengedStatus").getValue().toString();
+                                String challengerSt=ds.child("ChallengerStatus").getValue().toString();
+                                String challenger=ds.child("Challenger").getValue().toString();
+                                final String challenged=ds.child("Challenged").getValue().toString();
+                                if(challenger.equals(USERNAME) && challengedSt.equals("ready") && challengerSt.equals("ready")){
+                                    Log.d("requestAc",challengedSt+challengerSt+challenger+USERNAME);
+                                    SharedPreferences sharedPreferences=getSharedPreferences("Match",MODE_PRIVATE);
+                                    SharedPreferences.Editor editor=sharedPreferences.edit();
+                                    editor.putString("challenger",challenger);
+                                    editor.putString("challenged",challenged);
+                                    editor.putString("id",challenger+"vs"+challenged);
+                                    editor.apply();
+
+                                    //TODO succeslistener
+//                                    dbref.child(USERNAME).child("reqsent").addListenerForSingleValueEvent(new ValueEventListener() {
+//                                        @Override
+//                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                            GenericTypeIndicator<ArrayList<String>> t=new GenericTypeIndicator<ArrayList<String>>() {};
+//                                            ArrayList<String> arrlist=dataSnapshot.getValue(t);
+//                                            arrlist.remove(challenged);
+//                                            dbref.child(USERNAME).child("reqsent").setValue(arrlist);
+//                                        }
+//
+//                                        @Override
+//                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                        }
+//                                    });
+                                    Log.d("requestAc",challenger+challenged+"ready");
+                                    startTimer();
+                                }
+                            }
+                        }
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
 
         //get challenged name from online adapter
         LocalBroadcastManager.getInstance(this).registerReceiver(challengedReceiver,new IntentFilter("challenged"));
@@ -112,13 +175,13 @@ public class RequestActivity extends AppCompatActivity {
         fetchRequests();
 
         //send request
-        //CHALLENGED="asdfg";
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!e_challenged.getText().equals("")) CHALLENGED=e_challenged.getText().toString();
+                CHALLENGER=USERNAME;
+                if(!e_challenged.getText().toString().equals("")) CHALLENGED=e_challenged.getText().toString();
                 //add in reqreceived
-                if(!CHALLENGED.equals("")) {
+                if(!CHALLENGED.equals("")) {//TODO check if request is sent to oneself
                     dbref.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -156,7 +219,17 @@ public class RequestActivity extends AppCompatActivity {
                                                                 dbref.child(CHALLENGED).child("reqreceived").setValue(arrlist).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                     @Override
                                                                     public void onSuccess(Void aVoid) {
-                                                                        Toast.makeText(RequestActivity.this, "Request sent to " + CHALLENGED, Toast.LENGTH_LONG).show();
+                                                                        String matchid=CHALLENGER+"vs"+CHALLENGED;
+                                                                        dbrefmatch.child(matchid).child("Challenger").setValue(CHALLENGER);
+                                                                        dbrefmatch.child(matchid).child("Challenged").setValue(CHALLENGED);
+                                                                        dbrefmatch.child(matchid).child("ChallengerStatus").setValue("ready");
+                                                                        dbrefmatch.child(matchid).child("ChallengedStatus").setValue("not ready").addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                            @Override
+                                                                            public void onSuccess(Void aVoid) {
+                                                                                Log.d("requestAc","request sent successfully");
+                                                                                Toast.makeText(RequestActivity.this, "Request sent to " + CHALLENGED, Toast.LENGTH_LONG).show();
+                                                                            }
+                                                                        });
                                                                     }
                                                                 });
                                                             }
@@ -197,12 +270,40 @@ public class RequestActivity extends AppCompatActivity {
 
     public void fetchRequests(){
         //TODO add condition for hasChild
-        dbref.child(USERNAME).child("reqreceived").addValueEventListener(new ValueEventListener() {
+        //only those requests appear which are currently online
+        dbref.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<ArrayList<String>> t = new GenericTypeIndicator<ArrayList<String>>() {};
-                ArrayList<String> arrlist=dataSnapshot.getValue(t);
-                setAdapter(arrlist);
+            public void onDataChange(@NonNull final DataSnapshot dataSnap) {
+                dbref.child(USERNAME).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        UserProfile curruser=dataSnapshot.getValue(UserProfile.class);
+                        //check for null
+                        if(curruser.getReqreceived()!=null){
+                            ArrayList<String> arrlist=curruser.getReqreceived();
+                            ArrayList<String> names=new ArrayList<>();
+                            for(DataSnapshot ds:dataSnap.getChildren()){
+                                UserProfile user=ds.getValue(UserProfile.class);
+                                if(arrlist.contains(user.getUsername()) && user.getStatus().equals("online")){
+                                    names.add(user.getUsername());
+                                }
+                            }
+                            setAdapter(names);
+                        }
+                        else {
+                            //TODO
+//                            TextView t=findViewById(R.id.rec_hint);
+//                            t.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
             }
 
             @Override
@@ -217,7 +318,7 @@ public class RequestActivity extends AppCompatActivity {
         LinearLayoutManager layoutman=new LinearLayoutManager(RequestActivity.this);
         layoutman.setOrientation(LinearLayoutManager.HORIZONTAL);
         rec.setLayoutManager(layoutman);
-        RequestAdapter reqadapter=new RequestAdapter(this,names,CHALLENGER);
+        RequestAdapter reqadapter=new RequestAdapter(this,names,USERNAME);
         rec.setAdapter(reqadapter);
     }
 
@@ -238,6 +339,7 @@ public class RequestActivity extends AppCompatActivity {
     };
 
     void startTimer() {
+        //TODO utilize this time filling shared preferences
         timercard.setVisibility(View.VISIBLE);
         CountDownTimer cTimer = new CountDownTimer(4000, 1000) {
             public void onTick(long millisUntilFinished) {
@@ -251,7 +353,9 @@ public class RequestActivity extends AppCompatActivity {
                 }
             }
             public void onFinish() {
-                //Log.d(TAG, "onFinish: "+"On Finished Called");
+                //TODO remove names from reqsent and reqrec
+                //status=in match
+                dbref.child(USERNAME).child("status").setValue("in match");
                 startActivity(new Intent(RequestActivity.this,DummyMatch.class));
             }
         };
@@ -264,4 +368,11 @@ public class RequestActivity extends AppCompatActivity {
         return name;
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        dbref.child(USERNAME).child("status").setValue("offline");
+    }
 }
+
+

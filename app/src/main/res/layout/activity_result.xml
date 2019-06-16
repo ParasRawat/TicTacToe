@@ -7,6 +7,11 @@
     tools:context=".ResultActivity"
     android:orientation="vertical">
 
+
+    <TextView
+        android:id="@+id/t_match"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
     <TextView
         android:id="@+id/t_opponent"
         android:layout_width="match_parent"

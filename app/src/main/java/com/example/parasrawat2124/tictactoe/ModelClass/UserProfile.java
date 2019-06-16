@@ -6,29 +6,27 @@ public class UserProfile {
 
     String username,email,status,uri;
     ArrayList<String> friends=new ArrayList<>(),matches=new ArrayList<>(),reqreceived=new ArrayList<>(),reqsent=new ArrayList<>();
-    int won,lost,gravities,bulls,rank,score;
+    int won,lost,gravities,bulls,rank,score,bullspent,gravityspent;
 
     public UserProfile(){}
 
     public UserProfile(String name,String email,String uri){
         username=name;
         this.email=email;
-        status="online";
+        status="offline";
         this.uri=uri;
-        friends=new ArrayList<>();
-        friends.add("");
-        matches=new ArrayList<>();
-        matches.add("");
-        reqreceived=new ArrayList<>();
-        reqreceived.add("");
-        reqsent=new ArrayList<>();
-        reqsent.add("");
+//        friends.add("");
+//        matches.add("");
+//        reqreceived.add("");
+//        reqsent.add("");
         won=0;
         lost=0;
         gravities=0;
         bulls=0;
         rank=0;
         score=0;
+        bullspent=0;
+        gravityspent=0;
     }
 
     public String getUsername() {
@@ -141,5 +139,21 @@ public class UserProfile {
 
     public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    public int getBullspent() {
+        return bullspent;
+    }
+
+    public void setBullspent(int bullspent) {
+        this.bullspent = bullspent;
+    }
+
+    public int getGravityspent() {
+        return gravityspent;
+    }
+
+    public void setGravityspent(int gravityspent) {
+        this.gravityspent = gravityspent;
     }
 }

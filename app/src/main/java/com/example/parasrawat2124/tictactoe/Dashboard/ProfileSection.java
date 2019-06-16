@@ -23,7 +23,7 @@ import com.squareup.picasso.Picasso;
 public class ProfileSection extends AppCompatActivity {
 
     DatabaseReference dbref;
-    public static String USERNAME="adieu";
+    public static String USERNAME="";
     SharedPreferences sharedpref;
     TextView name,email,won,lost,rank,score,gravity,bull;
     ImageView imguser;
@@ -45,8 +45,7 @@ public class ProfileSection extends AppCompatActivity {
         imguser=findViewById(R.id.img_user);
 
         //TODO fetch username from shared pref
-//        sharedpref=getSharedPreferences("User",MODE_PRIVATE);
-//        USERNAME=sharedpref.getString("name","");
+        USERNAME=getGamer();
 
         dbref=FirebaseDatabase.getInstance().getReference("Users");
         //compute score,bulls,gravities
@@ -58,18 +57,20 @@ public class ProfileSection extends AppCompatActivity {
                 email.setText(user.getEmail());
                 won.setText("won : "+user.getWon());
                 lost.setText("lost : "+user.getLost());
+                int bullspent=user.getBullspent();
+                int grspent=user.getGravityspent();
                 sc=(2*user.getWon())-user.getLost();
                 score.setText("score : "+sc);
                 bu=user.getWon()/3;
                 gr=user.getWon()/5;
-                bull.setText("x "+bu);
-                gravity.setText("x "+gr);
+                bull.setText("x "+(bu-bullspent));
+                gravity.setText("x "+(gr-grspent));
                 Picasso.get().load(user.getUri()).into(imguser);
                 //imguser.setImageURI(Uri.parse(user.getUri()));
                 //update computed values
                 dbref.child(USERNAME).child("score").setValue(sc);
-                dbref.child(USERNAME).child("bulls").setValue(bu);
-                dbref.child(USERNAME).child("gravities").setValue(gr);
+                dbref.child(USERNAME).child("bulls").setValue(bu-bullspent);
+                dbref.child(USERNAME).child("gravities").setValue(gr-grspent);
                 checkRank(sc);
             }
 
@@ -118,5 +119,11 @@ public class ProfileSection extends AppCompatActivity {
 
             }
         });
+    }
+
+    String getGamer(){
+        SharedPreferences sharedPreferences=getSharedPreferences("Gamers",MODE_PRIVATE);
+        String name=sharedPreferences.getString("name","0");
+        return name;
     }
 }

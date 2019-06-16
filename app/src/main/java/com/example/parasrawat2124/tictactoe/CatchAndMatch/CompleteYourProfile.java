@@ -58,7 +58,8 @@ import java.util.Date;
 public class CompleteYourProfile extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
-    CardView buttoncardview,namecardview,emailcardview,browse,opencam;
+    CardView buttoncardview,namecardview,emailcardview,browse;
+    //CardView opencam;
     ImageView gamerImage;
     TextView gameremail,title;
     TextView gamername;
@@ -88,7 +89,7 @@ public class CompleteYourProfile extends AppCompatActivity {
         emailcardview=findViewById(R.id.emailcardview);
         gamername=findViewById(R.id.gamernamenameedittext);
         browse=findViewById(R.id.browse);
-        opencam=findViewById(R.id.opencam);
+        //opencam=findViewById(R.id.opencam);
         result=findViewById(R.id.result);
         logout=findViewById(R.id.logout);
         progressBar=findViewById(R.id.progressbar);
@@ -195,21 +196,21 @@ public class CompleteYourProfile extends AppCompatActivity {
                 startActivity(new Intent(   CompleteYourProfile.this,LoginScreen.class));
             }
         });
-        opencam.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OpenCamera();
-
-            }
-        });
-
-        try {
-            if (Build.VERSION.SDK_INT >= 23) {
-                requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE}, 3);
-            }
-        }catch (Exception e){
-            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
-        }
+        //opencam.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                OpenCamera();
+//
+//            }
+//        });
+//
+//        try {
+//            if (Build.VERSION.SDK_INT >= 23) {
+//                requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE}, 3);
+//            }
+//        }catch (Exception e){
+//            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+//        }
 
     }
 

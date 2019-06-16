@@ -66,6 +66,11 @@ public class DummyMatch extends AppCompatActivity {
         imageView33=findViewById(R.id.text33);
         final String challenged=getChallenged();
         String challenger=getChallenger();
+
+        //MAYURI : remove match entry
+        DatabaseReference dbrefmatch=FirebaseDatabase.getInstance().getReference("PlayStatus");
+        dbrefmatch.child(challenger+"vs"+challenged).removeValue();
+
         final String currentuser;
         //Pushing null grid conditions
         final String matchid=challenger+"vs"+challenged;

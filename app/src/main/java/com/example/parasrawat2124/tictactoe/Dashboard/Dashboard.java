@@ -50,7 +50,12 @@ public class Dashboard extends AppCompatActivity {
         gamerimage=findViewById(R.id.gamerimage);
         gamername=findViewById(R.id.gamername);
         exit=findViewById(R.id.exit);
-        String name=getGamer();
+        final String name=getGamer();
+
+        //status=offline
+        final DatabaseReference dbref=FirebaseDatabase.getInstance().getReference("Users");
+        dbref.child(name).child("status").setValue("offline");
+
         final String challenged="paras2";
         final String challenger="puru";
         //Pushing null grid conditions
@@ -89,6 +94,13 @@ public class Dashboard extends AppCompatActivity {
                         .playOn(logout);
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(Dashboard.this,LoginScreen.class));
+            }
+        });
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dbref.child(name).child("status").setValue("offline");
+                System.exit(1);
             }
         });
 

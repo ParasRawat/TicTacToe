@@ -40,11 +40,14 @@ public class ResultActivity extends AppCompatActivity {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dbref.child("friends").addListenerForSingleValueEvent(new ValueEventListener() {
+                dbref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        GenericTypeIndicator<ArrayList<String>> t=new GenericTypeIndicator<ArrayList<String>>() {};
-                        ArrayList<String> arrlist=dataSnapshot.getValue(t);
+                        UserProfile user=dataSnapshot.getValue(UserProfile.class);
+                        ArrayList<String> arrlist=new ArrayList<>();
+                        if(user.getFriends()!=null){
+                            arrlist=user.getFriends();
+                        }
                         if(!arrlist.contains(CHALLENGED))   arrlist.add(CHALLENGED);
                         //TODO check for duplicate entries
                         dbref.child("friends").setValue(arrlist);
@@ -57,5 +60,11 @@ public class ResultActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        dbref.child(USERNAME).child("status").setValue("offline");
     }
 }

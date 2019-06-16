@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.parasrawat2124.tictactoe.Adapters.OnlineAdapter;
 import com.example.parasrawat2124.tictactoe.ModelClass.UserProfile;
@@ -30,6 +31,7 @@ public class OnlineFragment extends Fragment {
     DatabaseReference dbref;
     RecyclerView rec;
     String tabname;
+    TextView head;
 
     @Nullable
     @Override
@@ -43,6 +45,7 @@ public class OnlineFragment extends Fragment {
         tabname=args.getString("tabname");
         USERNAME=args.getString("username");
 
+        head=view.findViewById(R.id.t_head);
         rec=view.findViewById(R.id.list);
         dbref=FirebaseDatabase.getInstance().getReference("Users");
 
@@ -77,8 +80,8 @@ public class OnlineFragment extends Fragment {
                 }
 
                 switch (tabname){
-                    case "RANDOM": setAdapter(rnames,rstatus);break;
-                    case "FRIENDS": setAdapter(fnames,fstatus);
+                    case "RANDOM": head.setText("Random ("+rnames.size()+")");setAdapter(rnames,rstatus);break;
+                    case "FRIENDS": head.setText("Friends ("+fnames.size()+")");setAdapter(fnames,fstatus);
                 }
             }
 

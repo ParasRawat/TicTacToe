@@ -20,9 +20,14 @@ import com.example.parasrawat2124.tictactoe.CatchAndMatch.Match;
 import com.example.parasrawat2124.tictactoe.ModelClass.DummyMatchModel;
 import com.example.parasrawat2124.tictactoe.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,9 +40,9 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.viewHold
     public static String CHALLENGED,CHALLENGER;
     Context context;
 
-    public RequestAdapter(Context context,ArrayList<String> reqrec, String challenger){
+    public RequestAdapter(Context context,ArrayList<String> reqrec, String challenged){
         this.reqrec=reqrec;
-        CHALLENGER=challenger;
+        CHALLENGED=challenged;
         this.context=context;
     }
 
@@ -54,7 +59,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.viewHold
         viewHolder.acceptB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CHALLENGED=viewHolder.username.getText().toString();
+                CHALLENGER=viewHolder.username.getText().toString();
                 SharedPreferences sharedPreferences=context.getSharedPreferences("Match",MODE_PRIVATE);
                 SharedPreferences.Editor editor=sharedPreferences.edit();
                 editor.putString("challenger",CHALLENGER);
@@ -103,10 +108,44 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.viewHold
              @Override
              public void onComplete(@NonNull Task<Void> task) {
                  if(task.isSuccessful()){
-                     Intent i=new Intent("match");
-                     LocalBroadcastManager.getInstance(context).sendBroadcast(i);
+                     //remove from reqreceived
+                     //TODO successlistener
+//                     final DatabaseReference dbrefu=FirebaseDatabase.getInstance().getReference("Users");
+//                     dbrefu.child(CHALLENGED).child("reqreceived").addListenerForSingleValueEvent(new ValueEventListener() {
+//                         @Override
+//                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                             GenericTypeIndicator<ArrayList<String>> t=new GenericTypeIndicator<ArrayList<String>>() {};
+//                             ArrayList<String> arrlist=dataSnapshot.getValue(t);
+//                             arrlist.remove(CHALLENGER);
+//                             dbrefu.child(CHALLENGED).child("reqreceived").setValue(arrlist);
+//                         }
+//
+//                         @Override
+//                         public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                         }
+//                     });
+                     //notifyChallenger(CHALLENGER+"vs"+CHALLENGED);
+                     String matchid=CHALLENGER+"vs"+CHALLENGED;
+                     DatabaseReference dbref=FirebaseDatabase.getInstance().getReference("PlayStatus");
+                     dbref.child(matchid).child("ChallengedStatus").setValue("ready").addOnSuccessListener(new OnSuccessListener<Void>() {
+                         @Override
+                         public void onSuccess(Void aVoid) {
+                             Log.d("requestAc",CHALLENGER+CHALLENGED+"accept");
+                             Intent i=new Intent("match");
+                             LocalBroadcastManager.getInstance(context).sendBroadcast(i);
+                         }
+                     });
                  }
              }
          });
+     }
+
+     private void notifyChallenger(String matchid){
+        DatabaseReference dbref=FirebaseDatabase.getInstance().getReference("PlayStatus");
+        dbref.child(matchid).child("Challenger").setValue(CHALLENGER);
+        dbref.child(matchid).child("Challenged").setValue(CHALLENGED);
+        dbref.child(matchid).child("ChallengerStatus").setValue("ready");
+        dbref.child(matchid).child("ChallengedStatus").setValue("ready");
      }
 }
