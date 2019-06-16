@@ -1,5 +1,6 @@
 package com.example.parasrawat2124.tictactoe;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.parasrawat2124.tictactoe.Dashboard.Dashboard;
 import com.example.parasrawat2124.tictactoe.ModelClass.UserProfile;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,9 +32,10 @@ public class ResultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_result);
 
         //TODO send and receive friend confirmation from opponent
-        final TextView opponent=findViewById(R.id.t_opponent);
+        final TextView opponent=findViewById(R.id.t_oppo);
         CHALLENGED=opponent.getText().toString();
         Button  b=findViewById(R.id.b_addfr);
+        Button home=findViewById(R.id.b_dash);
 
         dbref=FirebaseDatabase.getInstance().getReference("Users/"+USERNAME);
 
@@ -58,6 +61,14 @@ public class ResultActivity extends AppCompatActivity {
 
                     }
                 });
+            }
+        });
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(ResultActivity.this,Dashboard.class);
+                startActivity(i);
             }
         });
     }
