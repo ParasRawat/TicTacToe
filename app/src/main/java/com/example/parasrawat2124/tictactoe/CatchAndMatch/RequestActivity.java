@@ -105,22 +105,25 @@ public class RequestActivity extends AppCompatActivity {
                                     editor.apply();
 
                                     //TODO succeslistener
-//                                    dbref.child(USERNAME).child("reqsent").addListenerForSingleValueEvent(new ValueEventListener() {
-//                                        @Override
-//                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                                            GenericTypeIndicator<ArrayList<String>> t=new GenericTypeIndicator<ArrayList<String>>() {};
-//                                            ArrayList<String> arrlist=dataSnapshot.getValue(t);
-//                                            arrlist.remove(challenged);
-//                                            dbref.child(USERNAME).child("reqsent").setValue(arrlist);
-//                                        }
-//
-//                                        @Override
-//                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                                        }
-//                                    });
-                                    Log.d("requestAc",challenger+challenged+"ready");
-                                    startTimer();
+                                    dbref.child(USERNAME).child("reqsent").addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            GenericTypeIndicator<ArrayList<String>> t=new GenericTypeIndicator<ArrayList<String>>() {};
+                                            ArrayList<String> arrlist=dataSnapshot.getValue(t);
+                                            arrlist.remove(challenged);
+                                            dbref.child(USERNAME).child("reqsent").setValue(arrlist).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    startTimer();
+                                                }
+                                            });
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
                                 }
                             }
                         }

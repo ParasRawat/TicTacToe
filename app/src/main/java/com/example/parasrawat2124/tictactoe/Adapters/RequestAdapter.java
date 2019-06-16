@@ -110,30 +110,34 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.viewHold
                  if(task.isSuccessful()){
                      //remove from reqreceived
                      //TODO successlistener
-//                     final DatabaseReference dbrefu=FirebaseDatabase.getInstance().getReference("Users");
-//                     dbrefu.child(CHALLENGED).child("reqreceived").addListenerForSingleValueEvent(new ValueEventListener() {
-//                         @Override
-//                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                             GenericTypeIndicator<ArrayList<String>> t=new GenericTypeIndicator<ArrayList<String>>() {};
-//                             ArrayList<String> arrlist=dataSnapshot.getValue(t);
-//                             arrlist.remove(CHALLENGER);
-//                             dbrefu.child(CHALLENGED).child("reqreceived").setValue(arrlist);
-//                         }
-//
-//                         @Override
-//                         public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                         }
-//                     });
-                     //notifyChallenger(CHALLENGER+"vs"+CHALLENGED);
-                     String matchid=CHALLENGER+"vs"+CHALLENGED;
-                     DatabaseReference dbref=FirebaseDatabase.getInstance().getReference("PlayStatus");
-                     dbref.child(matchid).child("ChallengedStatus").setValue("ready").addOnSuccessListener(new OnSuccessListener<Void>() {
+                     final DatabaseReference dbrefu=FirebaseDatabase.getInstance().getReference("Users");
+                     dbrefu.child(CHALLENGED).child("reqreceived").addListenerForSingleValueEvent(new ValueEventListener() {
                          @Override
-                         public void onSuccess(Void aVoid) {
-                             Log.d("requestAc",CHALLENGER+CHALLENGED+"accept");
-                             Intent i=new Intent("match");
-                             LocalBroadcastManager.getInstance(context).sendBroadcast(i);
+                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                             GenericTypeIndicator<ArrayList<String>> t=new GenericTypeIndicator<ArrayList<String>>() {};
+                             ArrayList<String> arrlist=dataSnapshot.getValue(t);
+                             arrlist.remove(CHALLENGER);
+                             dbrefu.child(CHALLENGED).child("reqreceived").setValue(arrlist).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                 @Override
+                                 public void onSuccess(Void aVoid) {
+                                     //notifyChallenger(CHALLENGER+"vs"+CHALLENGED);
+                                     String matchid=CHALLENGER+"vs"+CHALLENGED;
+                                     DatabaseReference dbref=FirebaseDatabase.getInstance().getReference("PlayStatus");
+                                     dbref.child(matchid).child("ChallengedStatus").setValue("ready").addOnSuccessListener(new OnSuccessListener<Void>() {
+                                         @Override
+                                         public void onSuccess(Void aVoid) {
+                                             Log.d("requestAc",CHALLENGER+CHALLENGED+"accept");
+                                             Intent i=new Intent("match");
+                                             LocalBroadcastManager.getInstance(context).sendBroadcast(i);
+                                         }
+                                     });
+                                 }
+                             });
+                         }
+
+                         @Override
+                         public void onCancelled(@NonNull DatabaseError databaseError) {
+
                          }
                      });
                  }
