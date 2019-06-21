@@ -8,4 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="TabLayoutTextStyle">
+        <item name="android:fontFamily">@font/caesar_dressing</item>
+        <item name="android:textSize">15dp</item>
+    </style>
+
 </resources>

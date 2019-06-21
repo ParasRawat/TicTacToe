@@ -22,6 +22,7 @@ import com.example.parasrawat2124.tictactoe.Login_and_Registration.LoginScreen;
 import com.example.parasrawat2124.tictactoe.ModelClass.DummyMatchModel;
 import com.example.parasrawat2124.tictactoe.ModelClass.GamerProfile;
 import com.example.parasrawat2124.tictactoe.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -49,7 +50,7 @@ public class Dashboard extends AppCompatActivity {
         logout=findViewById(R.id.logout);
         gamerimage=findViewById(R.id.gamerimage);
         gamername=findViewById(R.id.gamername);
-        exit=findViewById(R.id.exit);
+        //exit=findViewById(R.id.exit);
         final String name=getGamer();
 
         //status=offline
@@ -96,13 +97,20 @@ public class Dashboard extends AppCompatActivity {
                 startActivity(new Intent(Dashboard.this,LoginScreen.class));
             }
         });
-        exit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dbref.child(name).child("status").setValue("offline");
-                System.exit(1);
-            }
-        });
+//        exit.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dbref.child(name).child("status").setValue("offline").addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        Intent intent = new Intent(Intent.ACTION_MAIN);
+//                        intent.addCategory(Intent.CATEGORY_HOME);
+//                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP & Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+//                        startActivity(intent);
+//                    }
+//                });
+//            }
+//        });
 
         DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("Gamers");
         databaseReference.child(name).addValueEventListener(new ValueEventListener() {

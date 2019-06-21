@@ -90,17 +90,17 @@
         android:textSize="30dp"
 
         android:textColor="@color/colorPrimaryDark"/>
-    <TextView
-        android:id="@+id/exit"
-        android:layout_margin="8dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="EXIT"
-        android:fontFamily="@font/caesar_dressing"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/logout"
+    <!--<TextView-->
+        <!--android:id="@+id/exit"-->
+        <!--android:layout_margin="8dp"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="EXIT"-->
+        <!--android:fontFamily="@font/caesar_dressing"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_below="@id/logout"-->
 
-        android:textSize="30dp"
-        android:textColor="@color/colorPrimaryDark"/>
+        <!--android:textSize="30dp"-->
+        <!--android:textColor="@color/colorPrimaryDark"/>-->
 
 </RelativeLayout>

@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
@@ -171,8 +172,8 @@ public class RequestActivity extends AppCompatActivity {
 
         pager=findViewById(R.id.pager_online);
         pager.setAdapter(adapter);
-//        TabLayout tab=findViewById(R.id.tabs);
-//        tab.setupWithViewPager(pager);
+        TabLayout tab=(TabLayout) findViewById(R.id.tabs);
+        tab.setupWithViewPager(pager);
 
         //set requests recyclerview
         fetchRequests();

@@ -3,6 +3,7 @@ package com.example.parasrawat2124.tictactoe.CatchAndMatch;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,7 +32,7 @@ public class OnlineFragment extends Fragment {
     DatabaseReference dbref;
     RecyclerView rec;
     String tabname;
-    TextView head;
+    //TextView head;
 
     @Nullable
     @Override
@@ -45,7 +46,7 @@ public class OnlineFragment extends Fragment {
         tabname=args.getString("tabname");
         USERNAME=args.getString("username");
 
-        head=view.findViewById(R.id.t_head);
+        //head=view.findViewById(R.id.t_head);
         rec=view.findViewById(R.id.list);
         dbref=FirebaseDatabase.getInstance().getReference("Users");
 
@@ -79,9 +80,13 @@ public class OnlineFragment extends Fragment {
                     }
                 }
 
+                //TODO add number of users online in tab name
                 switch (tabname){
-                    case "RANDOM": head.setText("Random ("+rnames.size()+")");setAdapter(rnames,rstatus);break;
-                    case "FRIENDS": head.setText("Friends ("+fnames.size()+")");setAdapter(fnames,fstatus);
+                    case "RANDOM": //head.setText("Random ("+rnames.size()+")");
+                            setAdapter(rnames,rstatus);
+                            break;
+                    case "FRIENDS": //head.setText("Friends ("+fnames.size()+")");
+                            setAdapter(fnames,fstatus);
                 }
             }
 

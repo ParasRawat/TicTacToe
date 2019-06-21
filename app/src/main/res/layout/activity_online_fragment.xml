@@ -6,21 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".CatchAndMatch.OnlineFragment">
 
-    <TextView
-        android:id="@+id/t_head"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/caesar_dressing"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="18sp"
-        android:textAlignment="center"
-        android:text="head"
-        android:layout_marginBottom="16dp"/>
+    <!--<TextView-->
+        <!--android:id="@+id/t_head"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:fontFamily="@font/caesar_dressing"-->
+        <!--android:textColor="@color/colorPrimaryDark"-->
+        <!--android:textSize="18sp"-->
+        <!--android:textAlignment="center"-->
+        <!--android:text="head"-->
+        <!--android:layout_marginBottom="16dp"/>-->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/t_head">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

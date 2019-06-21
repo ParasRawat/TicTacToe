@@ -48,6 +48,22 @@
         android:fontFamily="@font/caesar_dressing"
         android:textColor="@color/colorPrimaryDark"
         android:layout_margin="8dp"/>
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:tabGravity="fill"
+        app:tabMode="fixed"
+        app:tabTextColor="@color/colorPrimaryDark"
+        app:tabSelectedTextColor="#fff"
+        app:tabIndicatorColor="@color/colorPrimaryDark"
+        app:tabIndicatorHeight="40dp"
+        app:tabRippleColor="@color/colorPrimaryDark"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        app:tabTextAppearance="@style/TabLayoutTextStyle"/>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/pager_online"
         android:layout_width="match_parent"
@@ -56,10 +72,6 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp">
-        <!--<TabLayout-->
-            <!--android:id="@+id/tabs"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"></TabLayout>-->
     </android.support.v4.view.ViewPager>
 
     <Button
@@ -81,6 +93,8 @@
         android:id="@+id/rec_req"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"/>
+        android:layout_margin="16dp">
+
+    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>
