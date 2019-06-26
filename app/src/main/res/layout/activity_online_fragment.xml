@@ -17,8 +17,18 @@
         <!--android:text="head"-->
         <!--android:layout_marginBottom="16dp"/>-->
     <android.support.v7.widget.RecyclerView
+        android:visibility="gone"
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/t_no"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/caesar_dressing"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_marginTop="32dp"
+        android:textAlignment="center"/>
 
 </RelativeLayout>

@@ -32,7 +32,7 @@ public class OnlineFragment extends Fragment {
     DatabaseReference dbref;
     RecyclerView rec;
     String tabname;
-    //TextView head;
+    TextView t;
 
     @Nullable
     @Override
@@ -46,7 +46,7 @@ public class OnlineFragment extends Fragment {
         tabname=args.getString("tabname");
         USERNAME=args.getString("username");
 
-        //head=view.findViewById(R.id.t_head);
+        t=view.findViewById(R.id.t_no);
         rec=view.findViewById(R.id.list);
         dbref=FirebaseDatabase.getInstance().getReference("Users");
 
@@ -83,10 +83,18 @@ public class OnlineFragment extends Fragment {
                 //TODO add number of users online in tab name
                 switch (tabname){
                     case "RANDOM": //head.setText("Random ("+rnames.size()+")");
-                            setAdapter(rnames,rstatus);
+                            if(rnames.size()==0){
+                                t.setVisibility(View.VISIBLE);
+                                t.setText("NO GAMER ONLINE !");
+                            }
+                            else setAdapter(rnames,rstatus);
                             break;
                     case "FRIENDS": //head.setText("Friends ("+fnames.size()+")");
-                            setAdapter(fnames,fstatus);
+                        if(fnames.size()==0){
+                            t.setVisibility(View.VISIBLE);
+                            t.setText("MAYBE ADD MORE FRIENDS !");
+                        }
+                        else setAdapter(fnames,fstatus);
                 }
             }
 
@@ -100,6 +108,7 @@ public class OnlineFragment extends Fragment {
     }
 
     public void setAdapter(ArrayList<String> names, ArrayList<String> status){
+        rec.setVisibility(View.VISIBLE);
         OnlineAdapter adapter=new OnlineAdapter(names,status,getActivity());
         rec.setLayoutManager(new LinearLayoutManager(getContext()));
         rec.setAdapter(adapter);

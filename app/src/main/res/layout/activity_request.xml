@@ -90,11 +90,19 @@
 
 
     <android.support.v7.widget.RecyclerView
+        android:visibility="gone"
         android:id="@+id/rec_req"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp">
-
-    </android.support.v7.widget.RecyclerView>
+        android:layout_margin="16dp"/>
+    <TextView
+        android:id="@+id/t_no"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:textAlignment="center"
+        android:text="NO PENDING REQUESTS"
+        android:fontFamily="@font/caesar_dressing"
+        android:textColor="@color/colorPrimaryDark"/>
 
 </LinearLayout>

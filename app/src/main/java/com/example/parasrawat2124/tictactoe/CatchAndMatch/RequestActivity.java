@@ -294,11 +294,6 @@ public class RequestActivity extends AppCompatActivity {
                             }
                             setAdapter(names);
                         }
-                        else {
-                            //TODO
-//                            TextView t=findViewById(R.id.rec_hint);
-//                            t.setVisibility(View.VISIBLE);
-                        }
                     }
 
                     @Override
@@ -318,7 +313,11 @@ public class RequestActivity extends AppCompatActivity {
     }
 
     public void setAdapter(ArrayList<String> names){
+        TextView t=findViewById(R.id.t_no);
+        t.setVisibility(View.GONE);
         rec=findViewById(R.id.rec_req);
+        rec.setVisibility(View.VISIBLE);
+
         LinearLayoutManager layoutman=new LinearLayoutManager(RequestActivity.this);
         layoutman.setOrientation(LinearLayoutManager.HORIZONTAL);
         rec.setLayoutManager(layoutman);
